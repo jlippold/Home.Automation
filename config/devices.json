@@ -1,0 +1,82 @@
+{
+	"hub": {
+		"ip": "192.168.1.104"
+	},
+	"insteon": {
+		"367fa8": {
+			"type": "motion",
+			"location": "front door",
+			"enabled": true
+		},
+		"3c2bbd": {
+			"type": "light",
+			"subType": "switch",
+			"location": "bedroom",
+			"enabled": true
+		},
+		"3c2cc5": {
+			"type": "light",
+			"subType": "switch",
+			"location": "bedroom",
+			"enabled": true
+		},
+		"2f5595": {
+			"type": "light",
+			"subType": "bulb",
+			"location": "bedroom",
+			"enabled": false
+		},
+		"1a8dbd": {
+			"type": "light",
+			"subType": "switch",
+			"location": "kids room",
+			"enabled": true
+		},
+		"1f527c": {
+			"type": "fireplace",
+			"location": "livingroom",
+			"enabled": true
+		},
+		"237643": {
+			"type": "wall plug",
+			"location": "livingroom",
+			"enabled": true
+		},
+		"2998cd": {
+			"type": "light",
+			"subType": "bulb",
+			"location": "front door",
+			"enabled": false
+		}
+	},
+	"kodi": {
+		"livingRoom": {
+			"ip": "192.168.1.85",
+			"location": "livingroom"
+		},
+		"bedRoom": {
+			"ip": "192.168.1.103",
+			"location": "bedroom"
+		}
+	},
+	"harmony": {
+		"livingroom": {
+			"ip": "192.168.1.86",
+			"location": "livingroom"
+		},
+		"bedroom": {
+			"ip": "192.168.1.66",
+			"location": "bedroom"
+		}
+	},
+	"custom": {
+		"thermostat": {
+			"method": "get",
+			"address": "http://192.168.1.110/home/climate/",
+			"on": "mode=heat&hold=true",
+			"off": "mode=off",
+			"location": "house",
+			"enabled": true
+		}
+	}
+}
