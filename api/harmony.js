@@ -106,11 +106,11 @@ function saveConfig() {
 	});
 }
 
-function runActivity(hub, activity, callback) {
-	if (devices.harmony.hasOwnProperty(hub) == false) {
+function runActivity(hubName, activity, callback) {
+	if (devices.harmony.hasOwnProperty(hubName) == false) {
 		return callback("hub does not exist");
 	}
-	var address = devices.harmony[hub].ip;
+	var address = devices.harmony[hubName].ip;
 	if (hubs[address].activities.hasOwnProperty(activity) == false) {
 		return callback("activity does not exist");
 	}
@@ -118,7 +118,18 @@ function runActivity(hub, activity, callback) {
 	HarmonyHub(address).then(function(hub) {
 		hub.startActivity(activity);
 		hub.end();
-		callback();
+		var activityConfig = devices.harmony[hubName].activities[activity];
+		if (activityConfig.hasOwnProperty("supplementalCommands")) {
+			async.eachSeries(activityConfig.supplementalCommands, function(item, next) {
+				runCommand(hubName, item.device, item.command, function() {
+					return next();
+				})
+			}, function(err) {
+				return callback(err);
+			});
+		} else {
+			return callback();
+		}
 	});
 }
 

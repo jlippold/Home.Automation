@@ -4,48 +4,43 @@
 	},
 	"insteon": {
 		"367fa8": {
+			"description": "front door motion",
 			"type": "motion",
-			"location": "front door",
 			"enabled": true
 		},
 		"3c2bbd": {
-			"type": "light",
-			"subType": "switch",
-			"location": "bedroom",
+			"description": "bathroom wall switch",
+			"type": "switch",
 			"enabled": true
 		},
 		"3c2cc5": {
-			"type": "light",
-			"subType": "switch",
-			"location": "bedroom",
+			"description": "bedroom wall switch",
+			"type": "switch",
 			"enabled": true
 		},
 		"2f5595": {
-			"type": "light",
-			"subType": "bulb",
-			"location": "bedroom",
+			"description": "light bulb",
+			"type": "switch",
 			"enabled": false
 		},
 		"1a8dbd": {
-			"type": "light",
-			"subType": "switch",
-			"location": "kids room",
+			"description": "cora wall switch",
+			"type": "switch",
 			"enabled": true
 		},
 		"1f527c": {
-			"type": "fireplace",
-			"location": "livingroom",
+			"description": "fireplace",
+			"type": "switch",
 			"enabled": true
 		},
 		"237643": {
-			"type": "wall plug",
-			"location": "livingroom",
+			"description": "xmas tree wall plug",
+			"type": "switch",
 			"enabled": true
 		},
 		"2998cd": {
-			"type": "light",
-			"subType": "bulb",
-			"location": "front door",
+			"description": "front door light bulb",
+			"type": "switch",
 			"enabled": false
 		}
 	},
@@ -62,11 +57,59 @@
 	"harmony": {
 		"livingroom": {
 			"ip": "192.168.1.86",
-			"location": "livingroom"
+			"location": "livingroom",
+			"activities": {
+				"16466902": {
+					"id": "16466902",
+					"name": "Watch TV"
+				},
+				"16476999": {
+					"id": "16476999",
+					"name": "Watch a Movie",
+					"supplementalCommands": [{
+						"device": "30691958",
+						"command": "F5"
+					}, {
+						"device": "30691958",
+						"command": "F1"
+					}, {
+						"device": "30691958",
+						"command": "F3"
+					}]
+				},
+				"-1": {
+					"id": "-1",
+					"name": "PowerOff"
+				}
+			}
 		},
 		"bedroom": {
 			"ip": "192.168.1.66",
-			"location": "bedroom"
+			"location": "bedroom",
+			"activities": {
+				"16416816": {
+					"id": "16416816",
+					"name": "Watch TV"
+				},
+				"16416899": {
+					"id": "16416899",
+					"name": "Watch movie",
+					"supplementalCommands": [{
+						"device": "30691958",
+						"command": "F5"
+					}, {
+						"device": "30691958",
+						"command": "F1"
+					}, {
+						"device": "30691958",
+						"command": "F3"
+					}]
+				},
+				"-1": {
+					"id": "-1",
+					"name": "PowerOff"
+				}
+			}
 		}
 	},
 	"custom": {
@@ -77,6 +120,68 @@
 			"off": "mode=off",
 			"location": "house",
 			"enabled": true
+		}
+	},
+	"groups": {
+		"livingroom": {
+			"on": [{
+				"type": "insteon",
+				"id": "1f527c",
+				"description": "fireplace"
+			}, {
+				"type": "insteon",
+				"id": "237643",
+				"description": "xmas tree"
+			}, {
+				"type": "harmony",
+				"id": "livingroom",
+				"activity": "16476999",
+				"description": "Watch TV"
+			}],
+			"off": [{
+				"type": "insteon",
+				"id": "1f527c",
+				"description": "fireplace"
+			}, {
+				"type": "insteon",
+				"id": "237643",
+				"description": "xmas tree"
+			}, {
+				"type": "harmony",
+				"id": "livingroom",
+				"activity": "-1",
+				"description": "TV Off"
+			}]
+		},
+		"bedroom": {
+			"on": [{
+				"type": "insteon",
+				"id": "3c2bbd",
+				"description": "bathroom"
+			}, {
+				"type": "insteon",
+				"id": "3c2cc5",
+				"description": "ceiling"
+			}, {
+				"type": "harmony",
+				"id": "bedroom",
+				"activity": "16416899",
+				"description": "Watch TV"
+			}],
+			"off": [{
+				"type": "insteon",
+				"id": "3c2bbd",
+				"description": "bathroom"
+			}, {
+				"type": "insteon",
+				"id": "3c2cc5",
+				"description": "ceiling"
+			}, {
+				"type": "harmony",
+				"id": "bedroom",
+				"activity": "-1",
+				"description": "TV Off"
+			}]
 		}
 	}
 }

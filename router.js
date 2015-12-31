@@ -1,11 +1,26 @@
 var express = require('express');
 var insteon = require('./api/insteon');
 var harmony = require('./api/harmony');
+var groups = require('./lib/groups');
 var routes = express.Router();
 
+//wire up /insteon to give  a list
 
 // insteon on / offs
 // http://localhost:3000/insteon/3c2cc5/on
+
+routes.get('/insteon', function(req, res, next) {
+	var id = req.params.id;
+	insteon.listDevices(function(err, devices) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+		} else {
+			res.send(devices);
+		}
+	});
+});
+
 routes.get('/insteon/:id/on', function(req, res, next) {
 	var id = req.params.id;
 	insteon.setStatusOfDevice(id, "on", function(err) {
@@ -30,17 +45,39 @@ routes.get('/insteon/:id/off', function(req, res, next) {
 	});
 });
 
-// room on / offs
-// http://localhost:3000/room/bedroom/on
-routes.get('/room/:room/on', function(req, res, next) {
-	api.setStatusForRoom(req.params.room, "on", function() {
-		res.sendStatus(200);
+// group on / offs
+routes.get('/groups', function(req, res, next) {
+	var id = req.params.id;
+	groups.list(function(err, devices) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+		} else {
+			res.send(devices);
+		}
 	});
 });
 
-routes.get('/room/:room/off', function(req, res, next) {
-	api.setStatusForRoom(req.params.room, "off", function() {
-		res.sendStatus(200);
+// http://localhost:3000/groups/livingroom/off
+routes.get('/groups/:id/on', function(req, res, next) {
+	groups.setStatus(req.params.id, "on", function(err) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+		} else {
+			res.sendStatus(200);
+		}
+	});
+});
+
+routes.get('/groups/:id/off', function(req, res, next) {
+	groups.setStatus(req.params.id, "off", function(err) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+		} else {
+			res.sendStatus(200);
+		}
 	});
 });
 
@@ -64,6 +101,7 @@ routes.get('/harmony/hubs/:hub/activities/:activity', function(req, res, next) {
 	var hub = req.params.hub;
 	var activity = req.params.activity;
 	harmony.runActivity(hub, activity, function(err) {
+		console.log(err);
 		if (err) {
 			res.status(500);
 			res.send(err);
@@ -73,7 +111,7 @@ routes.get('/harmony/hubs/:hub/activities/:activity', function(req, res, next) {
 	});
 });
 
-// http://localhost:3000/harmony/hubs/bedroom/devices/30573030/commands/VolumeUp
+// http://localhost:3000	
 routes.get('/harmony/hubs/:hub/devices/:device/commands/:command', function(req, res, next) {
 	var hub = req.params.hub;
 	var device = req.params.device;

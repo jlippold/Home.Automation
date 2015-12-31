@@ -27,11 +27,13 @@ app.use(function(err, req, res, next) {
 async.auto({
     insteonHub: function(next){
     	insteon.register(function() {
+            console.log("connected to insteon hub");
     		next();
     	});
     },
     harmonyActivities: function(next){
     	harmony.init(function() {
+            console.log("retrieved harmony commands");
     		next();
     	});
     },

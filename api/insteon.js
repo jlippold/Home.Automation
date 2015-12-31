@@ -8,9 +8,10 @@ var hub = new Insteon();
 
 module.exports.register = register;
 module.exports.setStatusOfDevice = setStatusOfDevice;
+module.exports.listDevices = listDevices;
 
 function register(callback) {
-
+	
 	var motionDevices = getInsteonDevicesByType("motion");
 	motionDevices.forEach(function(id) {
 		var device = hub.motion(id);
@@ -22,12 +23,15 @@ function register(callback) {
 		});
 	});
 
+
 	hub.connect(devices.hub.ip, function() {
-		console.log("connected to insteon hub " + devices.hub.ip);
 		callback();
 	});
 }
 
+function listDevices(callback) {
+	return callback(null, devices.insteon);
+}
 
 function getInsteonDevicesByType(type) {
 	var arr = [];
@@ -45,8 +49,8 @@ function setStatusOfDevice(id, status, callback) {
 	}
 
 	var device = devices.insteon[id];
-	if (device.type == "motion") {
-		console.log("skipping motion device: " + id);
+	if (device.type != "switch") {
+		console.log("skipping non switch device: " + id);
 		return callback(null);
 	}
 	if (device.enabled == false) {
