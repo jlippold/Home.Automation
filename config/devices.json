@@ -95,13 +95,13 @@
 					"id": "16416899",
 					"name": "Watch movie",
 					"supplementalCommands": [{
-						"device": "30691958",
+						"device": "30692460",
 						"command": "F5"
 					}, {
-						"device": "30691958",
+						"device": "30692460",
 						"command": "F1"
 					}, {
-						"device": "30691958",
+						"device": "30692460",
 						"command": "F3"
 					}]
 				},
@@ -181,6 +181,26 @@
 				"id": "bedroom",
 				"activity": "-1",
 				"description": "TV Off"
+			}]
+		},
+		"bedroom_lights": {
+			"on": [{
+				"type": "insteon",
+				"id": "3c2bbd",
+				"description": "bathroom"
+			}, {
+				"type": "insteon",
+				"id": "3c2cc5",
+				"description": "ceiling"
+			}],
+			"off": [{
+				"type": "insteon",
+				"id": "3c2bbd",
+				"description": "bathroom"
+			}, {
+				"type": "insteon",
+				"id": "3c2cc5",
+				"description": "ceiling"
 			}]
 		}
 	}
