@@ -4,8 +4,15 @@
 	},
 	"insteon": {
 		"367fa8": {
-			"description": "front door motion",
+			"description": "front door motion sensor",
+			"camera": 1,
 			"type": "motion",
+			"enabled": true
+		},
+		"3699ae": {
+			"description": "garage motion sensor",
+			"type": "motion",
+			"camera": 2,
 			"enabled": true
 		},
 		"3c2bbd": {
@@ -42,6 +49,16 @@
 			"description": "front door light bulb",
 			"type": "switch",
 			"enabled": false
+		}
+	},
+	"lifx": {
+		"bedroom": {
+			"description": "bedroom light bulb",
+			"ifttt_maker": {
+				"on": "light_on",
+				"off": "light_off"
+			},
+			"enabled": true
 		}
 	},
 	"kodi": {

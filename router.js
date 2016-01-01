@@ -1,6 +1,7 @@
 var express = require('express');
 var insteon = require('./api/insteon');
 var harmony = require('./api/harmony');
+var lifx = require('./api/lifx');
 var groups = require('./lib/groups');
 var routes = express.Router();
 
@@ -44,6 +45,31 @@ routes.get('/insteon/:id/off', function(req, res, next) {
 		}
 	});
 });
+
+routes.get('/lifx/:id/on', function(req, res, next) {
+	var id = req.params.id;
+	lifx.setStatus(id, "on", function(err) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+		} else {
+			res.sendStatus(200);
+		}
+	});
+});
+
+routes.get('/lifx/:id/off', function(req, res, next) {
+	var id = req.params.id;
+	lifx.setStatus(id, "off", function(err) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+		} else {
+			res.sendStatus(200);
+		}
+	});
+});
+
 
 // group on / offs
 routes.get('/groups', function(req, res, next) {

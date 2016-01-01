@@ -16,10 +16,13 @@ function register(callback) {
 	motionDevices.forEach(function(id) {
 		var device = hub.motion(id);
 		device.on('motion', function() {
+			var d = devices.insteon[id];
+
 			console.log(util.format("%s motion detected at %s",
-				devices.insteon[id].location,
+				d.description,
 				new Date()));
-			kodi.notify();
+
+			kodi.notify(d);
 		});
 	});
 
