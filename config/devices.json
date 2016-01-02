@@ -5,14 +5,29 @@
 	"insteon": {
 		"367fa8": {
 			"description": "front door motion sensor",
-			"camera": 1,
 			"type": "motion",
+			"action": {
+				"type": "kodi",
+				"camera": 1
+			},
 			"enabled": true
 		},
 		"3699ae": {
 			"description": "garage motion sensor",
 			"type": "motion",
-			"camera": 2,
+			"action": {
+				"type": "kodi",
+				"camera": 2
+			},
+			"enabled": true
+		},
+		"NEWONE": {
+			"description": "kitchen sensor",
+			"type": "motion",
+			"action": {
+				"type": "toggle",
+				"insteon": "237643"
+			},
 			"enabled": true
 		},
 		"3c2bbd": {

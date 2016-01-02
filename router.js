@@ -3,6 +3,7 @@ var insteon = require('./api/insteon');
 var harmony = require('./api/harmony');
 var lifx = require('./api/lifx');
 var groups = require('./lib/groups');
+var motion = require('./lib/motion');
 var routes = express.Router();
 
 //wire up /insteon to give  a list
@@ -143,6 +144,22 @@ routes.get('/harmony/hubs/:hub/devices/:device/commands/:command', function(req,
 	var device = req.params.device;
 	var command = req.params.command;
 	harmony.runCommand(hub, device, command, function(err) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+		} else {
+			res.sendStatus(200);
+		}
+	});
+});
+
+
+// http://localhost:3000/motion/testFire/367fa8
+// http://localhost:3000/motion/testFire/3699ae
+
+routes.get('/motion/testFire/:device', function(req, res, next) {
+	var device = req.params.device;
+	motion.testFire(device, function(err, commands) {
 		if (err) {
 			res.status(500);
 			res.send(err);

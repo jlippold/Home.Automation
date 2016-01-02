@@ -1,8 +1,9 @@
 var Insteon = require('home-controller').Insteon;
 var async = require('async');
 var util = require('util');
-var kodi = require('./kodi');
+var moment = require('moment');
 var devices = require("../config/devices.json");
+var motion = require("../lib/motion");
 
 var hub = new Insteon();
 
@@ -11,18 +12,22 @@ module.exports.setStatusOfDevice = setStatusOfDevice;
 module.exports.listDevices = listDevices;
 
 function register(callback) {
-	
+
 	var motionDevices = getInsteonDevicesByType("motion");
 	motionDevices.forEach(function(id) {
 		var device = hub.motion(id);
 		device.on('motion', function() {
+
 			var d = devices.insteon[id];
+			console.log(
+				util.format(
+					"%s motion detected at %s",
+					d.description,
+					moment().format("LLL")
+				)
+			);
 
-			console.log(util.format("%s motion detected at %s",
-				d.description,
-				new Date()));
-
-			kodi.notify(d);
+			motion.fired(d);
 		});
 	});
 
