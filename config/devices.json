@@ -6,28 +6,35 @@
 		"367fa8": {
 			"description": "front door motion sensor",
 			"type": "motion",
-			"action": {
+			"actions": [{
 				"type": "kodi",
-				"camera": 1
-			},
+				"camera": 1,
+				"cutoff": 15
+			}],
 			"enabled": true
 		},
 		"3699ae": {
 			"description": "garage motion sensor",
 			"type": "motion",
-			"action": {
+			"actions": [{
 				"type": "kodi",
-				"camera": 2
-			},
+				"camera": 2,
+				"cutoff": 15
+			}, {
+				"type": "toggle",
+				"insteon": "3728ac",
+				"cutoff": 300
+			}],
 			"enabled": true
 		},
-		"NEWONE": {
-			"description": "kitchen sensor",
+		"37b015": {
+			"description": "kitchen motion sensor",
 			"type": "motion",
-			"action": {
+			"actions": [{
 				"type": "toggle",
-				"insteon": "237643"
-			},
+				"insteon": "3728ac",
+				"cutoff": 300
+			}],
 			"enabled": true
 		},
 		"3c2bbd": {
@@ -41,7 +48,7 @@
 			"enabled": true
 		},
 		"2f5595": {
-			"description": "light bulb",
+			"description": "dining room small lamp",
 			"type": "switch",
 			"enabled": false
 		},
@@ -58,10 +65,15 @@
 		"237643": {
 			"description": "xmas tree wall plug",
 			"type": "switch",
-			"enabled": true
+			"enabled": false
 		},
 		"2998cd": {
-			"description": "front door light bulb",
+			"description": "dining room tall lamp",
+			"type": "switch",
+			"enabled": false
+		},
+		"3728ac": {
+			"description": "kitchen cabinets",
 			"type": "switch",
 			"enabled": false
 		}
