@@ -23,7 +23,11 @@
 			}, {
 				"type": "toggle",
 				"insteon": "3728ac",
-				"cutoff": 300
+				"cutoff": 300,
+				"betweenHours": {
+					"start": 18,
+					"end": 8
+				}
 			}],
 			"enabled": true
 		},
@@ -33,7 +37,11 @@
 			"actions": [{
 				"type": "toggle",
 				"insteon": "3728ac",
-				"cutoff": 300
+				"cutoff": 300,
+				"betweenHours": {
+					"start": 21,
+					"end": 8
+				}
 			}],
 			"enabled": true
 		},
