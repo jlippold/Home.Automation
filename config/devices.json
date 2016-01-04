@@ -83,7 +83,7 @@
 		"3728ac": {
 			"description": "kitchen cabinets",
 			"type": "switch",
-			"enabled": false
+			"enabled": true
 		}
 	},
 	"lifx": {
