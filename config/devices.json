@@ -39,11 +39,42 @@
 				"insteon": "3728ac",
 				"cutoff": 300,
 				"betweenHours": {
-					"start": 21,
-					"end": 8
+					"start": 17,
+					"end": 9
 				}
 			}],
 			"enabled": true
+		},
+		"357531": {
+			"description": "8 button keypad",
+			"type": "keypad",
+			"enabled": true,
+			"actions": {
+				"1": {
+					"type": "insteon",
+					"id": "3c2bbd",
+					"description": "bathroom",
+					"status": "on"
+				},
+				"2": {
+					"type": "insteon",
+					"id": "3c2bbd",
+					"description": "bathroom",
+					"status": "off"
+				},
+				"3": {
+					"type": "insteon",
+					"id": "3c2cc5",
+					"description": "bedroom",
+					"status": "on"
+				},
+				"4": {
+					"type": "insteon",
+					"id": "3c2cc5",
+					"description": "bedroom",
+					"status": "off"
+				}
+			}
 		},
 		"3c2bbd": {
 			"description": "bathroom wall switch",
@@ -88,7 +119,7 @@
 	},
 	"lifx": {
 		"bedroom": {
-			"description": "bedroom light bulb",
+			"description": "bedroom lamp",
 			"ifttt_maker": {
 				"on": "light_on",
 				"off": "light_off"

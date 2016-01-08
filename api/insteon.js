@@ -4,6 +4,7 @@ var util = require('util');
 var moment = require('moment');
 var devices = require("../config/devices.json");
 var motion = require("../lib/motion");
+var keypad = require("../lib/keypad");
 
 var hub = new Insteon();
 
@@ -29,6 +30,17 @@ function register(callback) {
 
 			motion.fired(d);
 		});
+	});
+
+	var keypads = getInsteonDevicesByType("keypad");
+	keypads.forEach(function(id) {
+		var toggle = hub.light(id);
+		function registerButtonPress(digit) {
+			var d = devices.insteon[id];
+			keypad.pressed(d, digit);
+		}
+		toggle.on('turnOn', registerButtonPress);
+		toggle.on('turnOff', registerButtonPress);
 	});
 
 

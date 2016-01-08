@@ -87,23 +87,19 @@ routes.get('/groups', function(req, res, next) {
 
 // http://localhost:3000/groups/livingroom/off
 routes.get('/groups/:id/on', function(req, res, next) {
+	res.sendStatus(200);
 	groups.setStatus(req.params.id, "on", function(err) {
 		if (err) {
-			res.status(500);
-			res.send(err);
-		} else {
-			res.sendStatus(200);
+			console.log(err);
 		}
 	});
 });
 
 routes.get('/groups/:id/off', function(req, res, next) {
+	res.sendStatus(200);
 	groups.setStatus(req.params.id, "off", function(err) {
 		if (err) {
-			res.status(500);
-			res.send(err);
-		} else {
-			res.sendStatus(200);
+			console.log(err);
 		}
 	});
 });
