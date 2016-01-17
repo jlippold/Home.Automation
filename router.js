@@ -9,7 +9,7 @@ var routes = express.Router();
 //wire up /insteon to give  a list
 
 // insteon on / offs
-// http://localhost:3000/insteon/3c2cc5/on
+// http://localhost:3000/insteon/1f527c/toggle
 
 routes.get('/insteon', function(req, res, next) {
 	var id = req.params.id;
@@ -24,30 +24,25 @@ routes.get('/insteon', function(req, res, next) {
 	});
 });
 
-routes.get('/insteon/:id/on', function(req, res, next) {
-	var id = req.params.id;
-	insteon.setStatusOfDevice(id, "on", function(err) {
-		if (err) {
-			res.status(500);
-			res.send(err);
-			console.log(err);
-		} else {
-			res.sendStatus(200);
-		}
-	});
-});
+routes.get('/insteon/:id/:status', function(req, res, next) {
 
-routes.get('/insteon/:id/off', function(req, res, next) {
 	var id = req.params.id;
-	insteon.setStatusOfDevice(id, "off", function(err) {
-		if (err) {
-			res.status(500);
-			res.send(err);
-			console.log(err);
-		} else {
-			res.sendStatus(200);
-		}
-	});
+	var status = req.params.status;
+
+	if (["on", "off", "toggle"].indexOf(status) > -1) {
+		insteon.setStatusOfDevice(id, status, function(err) {
+			if (err) {
+				res.status(500);
+				res.send(err);
+				console.log(err);
+			} else {
+				res.sendStatus(200);
+			}
+		});
+	} else {
+		res.send("Bad status");
+		res.status(500);
+	}
 });
 
 routes.get('/lifx/:id/on', function(req, res, next) {

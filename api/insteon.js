@@ -35,6 +35,7 @@ function register(callback) {
 	var keypads = getInsteonDevicesByType("keypad");
 	keypads.forEach(function(id) {
 		var toggle = hub.light(id);
+
 		function registerButtonPress(digit) {
 			var d = devices.insteon[id];
 			keypad.pressed(d, digit);
@@ -83,10 +84,25 @@ function setStatusOfDevice(id, status, callback) {
 			.then(function(status) {
 				callback(null);
 			});
-	} else {
+	} else if (status == "off") {
 		hub.light(id).turnOff()
 			.then(function(status) {
 				callback(null);
 			});
+	} else if (status == "toggle") {
+		var device = hub.light(id);
+		device.level(function(err, level) {
+			if (level > 0) { //is on
+				device.turnOff()
+					.then(function(status) {
+						callback(null);
+					});
+			} else { //is off
+				device.turnOn()
+					.then(function(status) {
+						callback(null);
+					});
+			}
+		});
 	}
 }
