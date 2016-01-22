@@ -25,7 +25,6 @@ routes.get('/insteon', function(req, res, next) {
 });
 
 routes.get('/insteon/:id/:status', function(req, res, next) {
-
 	var id = req.params.id;
 	var status = req.params.status;
 
@@ -125,13 +124,25 @@ routes.get('/harmony/hubs/:hub/activities/:activity', function(req, res, next) {
 	var hub = req.params.hub;
 	var activity = req.params.activity;
 	harmony.runActivity(hub, activity, function(err) {
-		console.log(err);
 		if (err) {
 			res.status(500);
 			res.send(err);
 			console.log(err);
 		} else {
 			res.sendStatus(200);
+		}
+	});
+});
+
+// http://localhost:3000/harmony/hubs/livingroom/activities/16476999/toggle
+routes.get('/harmony/hubs/:hub/activities/:activity/toggle', function(req, res, next) {
+	var hub = req.params.hub;
+	var activity = req.params.activity;
+	res.sendStatus(200);
+
+	harmony.toggleActivity(hub, activity, function(err) {
+		if (err) {
+			console.log(err);
 		}
 	});
 });

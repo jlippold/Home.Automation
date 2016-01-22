@@ -7,6 +7,7 @@ module.exports.init = init;
 module.exports.listHubs = listHubs;
 module.exports.listRoomCommands = listRoomCommands;
 module.exports.runActivity = runActivity;
+module.exports.toggleActivity = toggleActivity;
 module.exports.runCommand = runCommand;
 
 var hubs = {};
@@ -118,21 +119,59 @@ function runActivity(hubName, activity, callback) {
 	HarmonyHub(address).then(function(hub) {
 		hub.startActivity(activity);
 		hub.end();
-		var activityConfig = devices.harmony[hubName].activities[activity];
-		if (activityConfig.hasOwnProperty("supplementalCommands")) {
-			async.eachSeries(activityConfig.supplementalCommands, function(item, next) {
-				runCommand(hubName, item.device, item.command, function() {
-					return next();
-				})
-			}, function(err) {
-				return callback(err);
+		setTimeout(function() {
+			runSupplementals(hubName, activity, function(err) {
+				return callback();
 			});
-		} else {
-			return callback();
-		}
+		}, 5000);
 	});
 }
 
+function toggleActivity(hubName, activity, callback) {
+
+	if (devices.harmony.hasOwnProperty(hubName) == false) {
+		return callback("hub does not exist");
+	}
+	var address = devices.harmony[hubName].ip;
+	if (hubs[address].activities.hasOwnProperty(activity) == false) {
+		return callback("activity does not exist");
+	}
+
+	HarmonyHub(address).then(function(hub) {
+		hub.isOff().then(function(off) {
+			hub.end();
+			if (off) {
+				console.log("Turning on TV");
+			} else {
+				console.log("Turning off TV");
+				activity = "-1";
+			}
+
+			runActivity(hubName, activity, function() {
+				callback()
+			});
+		});
+	});
+
+}
+
+function runSupplementals(hubName, activity, callback) {
+	var activityConfig = devices.harmony[hubName].activities[activity];
+	if (activityConfig.hasOwnProperty("supplementalCommands")) {
+		async.eachSeries(activityConfig.supplementalCommands, function(item, next) {
+			runCommand(hubName, item.device, item.command, function() {
+				console.log(item);
+				setTimeout(function() {
+					return next();
+				}, 1000);
+			});
+		}, function(err) {
+			return callback(err);
+		});
+	} else {
+		return callback();
+	}
+}
 
 function runCommand(hub, device, command, callback) {
 	if (devices.harmony.hasOwnProperty(hub) == false) {

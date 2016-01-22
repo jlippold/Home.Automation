@@ -114,7 +114,7 @@
 		"2f5595": {
 			"description": "dining room small lamp",
 			"type": "switch",
-			"enabled": false
+			"enabled": true
 		},
 		"1a8dbd": {
 			"description": "cora wall switch",
@@ -134,7 +134,7 @@
 		"2998cd": {
 			"description": "dining room tall lamp",
 			"type": "switch",
-			"enabled": false
+			"enabled": true
 		},
 		"3728ac": {
 			"description": "kitchen cabinets",
@@ -187,7 +187,11 @@
 				},
 				"-1": {
 					"id": "-1",
-					"name": "PowerOff"
+					"name": "PowerOff",
+					"supplementalCommands": [{
+						"device": "30691958",
+						"command": "F2"
+					}]
 				}
 			}
 		},
@@ -215,7 +219,11 @@
 				},
 				"-1": {
 					"id": "-1",
-					"name": "PowerOff"
+					"name": "PowerOff",
+					"supplementalCommands": [{
+						"device": "30692460",
+						"command": "F2"
+					}]
 				}
 			}
 		}
