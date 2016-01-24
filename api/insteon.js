@@ -5,6 +5,7 @@ var moment = require('moment');
 var devices = require("../config/devices.json");
 var motion = require("../lib/motion");
 var keypad = require("../lib/keypad");
+var pool = require("../lib/pool");
 
 var hub = new Insteon();
 
@@ -79,29 +80,37 @@ function setStatusOfDevice(id, status, callback) {
 		return callback(null);
 	}
 
+
+
 	if (status == "on") {
-		hub.light(id).turnOn()
-			.then(function(status) {
+		pool.add(function() {
+			hub.light(id).turnOn().then(function() {
 				callback(null);
 			});
+		});
 	} else if (status == "off") {
-		hub.light(id).turnOff()
-			.then(function(status) {
+		pool.add(function() {
+			hub.light(id).turnOff().then(function() {
 				callback(null);
 			});
+		});
 	} else if (status == "toggle") {
 		var device = hub.light(id);
 		device.level(function(err, level) {
 			if (level > 0) { //is on
-				device.turnOff()
-					.then(function(status) {
-						callback(null);
-					});
+				pool.add(function() {
+					device.turnOff()
+						.then(function(status) {
+							callback(null);
+						});
+				});
 			} else { //is off
-				device.turnOn()
-					.then(function(status) {
-						callback(null);
-					});
+				pool.add(function() {
+					device.turnOn()
+						.then(function(status) {
+							callback(null);
+						});
+				});
 			}
 		});
 	}

@@ -169,7 +169,14 @@
 			"activities": {
 				"16466902": {
 					"id": "16466902",
-					"name": "Watch TV"
+					"name": "Watch TV",
+					"supplementalCommands": [{
+						"device": "30691958",
+						"command": "F4"
+					}, {
+						"device": "30691958",
+						"command": "F1"
+					}]
 				},
 				"16476999": {
 					"id": "16476999",
@@ -201,7 +208,14 @@
 			"activities": {
 				"16416816": {
 					"id": "16416816",
-					"name": "Watch TV"
+					"name": "Watch TV",
+					"supplementalCommands": [{
+						"device": "30692460",
+						"command": "F4"
+					}, {
+						"device": "30692460",
+						"command": "F1"
+					}]
 				},
 				"16416899": {
 					"id": "16416899",
