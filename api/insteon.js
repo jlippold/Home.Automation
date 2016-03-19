@@ -33,6 +33,33 @@ function register(callback) {
 		});
 	});
 
+	var doors = getInsteonDevicesByType("door");
+	doors.forEach(function(id) {
+		var device = hub.door(id);
+		device.on('opened', function() {
+			var d = devices.insteon[id];
+			console.log(
+				util.format(
+					"%s opened at %s",
+					d.description,
+					moment().format("LLL")
+				)
+			);
+			motion.fired(d);
+		});
+		device.on('closed', function() {
+			var d = devices.insteon[id];
+			console.log(
+				util.format(
+					"%s closed at %s",
+					d.description,
+					moment().format("LLL")
+				)
+			);
+			motion.fired(d);
+		});
+	});
+
 	var keypads = getInsteonDevicesByType("keypad");
 	keypads.forEach(function(id) {
 		var toggle = hub.light(id);

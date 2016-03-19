@@ -45,6 +45,15 @@
 			}],
 			"enabled": true
 		},
+		"37DF79": {
+			"description": "front door sensor",
+			"type": "door",
+			"actions": [{
+				"type": "kodi",
+				"addon": "plugin.seinfeld.sound"
+			}],
+			"enabled": true
+		},
 		"357531": {
 			"description": "8 button keypad",
 			"type": "keypad",
