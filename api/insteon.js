@@ -47,17 +47,6 @@ function register(callback) {
 			);
 			motion.fired(d);
 		});
-		device.on('closed', function() {
-			var d = devices.insteon[id];
-			console.log(
-				util.format(
-					"%s closed at %s",
-					d.description,
-					moment().format("LLL")
-				)
-			);
-			motion.fired(d);
-		});
 	});
 
 	var keypads = getInsteonDevicesByType("keypad");
