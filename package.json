@@ -20,6 +20,7 @@
     "home-controller": "^0.6.0",
     "hover.css": "^2.0.2",
     "moment": "^2.10.6",
+    "node-expat": "^2.3.13",
     "object-assign": "^4.0.1",
     "react": "^0.14.8",
     "react-dom": "^0.14.8",
