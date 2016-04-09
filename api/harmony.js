@@ -2,6 +2,7 @@ var HarmonyHub = require('harmonyhubjs-client');
 var async = require('async');
 var fs = require('fs');
 var devices = require("../config/devices.json");
+var dispatch = require("../lib/dispatch");
 
 module.exports.init = init;
 module.exports.listHubs = listHubs;
@@ -9,6 +10,7 @@ module.exports.listRoomCommands = listRoomCommands;
 module.exports.runActivity = runActivity;
 module.exports.toggleActivity = toggleActivity;
 module.exports.runCommand = runCommand;
+module.exports.getStatusOfHub = getStatusOfHub;
 
 var hubs = {};
 
@@ -22,7 +24,7 @@ function init(callback) {
 
 					hub.getActivities().then(function(json) {
 
-						var activities = {}
+						var activities = {};
 
 						json.forEach(function(item) {
 							activities[item.id] = {
@@ -31,7 +33,7 @@ function init(callback) {
 							};
 						});
 
-						if (hubs.hasOwnProperty(address) == false) {
+						if (hubs.hasOwnProperty(address) === false) {
 							hubs[address] = {};
 						}
 
@@ -44,7 +46,7 @@ function init(callback) {
 				commands: function(complete) {
 					hub.getAvailableCommands().then(function(json) {
 
-						if (hubs.hasOwnProperty(address) == false) {
+						if (hubs.hasOwnProperty(address) === false) {
 							hubs[address] = {};
 						}
 
@@ -108,17 +110,18 @@ function saveConfig() {
 }
 
 function runActivity(hubName, activity, callback) {
-	if (devices.harmony.hasOwnProperty(hubName) == false) {
+	if (devices.harmony.hasOwnProperty(hubName) === false) {
 		return callback("hub does not exist");
 	}
 	var address = devices.harmony[hubName].ip;
-	if (hubs[address].activities.hasOwnProperty(activity) == false) {
+	if (hubs[address].activities.hasOwnProperty(activity) === false) {
 		return callback("activity does not exist");
 	}
 
 	HarmonyHub(address).then(function(hub) {
 		hub.startActivity(activity);
 		hub.end();
+		dispatch.setStatus(hubName, activity == "-1" ? "off" : "on");
 		setTimeout(function() {
 			runSupplementals(hubName, activity, function(err) {
 				return callback();
@@ -127,28 +130,48 @@ function runActivity(hubName, activity, callback) {
 	});
 }
 
+function getStatusOfHub(hubName, callback) {
+
+	if (!validHub(hubName)) {
+		return callback("hub does not exist");
+	}
+
+	var address = devices.harmony[hubName].ip;
+	HarmonyHub(address).then(function(hub) {
+		hub.isOff().then(function(off) {
+			if (off) {
+				callback(null, "off");
+			} else {
+				callback(null, "on");
+			}
+			hub.end();
+		});
+	});
+}
+
+function validHub(hubName) {
+	return devices.harmony.hasOwnProperty(hubName);
+}
+
 function toggleActivity(hubName, activity, callback) {
 
-	if (devices.harmony.hasOwnProperty(hubName) == false) {
+	if (!validHub(hubName)) {
 		return callback("hub does not exist");
 	}
 	var address = devices.harmony[hubName].ip;
-	if (hubs[address].activities.hasOwnProperty(activity) == false) {
+	if (hubs[address].activities.hasOwnProperty(activity) === false) {
 		return callback("activity does not exist");
 	}
 
 	HarmonyHub(address).then(function(hub) {
 		hub.isOff().then(function(off) {
 			hub.end();
-			if (off) {
-				console.log("Turning on TV");
-			} else {
-				console.log("Turning off TV");
+			if (!off) {
 				activity = "-1";
 			}
 
 			runActivity(hubName, activity, function() {
-				callback()
+				callback();
 			});
 		});
 	});
@@ -174,7 +197,7 @@ function runSupplementals(hubName, activity, callback) {
 }
 
 function runCommand(hub, device, command, callback) {
-	if (devices.harmony.hasOwnProperty(hub) == false) {
+	if (devices.harmony.hasOwnProperty(hub) === false) {
 		return callback("hub does not exist");
 	}
 	var address = devices.harmony[hub].ip;
@@ -190,13 +213,13 @@ function runCommand(hub, device, command, callback) {
 		return callback("device does not exist");
 	}
 
-	if (foundDevice.commands.hasOwnProperty(command) == false) {
+	if (foundDevice.commands.hasOwnProperty(command) === false) {
 		return callback("command does not exist");
 	}
 
 	HarmonyHub(address).then(function(hub) {
 		var encodedAction = foundDevice.commands[command].action.replace(/\:/g, '::');
-		hub.send('holdAction', 'action=' + encodedAction + ':status=press')
+		hub.send('holdAction', 'action=' + encodedAction + ':status=press');
 		hub.end();
 		callback();
 	});

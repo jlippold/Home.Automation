@@ -4,12 +4,19 @@ var harmony = require('./api/harmony');
 var lifx = require('./api/lifx');
 var groups = require('./lib/groups');
 var motion = require('./lib/motion');
+var activities = require('./lib/activities');
 var routes = express.Router();
 
 //wire up /insteon to give  a list
 
 // insteon on / offs
 // http://localhost:3000/insteon/1f527c/toggle
+
+routes.get('/status', function(req, res, next) {
+	activities.status(function(err, results) {
+		res.send(results);	
+	});
+});
 
 routes.get('/insteon', function(req, res, next) {
 	var id = req.params.id;
@@ -123,13 +130,11 @@ routes.get('/harmony/hubs/:hub', function(req, res, next) {
 routes.get('/harmony/hubs/:hub/activities/:activity', function(req, res, next) {
 	var hub = req.params.hub;
 	var activity = req.params.activity;
+	res.sendStatus(200);
+	
 	harmony.runActivity(hub, activity, function(err) {
 		if (err) {
-			res.status(500);
-			res.send(err);
 			console.log(err);
-		} else {
-			res.sendStatus(200);
 		}
 	});
 });

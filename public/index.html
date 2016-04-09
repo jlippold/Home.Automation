@@ -1,0 +1,108 @@
+<html lang="en">
+  <head>
+	    <meta charset="utf-8">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+	    <meta name="description" content="">
+	    <meta name="author" content="">
+	    <title>Jed</title>
+	    <!-- Bootstrap core CSS -->
+	    <link href="css/bootstrap.min.css" rel="stylesheet">
+	    
+	    <link rel="stylesheet" href="css/home.css">
+	    <link rel="stylesheet" href="css/animation.css">
+	    <style>
+
+	    	#groupContainer {
+	    		padding-top: 10px;
+	    		padding-bottom: 20px;
+	    	}
+
+	    	i {
+	    		font-size: 62px;
+	    	}
+
+	    	li.list-group-item {
+	    		height: 80px;
+	    	}
+
+	    	span.liHeader {
+	    		font-size: 1.3em;
+	    		line-height: 2.4em;
+	    	}
+
+	    	.card-columns {
+	    		-moz-column-gap: 0.85rem;
+	    		-webkit-column-gap: 0.85rem;
+	    		column-gap: 0.85rem;
+	    	}
+
+	    	.card {
+				-webkit-column-break-inside: avoid; 
+				page-break-inside: avoid; 
+				break-inside: avoid; 
+				cursor: pointer;
+	    	}
+
+			@media (max-width: 1600px) {
+				.card-columns {
+			    	column-count: 5;
+			    	-moz-column-count: 5;
+			    	-webkit-column-count: 5;
+			    }
+	    	}
+	    	@media (max-width: 1200px) {
+				.card-columns {
+					column-count: 4;
+			    	-moz-column-count: 4;
+			    	-webkit-column-count: 4;
+			    }
+	    	}
+			@media (max-width: 800px) {
+				.card-columns {
+					column-count: 3;
+			    	-moz-column-count: 3;
+			    	-webkit-column-count: 3;
+			    }
+	    	}
+	    	@media (max-width: 544px) {
+	    		span.liHeader {
+					display: block;
+					float: left;
+					max-width: 100px;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+	    		}
+				.card-columns {
+					column-count: 2;
+			    	-moz-column-count: 2;
+			    	-webkit-column-count: 2;
+			    }
+	    	}
+	    	@media (max-width: 320px) {
+				.card-columns {
+					column-count: 1;
+			    	-moz-column-count: 1;
+			    	-webkit-column-count: 1;
+			    }
+	    	}
+
+	    </style>
+		<script src="js/bundle.js"></script>
+		<script src="http://localhost:3000/socket.io/socket.io.js"></script>
+    </head>
+    
+    <body>
+	    <div class="container-fluid">
+
+			<div id="groupContainer"></div>
+
+	    	<div class="card-columns" id="cardContainer"></div>
+
+			<p>&nbsp;</p>
+
+	    </div>
+    </body>
+</html>

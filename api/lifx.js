@@ -6,7 +6,7 @@ module.exports.setStatus = setStatus;
 
 function setStatus(id, status, callback) {
 
-	if (devices.lifx.hasOwnProperty(id) == false) {
+	if (devices.lifx.hasOwnProperty(id) === false) {
 		return callback("lifx device does not exist");
 	}
 

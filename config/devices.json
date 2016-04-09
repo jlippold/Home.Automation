@@ -4,8 +4,10 @@
 	},
 	"insteon": {
 		"367fa8": {
-			"description": "front door motion sensor",
+			"description": "Front Door Motion Sensor",
 			"type": "motion",
+			"icon": "icon-pitch",
+			"group": "outside",
 			"actions": [{
 				"type": "kodi",
 				"camera": 1,
@@ -14,8 +16,10 @@
 			"enabled": true
 		},
 		"3699ae": {
-			"description": "garage motion sensor",
+			"description": "Garage Motion Sensor",
 			"type": "motion",
+			"icon": "icon-pitch",
+			"group": "outside",
 			"actions": [{
 				"type": "kodi",
 				"camera": 2,
@@ -32,8 +36,10 @@
 			"enabled": true
 		},
 		"37b015": {
-			"description": "kitchen motion sensor",
+			"description": "Kitchen Motion Sensor",
 			"type": "motion",
+			"icon": "icon-pitch",
+			"group": "outside",
 			"actions": [{
 				"type": "toggle",
 				"insteon": "3728ac",
@@ -46,8 +52,10 @@
 			"enabled": true
 		},
 		"37DF79": {
-			"description": "front door sensor",
+			"description": "Front Door Sensor",
 			"type": "door",
+			"icon": "icon-home",
+			"group": "outside",
 			"actions": [{
 				"type": "kodi",
 				"addon": "plugin.seinfeld.sound"
@@ -111,53 +119,71 @@
 			}
 		},
 		"3c2bbd": {
-			"description": "bathroom wall switch",
+			"description": "Master Bathroom Lights",
+			"icon": "icon-lightbulb",
+			"group": "Master Bedroom",
 			"type": "switch",
 			"enabled": true
 		},
 		"3c2cc5": {
-			"description": "bedroom wall switch",
+			"description": "Master Bedroom Lights",
+			"icon": "icon-lightbulb",
+			"group": "Master Bedroom",
 			"type": "switch",
 			"enabled": true
 		},
 		"2f5595": {
-			"description": "dining room small lamp",
+			"description": "Dining Room Small Lamp",
+			"icon": "icon-lightbulb",
+			"group": "Dining Room",
+			"type": "switch",
+			"enabled": true
+		},
+		"2998cd": {
+			"description": "Dining Room Tall Lamp",
+			"icon": "icon-lightbulb",
+			"group": "Dining Room",
 			"type": "switch",
 			"enabled": true
 		},
 		"1a8dbd": {
-			"description": "cora wall switch",
+			"description": "Kids Room Light",
+			"icon": "icon-lightbulb",
+			"group": "Kids Room",
 			"type": "switch",
 			"enabled": true
 		},
 		"1f527c": {
-			"description": "fireplace",
+			"description": "Fireplace",
+			"icon": "icon-fire",
+			"group": "Living Room",
 			"type": "switch",
 			"enabled": true
 		},
 		"237643": {
-			"description": "xmas tree wall plug",
+			"description": "Christmas Tree", 
+			"icon": "icon-tree-1",
+			"group": "Living Room",
 			"type": "switch",
 			"enabled": false
 		},
-		"2998cd": {
-			"description": "dining room tall lamp",
-			"type": "switch",
-			"enabled": true
-		},
 		"3728ac": {
-			"description": "kitchen cabinets",
+			"description": "Kitchen Cabinet Lights",
+			"icon": "icon-food",
+			"group": "Kitchen",
 			"type": "switch",
 			"enabled": true
 		}
 	},
 	"lifx": {
 		"bedroom": {
-			"description": "bedroom lamp",
+			"description": "Master Bedroom Lamp",
 			"ifttt_maker": {
 				"on": "light_on",
 				"off": "light_off"
 			},
+			"icon": "icon-lightbulb",
+			"group": "Master Bedroom",
 			"enabled": true
 		}
 	},
@@ -175,6 +201,8 @@
 		"livingroom": {
 			"ip": "192.168.1.86",
 			"location": "livingroom",
+			"icon": "icon-desktop",
+			"group": "Living Room",
 			"activities": {
 				"16466902": {
 					"id": "16466902",
@@ -214,6 +242,8 @@
 		"bedroom": {
 			"ip": "192.168.1.66",
 			"location": "bedroom",
+			"icon": "icon-desktop",
+			"group": "Master bedroom",
 			"activities": {
 				"16416816": {
 					"id": "16416816",
@@ -263,6 +293,7 @@
 	},
 	"groups": {
 		"livingroom": {
+			"name": "Living Room",
 			"on": [{
 				"type": "insteon",
 				"id": "1f527c",
@@ -293,6 +324,7 @@
 			}]
 		},
 		"bedroom": {
+			"name": "Master Bedroom",
 			"on": [{
 				"type": "insteon",
 				"id": "3c2bbd",
@@ -322,27 +354,8 @@
 				"description": "TV Off"
 			}]
 		},
-		"bedroom_lights": {
-			"on": [{
-				"type": "insteon",
-				"id": "3c2bbd",
-				"description": "bathroom"
-			}, {
-				"type": "insteon",
-				"id": "3c2cc5",
-				"description": "ceiling"
-			}],
-			"off": [{
-				"type": "insteon",
-				"id": "3c2bbd",
-				"description": "bathroom"
-			}, {
-				"type": "insteon",
-				"id": "3c2cc5",
-				"description": "ceiling"
-			}]
-		},
 		"dining_room": {
+			"name": "Dining Room",
 			"on": [{
 				"type": "insteon",
 				"id": "2f5595",
@@ -363,6 +376,7 @@
 			}]
 		},
 		"house": {
+			"name": "Entire House",
 			"on": [{
 				"type": "insteon",
 				"id": "1f527c",

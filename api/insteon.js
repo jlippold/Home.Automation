@@ -1,17 +1,21 @@
 var Insteon = require('home-controller').Insteon;
 var async = require('async');
-var util = require('util');
+var nodeUtil = require('util');
+var util = require("../lib/util");
 var moment = require('moment');
 var devices = require("../config/devices.json");
 var motion = require("../lib/motion");
 var keypad = require("../lib/keypad");
 var pool = require("../lib/pool");
+var dispatch = require("../lib/dispatch");
 
 var hub = new Insteon();
 
 module.exports.register = register;
 module.exports.setStatusOfDevice = setStatusOfDevice;
+module.exports.getStatusOfDevice = getStatusOfDevice;
 module.exports.listDevices = listDevices;
+
 
 function register(callback) {
 
@@ -22,7 +26,7 @@ function register(callback) {
 
 			var d = devices.insteon[id];
 			console.log(
-				util.format(
+				nodeUtil.format(
 					"%s motion detected at %s",
 					d.description,
 					moment().format("LLL")
@@ -39,7 +43,7 @@ function register(callback) {
 		device.on('opened', function() {
 			var d = devices.insteon[id];
 			console.log(
-				util.format(
+				nodeUtil.format(
 					"%s opened at %s",
 					d.description,
 					moment().format("LLL")
@@ -68,7 +72,27 @@ function register(callback) {
 }
 
 function listDevices(callback) {
-	return callback(null, devices.insteon);
+	var list = {};
+	Object.keys(devices.insteon).forEach(function(id) {
+
+		var device = devices.insteon[id];
+
+		if (device.type == "switch") {
+			device.onUrl = util.getHost() + "/insteon/" + id + "/on";
+			device.offUrl = util.getHost() + "/insteon/" + id + "/off";
+			device.toggle = util.getHost() + "/insteon/" + id + "/toggle";
+			device.status = "unknown";
+		}
+
+		if (device.type == "motion" || device.type == "door") {
+			device.events = [];
+		}
+
+		if (device.type != "keypad") {
+			list[id] = device;
+		}
+	});
+	return callback(null, list);
 }
 
 function getInsteonDevicesByType(type) {
@@ -81,32 +105,36 @@ function getInsteonDevicesByType(type) {
 	return arr;
 }
 
+function getStatusOfDevice(id, callback) {
+	if (isValidDeviceId(id) === false) {
+		return callback("Invalid Device");
+	}
+	var device = hub.light(id);
+	device.level(function(err, level) {
+		if (level > 0) { //is on 
+			return callback(err, "on");
+		} else { //is off
+			return callback(err, "off");
+		}
+	});
+}
+
 function setStatusOfDevice(id, status, callback) {
-	if (devices.insteon.hasOwnProperty(id) == false) {
-		return callback("no device found");
+	if (isValidDeviceId(id) === false) {
+		return callback("Invalid Device");
 	}
-
-	var device = devices.insteon[id];
-	if (device.type != "switch") {
-		console.log("skipping non switch device: " + id);
-		return callback(null);
-	}
-	if (device.enabled == false) {
-		console.log("skipping disabled device: " + id);
-		return callback(null);
-	}
-
-
 
 	if (status == "on") {
 		pool.add(function() {
 			hub.light(id).turnOn().then(function() {
+				dispatch.setStatus(id, status);
 				callback(null);
 			});
 		});
 	} else if (status == "off") {
 		pool.add(function() {
 			hub.light(id).turnOff().then(function() {
+				dispatch.setStatus(id, status);
 				callback(null);
 			});
 		});
@@ -117,6 +145,7 @@ function setStatusOfDevice(id, status, callback) {
 				pool.add(function() {
 					device.turnOff()
 						.then(function(status) {
+							dispatch.setStatus(id, "off");
 							callback(null);
 						});
 				});
@@ -124,10 +153,26 @@ function setStatusOfDevice(id, status, callback) {
 				pool.add(function() {
 					device.turnOn()
 						.then(function(status) {
+							dispatch.setStatus(id, "on");
 							callback(null);
 						});
 				});
 			}
 		});
 	}
+
+}
+
+function isValidDeviceId(id) {
+	if (devices.insteon.hasOwnProperty(id) === false) {
+		return false;
+	}
+	var device = devices.insteon[id];
+	if (device.type != "switch") {
+		return false;
+	}
+	if (device.enabled === false) {
+		return false;
+	}
+	return true;
 }
