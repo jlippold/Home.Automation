@@ -44,23 +44,48 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	
-	var poo = __webpack_require__(1);
+	document.addEventListener("DOMContentLoaded", function (event) {
+		console.log("asd");
+		var host = window.location.origin;
+
+		if (host.indexOf("localhost:8080") > -1) {
+			host = "http://localhost:3000";
+		}
+
+		var s = document.createElement("script");
+		s.type = "text/javascript";
+		s.src = host + "/socket.io/socket.io.js";
+		s.onload = function () {
+			var r = __webpack_require__(1).listen(host);
+		};
+
+		document.body.appendChild(s);
+	});
 
 /***/ },
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	
-	'use strict';
-
 	var React = __webpack_require__(2);
 	var ReactDOM = __webpack_require__(159);
-	var Hello = __webpack_require__(160);
+	var Cards = __webpack_require__(160);
+	var Groups = __webpack_require__(169);
+	var AppDispatcher = __webpack_require__(161);
 
-	document.addEventListener("DOMContentLoaded", function (event) {
-	  ReactDOM.render(React.createElement(Hello, null), document.getElementById('poop'));
-	});
+	module.exports.listen = function (host) {
+
+		ReactDOM.render(React.createElement(Cards, null), document.getElementById('cardContainer'));
+		var url = host + "/groups";
+		ReactDOM.render(React.createElement(Groups, { source: url }), document.getElementById('groupContainer'));
+
+		var socket = io.connect(host);
+		socket.on('devices', function (devices) {
+			AppDispatcher.dispatch({
+				actionName: 'update-device-list',
+				devices: devices
+			});
+		});
+	};
 
 /***/ },
 /* 2 */
@@ -19671,19 +19696,1400 @@
 /* 160 */
 /***/ function(module, exports, __webpack_require__) {
 
-	
 	'use strict';
 
 	var React = __webpack_require__(2);
+	var AppDispatcher = __webpack_require__(161);
+	var DeviceStore = __webpack_require__(165);
+	var request = __webpack_require__(168);
+
 	module.exports = React.createClass({
-	    displayName: 'HelloReact',
-	    render: function () {
-	        return React.createElement(
-	            'div',
-	            null,
-	            'Hello React'
-	        );
+		displayName: 'Cards',
+		componentWillMount: function () {
+			DeviceStore.bind('change', this.changed);
+		},
+		componentWillUnmount: function () {
+			DeviceStore.unbind('change', this.changed);
+		},
+		getInitialState: function () {
+			return {};
+		},
+		changed: function () {
+			var devices = DeviceStore.devices();
+			this.setState({
+				devices: devices
+			});
+		},
+		render: function () {
+
+			if (!this.state.hasOwnProperty("devices")) {
+				return React.createElement('div', null);
+			}
+
+			var devices = this.state.devices;
+			var cards = [];
+			var component = this;
+
+			Object.keys(devices).forEach(function (key) {
+				var device = devices[key];
+				var cssClass = "card-info";
+				var icon = device.icon;
+
+				if (device.status) {
+					if (device.status == "on") {
+						cssClass = "card-success";
+					}
+					if (device.status == "off") {
+						cssClass = "card-danger";
+					}
+					if (device.status == "waiting") {
+						cssClass = "card-warning animate-pulse";
+						icon = "icon-spin2 animate-spin";
+					}
+				} else {
+					cssClass = "card-primary";
+				}
+				cssClass = "card card-block card-inverse text-xs-center " + cssClass;
+
+				cards.push(React.createElement(
+					'div',
+					{ key: key,
+						className: cssClass,
+						onClick: component.toggleSwitch.bind(null, null, device, key)
+					},
+					React.createElement(
+						'blockquote',
+						{ className: 'card-blockquote' },
+						React.createElement('i', { className: icon }),
+						React.createElement(
+							'p',
+							null,
+							device.description
+						),
+						device.status ? React.createElement(
+							'footer',
+							null,
+							React.createElement(
+								'small',
+								null,
+								'Status: ',
+								device.status
+							)
+						) : null
+					)
+				));
+			});
+
+			return React.createElement(
+				'div',
+				null,
+				cards
+			);
+		},
+		toggleSwitch: function (event, device, id) {
+
+			if (device.hasOwnProperty("toggle") && device.status != "waiting") {
+				request(device.toggle, function (error, response, body) {
+					if (error) {
+						console.log(error);
+
+						return AppDispatcher.dispatch({
+							actionName: 'device-state-change',
+							device: {
+								id: id,
+								status: "unknown"
+							}
+						});
+					}
+				});
+			}
+
+			AppDispatcher.dispatch({
+				actionName: 'device-state-change',
+				device: {
+					id: id,
+					status: "waiting"
+				}
+			});
+		}
+	});
+
+/***/ },
+/* 161 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(162).Dispatcher;
+
+	module.exports = new Dispatcher();
+
+/***/ },
+/* 162 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright (c) 2014-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 */
+
+	module.exports.Dispatcher = __webpack_require__(163);
+
+
+/***/ },
+/* 163 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {/**
+	 * Copyright (c) 2014-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule Dispatcher
+	 * 
+	 * @preventMunge
+	 */
+
+	'use strict';
+
+	exports.__esModule = true;
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	var invariant = __webpack_require__(164);
+
+	var _prefix = 'ID_';
+
+	/**
+	 * Dispatcher is used to broadcast payloads to registered callbacks. This is
+	 * different from generic pub-sub systems in two ways:
+	 *
+	 *   1) Callbacks are not subscribed to particular events. Every payload is
+	 *      dispatched to every registered callback.
+	 *   2) Callbacks can be deferred in whole or part until other callbacks have
+	 *      been executed.
+	 *
+	 * For example, consider this hypothetical flight destination form, which
+	 * selects a default city when a country is selected:
+	 *
+	 *   var flightDispatcher = new Dispatcher();
+	 *
+	 *   // Keeps track of which country is selected
+	 *   var CountryStore = {country: null};
+	 *
+	 *   // Keeps track of which city is selected
+	 *   var CityStore = {city: null};
+	 *
+	 *   // Keeps track of the base flight price of the selected city
+	 *   var FlightPriceStore = {price: null}
+	 *
+	 * When a user changes the selected city, we dispatch the payload:
+	 *
+	 *   flightDispatcher.dispatch({
+	 *     actionType: 'city-update',
+	 *     selectedCity: 'paris'
+	 *   });
+	 *
+	 * This payload is digested by `CityStore`:
+	 *
+	 *   flightDispatcher.register(function(payload) {
+	 *     if (payload.actionType === 'city-update') {
+	 *       CityStore.city = payload.selectedCity;
+	 *     }
+	 *   });
+	 *
+	 * When the user selects a country, we dispatch the payload:
+	 *
+	 *   flightDispatcher.dispatch({
+	 *     actionType: 'country-update',
+	 *     selectedCountry: 'australia'
+	 *   });
+	 *
+	 * This payload is digested by both stores:
+	 *
+	 *   CountryStore.dispatchToken = flightDispatcher.register(function(payload) {
+	 *     if (payload.actionType === 'country-update') {
+	 *       CountryStore.country = payload.selectedCountry;
+	 *     }
+	 *   });
+	 *
+	 * When the callback to update `CountryStore` is registered, we save a reference
+	 * to the returned token. Using this token with `waitFor()`, we can guarantee
+	 * that `CountryStore` is updated before the callback that updates `CityStore`
+	 * needs to query its data.
+	 *
+	 *   CityStore.dispatchToken = flightDispatcher.register(function(payload) {
+	 *     if (payload.actionType === 'country-update') {
+	 *       // `CountryStore.country` may not be updated.
+	 *       flightDispatcher.waitFor([CountryStore.dispatchToken]);
+	 *       // `CountryStore.country` is now guaranteed to be updated.
+	 *
+	 *       // Select the default city for the new country
+	 *       CityStore.city = getDefaultCityForCountry(CountryStore.country);
+	 *     }
+	 *   });
+	 *
+	 * The usage of `waitFor()` can be chained, for example:
+	 *
+	 *   FlightPriceStore.dispatchToken =
+	 *     flightDispatcher.register(function(payload) {
+	 *       switch (payload.actionType) {
+	 *         case 'country-update':
+	 *         case 'city-update':
+	 *           flightDispatcher.waitFor([CityStore.dispatchToken]);
+	 *           FlightPriceStore.price =
+	 *             getFlightPriceStore(CountryStore.country, CityStore.city);
+	 *           break;
+	 *     }
+	 *   });
+	 *
+	 * The `country-update` payload will be guaranteed to invoke the stores'
+	 * registered callbacks in order: `CountryStore`, `CityStore`, then
+	 * `FlightPriceStore`.
+	 */
+
+	var Dispatcher = (function () {
+	  function Dispatcher() {
+	    _classCallCheck(this, Dispatcher);
+
+	    this._callbacks = {};
+	    this._isDispatching = false;
+	    this._isHandled = {};
+	    this._isPending = {};
+	    this._lastID = 1;
+	  }
+
+	  /**
+	   * Registers a callback to be invoked with every dispatched payload. Returns
+	   * a token that can be used with `waitFor()`.
+	   */
+
+	  Dispatcher.prototype.register = function register(callback) {
+	    var id = _prefix + this._lastID++;
+	    this._callbacks[id] = callback;
+	    return id;
+	  };
+
+	  /**
+	   * Removes a callback based on its token.
+	   */
+
+	  Dispatcher.prototype.unregister = function unregister(id) {
+	    !this._callbacks[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.unregister(...): `%s` does not map to a registered callback.', id) : invariant(false) : undefined;
+	    delete this._callbacks[id];
+	  };
+
+	  /**
+	   * Waits for the callbacks specified to be invoked before continuing execution
+	   * of the current callback. This method should only be used by a callback in
+	   * response to a dispatched payload.
+	   */
+
+	  Dispatcher.prototype.waitFor = function waitFor(ids) {
+	    !this._isDispatching ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): Must be invoked while dispatching.') : invariant(false) : undefined;
+	    for (var ii = 0; ii < ids.length; ii++) {
+	      var id = ids[ii];
+	      if (this._isPending[id]) {
+	        !this._isHandled[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): Circular dependency detected while ' + 'waiting for `%s`.', id) : invariant(false) : undefined;
+	        continue;
+	      }
+	      !this._callbacks[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): `%s` does not map to a registered callback.', id) : invariant(false) : undefined;
+	      this._invokeCallback(id);
 	    }
+	  };
+
+	  /**
+	   * Dispatches a payload to all registered callbacks.
+	   */
+
+	  Dispatcher.prototype.dispatch = function dispatch(payload) {
+	    !!this._isDispatching ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatch.dispatch(...): Cannot dispatch in the middle of a dispatch.') : invariant(false) : undefined;
+	    this._startDispatching(payload);
+	    try {
+	      for (var id in this._callbacks) {
+	        if (this._isPending[id]) {
+	          continue;
+	        }
+	        this._invokeCallback(id);
+	      }
+	    } finally {
+	      this._stopDispatching();
+	    }
+	  };
+
+	  /**
+	   * Is this Dispatcher currently dispatching.
+	   */
+
+	  Dispatcher.prototype.isDispatching = function isDispatching() {
+	    return this._isDispatching;
+	  };
+
+	  /**
+	   * Call the callback stored with the given id. Also do some internal
+	   * bookkeeping.
+	   *
+	   * @internal
+	   */
+
+	  Dispatcher.prototype._invokeCallback = function _invokeCallback(id) {
+	    this._isPending[id] = true;
+	    this._callbacks[id](this._pendingPayload);
+	    this._isHandled[id] = true;
+	  };
+
+	  /**
+	   * Set up bookkeeping needed when dispatching.
+	   *
+	   * @internal
+	   */
+
+	  Dispatcher.prototype._startDispatching = function _startDispatching(payload) {
+	    for (var id in this._callbacks) {
+	      this._isPending[id] = false;
+	      this._isHandled[id] = false;
+	    }
+	    this._pendingPayload = payload;
+	    this._isDispatching = true;
+	  };
+
+	  /**
+	   * Clear bookkeeping used for dispatching.
+	   *
+	   * @internal
+	   */
+
+	  Dispatcher.prototype._stopDispatching = function _stopDispatching() {
+	    delete this._pendingPayload;
+	    this._isDispatching = false;
+	  };
+
+	  return Dispatcher;
+	})();
+
+	module.exports = Dispatcher;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
+
+/***/ },
+/* 164 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule invariant
+	 */
+
+	"use strict";
+
+	/**
+	 * Use invariant() to assert state which your program assumes to be true.
+	 *
+	 * Provide sprintf-style format (only %s is supported) and arguments
+	 * to provide information about what broke and what you were
+	 * expecting.
+	 *
+	 * The invariant message will be stripped in production, but the invariant
+	 * will remain to ensure logic does not differ in production.
+	 */
+
+	var invariant = function (condition, format, a, b, c, d, e, f) {
+	  if (process.env.NODE_ENV !== 'production') {
+	    if (format === undefined) {
+	      throw new Error('invariant requires an error message argument');
+	    }
+	  }
+
+	  if (!condition) {
+	    var error;
+	    if (format === undefined) {
+	      error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
+	    } else {
+	      var args = [a, b, c, d, e, f];
+	      var argIndex = 0;
+	      error = new Error('Invariant Violation: ' + format.replace(/%s/g, function () {
+	        return args[argIndex++];
+	      }));
+	    }
+
+	    error.framesToPop = 1; // we don't care about invariant's own frame
+	    throw error;
+	  }
+	};
+
+	module.exports = invariant;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
+
+/***/ },
+/* 165 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var assign = __webpack_require__(166);
+	var EventEmitter = __webpack_require__(167).EventEmitter;
+	var AppDispatcher = __webpack_require__(161);
+
+	var devices = {};
+
+	var DeviceStore = assign({}, EventEmitter.prototype, {
+		bind: function (event, callback) {
+			this.on("change", callback);
+		},
+		unbind: function (event, callback) {
+			this.removeListener("change", callback);
+		},
+		emitChange: function () {
+			this.emit("change");
+		},
+		devices: function () {
+			return devices;
+		}
+	});
+
+	AppDispatcher.register(function (payload) {
+		switch (payload.actionName) {
+			case 'update-device-list':
+				devices = payload.devices;
+				DeviceStore.emitChange();
+				break;
+			case 'device-state-change':
+				var deviceId = payload.device.id;
+
+				if (devices.hasOwnProperty(deviceId)) {
+					devices[deviceId].status = payload.device.status;
+				}
+
+				DeviceStore.emitChange();
+				break;
+		}
+	});
+
+	module.exports = DeviceStore;
+
+/***/ },
+/* 166 */
+/***/ function(module, exports) {
+
+	/* eslint-disable no-unused-vars */
+	'use strict';
+	var hasOwnProperty = Object.prototype.hasOwnProperty;
+	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+
+	function toObject(val) {
+		if (val === null || val === undefined) {
+			throw new TypeError('Object.assign cannot be called with null or undefined');
+		}
+
+		return Object(val);
+	}
+
+	module.exports = Object.assign || function (target, source) {
+		var from;
+		var to = toObject(target);
+		var symbols;
+
+		for (var s = 1; s < arguments.length; s++) {
+			from = Object(arguments[s]);
+
+			for (var key in from) {
+				if (hasOwnProperty.call(from, key)) {
+					to[key] = from[key];
+				}
+			}
+
+			if (Object.getOwnPropertySymbols) {
+				symbols = Object.getOwnPropertySymbols(from);
+				for (var i = 0; i < symbols.length; i++) {
+					if (propIsEnumerable.call(from, symbols[i])) {
+						to[symbols[i]] = from[symbols[i]];
+					}
+				}
+			}
+		}
+
+		return to;
+	};
+
+
+/***/ },
+/* 167 */
+/***/ function(module, exports) {
+
+	// Copyright Joyent, Inc. and other Node contributors.
+	//
+	// Permission is hereby granted, free of charge, to any person obtaining a
+	// copy of this software and associated documentation files (the
+	// "Software"), to deal in the Software without restriction, including
+	// without limitation the rights to use, copy, modify, merge, publish,
+	// distribute, sublicense, and/or sell copies of the Software, and to permit
+	// persons to whom the Software is furnished to do so, subject to the
+	// following conditions:
+	//
+	// The above copyright notice and this permission notice shall be included
+	// in all copies or substantial portions of the Software.
+	//
+	// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+	// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+	// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+	// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+	// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+	// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+	// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+	function EventEmitter() {
+	  this._events = this._events || {};
+	  this._maxListeners = this._maxListeners || undefined;
+	}
+	module.exports = EventEmitter;
+
+	// Backwards-compat with node 0.10.x
+	EventEmitter.EventEmitter = EventEmitter;
+
+	EventEmitter.prototype._events = undefined;
+	EventEmitter.prototype._maxListeners = undefined;
+
+	// By default EventEmitters will print a warning if more than 10 listeners are
+	// added to it. This is a useful default which helps finding memory leaks.
+	EventEmitter.defaultMaxListeners = 10;
+
+	// Obviously not all Emitters should be limited to 10. This function allows
+	// that to be increased. Set to zero for unlimited.
+	EventEmitter.prototype.setMaxListeners = function(n) {
+	  if (!isNumber(n) || n < 0 || isNaN(n))
+	    throw TypeError('n must be a positive number');
+	  this._maxListeners = n;
+	  return this;
+	};
+
+	EventEmitter.prototype.emit = function(type) {
+	  var er, handler, len, args, i, listeners;
+
+	  if (!this._events)
+	    this._events = {};
+
+	  // If there is no 'error' event listener then throw.
+	  if (type === 'error') {
+	    if (!this._events.error ||
+	        (isObject(this._events.error) && !this._events.error.length)) {
+	      er = arguments[1];
+	      if (er instanceof Error) {
+	        throw er; // Unhandled 'error' event
+	      }
+	      throw TypeError('Uncaught, unspecified "error" event.');
+	    }
+	  }
+
+	  handler = this._events[type];
+
+	  if (isUndefined(handler))
+	    return false;
+
+	  if (isFunction(handler)) {
+	    switch (arguments.length) {
+	      // fast cases
+	      case 1:
+	        handler.call(this);
+	        break;
+	      case 2:
+	        handler.call(this, arguments[1]);
+	        break;
+	      case 3:
+	        handler.call(this, arguments[1], arguments[2]);
+	        break;
+	      // slower
+	      default:
+	        args = Array.prototype.slice.call(arguments, 1);
+	        handler.apply(this, args);
+	    }
+	  } else if (isObject(handler)) {
+	    args = Array.prototype.slice.call(arguments, 1);
+	    listeners = handler.slice();
+	    len = listeners.length;
+	    for (i = 0; i < len; i++)
+	      listeners[i].apply(this, args);
+	  }
+
+	  return true;
+	};
+
+	EventEmitter.prototype.addListener = function(type, listener) {
+	  var m;
+
+	  if (!isFunction(listener))
+	    throw TypeError('listener must be a function');
+
+	  if (!this._events)
+	    this._events = {};
+
+	  // To avoid recursion in the case that type === "newListener"! Before
+	  // adding it to the listeners, first emit "newListener".
+	  if (this._events.newListener)
+	    this.emit('newListener', type,
+	              isFunction(listener.listener) ?
+	              listener.listener : listener);
+
+	  if (!this._events[type])
+	    // Optimize the case of one listener. Don't need the extra array object.
+	    this._events[type] = listener;
+	  else if (isObject(this._events[type]))
+	    // If we've already got an array, just append.
+	    this._events[type].push(listener);
+	  else
+	    // Adding the second element, need to change to array.
+	    this._events[type] = [this._events[type], listener];
+
+	  // Check for listener leak
+	  if (isObject(this._events[type]) && !this._events[type].warned) {
+	    if (!isUndefined(this._maxListeners)) {
+	      m = this._maxListeners;
+	    } else {
+	      m = EventEmitter.defaultMaxListeners;
+	    }
+
+	    if (m && m > 0 && this._events[type].length > m) {
+	      this._events[type].warned = true;
+	      console.error('(node) warning: possible EventEmitter memory ' +
+	                    'leak detected. %d listeners added. ' +
+	                    'Use emitter.setMaxListeners() to increase limit.',
+	                    this._events[type].length);
+	      if (typeof console.trace === 'function') {
+	        // not supported in IE 10
+	        console.trace();
+	      }
+	    }
+	  }
+
+	  return this;
+	};
+
+	EventEmitter.prototype.on = EventEmitter.prototype.addListener;
+
+	EventEmitter.prototype.once = function(type, listener) {
+	  if (!isFunction(listener))
+	    throw TypeError('listener must be a function');
+
+	  var fired = false;
+
+	  function g() {
+	    this.removeListener(type, g);
+
+	    if (!fired) {
+	      fired = true;
+	      listener.apply(this, arguments);
+	    }
+	  }
+
+	  g.listener = listener;
+	  this.on(type, g);
+
+	  return this;
+	};
+
+	// emits a 'removeListener' event iff the listener was removed
+	EventEmitter.prototype.removeListener = function(type, listener) {
+	  var list, position, length, i;
+
+	  if (!isFunction(listener))
+	    throw TypeError('listener must be a function');
+
+	  if (!this._events || !this._events[type])
+	    return this;
+
+	  list = this._events[type];
+	  length = list.length;
+	  position = -1;
+
+	  if (list === listener ||
+	      (isFunction(list.listener) && list.listener === listener)) {
+	    delete this._events[type];
+	    if (this._events.removeListener)
+	      this.emit('removeListener', type, listener);
+
+	  } else if (isObject(list)) {
+	    for (i = length; i-- > 0;) {
+	      if (list[i] === listener ||
+	          (list[i].listener && list[i].listener === listener)) {
+	        position = i;
+	        break;
+	      }
+	    }
+
+	    if (position < 0)
+	      return this;
+
+	    if (list.length === 1) {
+	      list.length = 0;
+	      delete this._events[type];
+	    } else {
+	      list.splice(position, 1);
+	    }
+
+	    if (this._events.removeListener)
+	      this.emit('removeListener', type, listener);
+	  }
+
+	  return this;
+	};
+
+	EventEmitter.prototype.removeAllListeners = function(type) {
+	  var key, listeners;
+
+	  if (!this._events)
+	    return this;
+
+	  // not listening for removeListener, no need to emit
+	  if (!this._events.removeListener) {
+	    if (arguments.length === 0)
+	      this._events = {};
+	    else if (this._events[type])
+	      delete this._events[type];
+	    return this;
+	  }
+
+	  // emit removeListener for all listeners on all events
+	  if (arguments.length === 0) {
+	    for (key in this._events) {
+	      if (key === 'removeListener') continue;
+	      this.removeAllListeners(key);
+	    }
+	    this.removeAllListeners('removeListener');
+	    this._events = {};
+	    return this;
+	  }
+
+	  listeners = this._events[type];
+
+	  if (isFunction(listeners)) {
+	    this.removeListener(type, listeners);
+	  } else if (listeners) {
+	    // LIFO order
+	    while (listeners.length)
+	      this.removeListener(type, listeners[listeners.length - 1]);
+	  }
+	  delete this._events[type];
+
+	  return this;
+	};
+
+	EventEmitter.prototype.listeners = function(type) {
+	  var ret;
+	  if (!this._events || !this._events[type])
+	    ret = [];
+	  else if (isFunction(this._events[type]))
+	    ret = [this._events[type]];
+	  else
+	    ret = this._events[type].slice();
+	  return ret;
+	};
+
+	EventEmitter.prototype.listenerCount = function(type) {
+	  if (this._events) {
+	    var evlistener = this._events[type];
+
+	    if (isFunction(evlistener))
+	      return 1;
+	    else if (evlistener)
+	      return evlistener.length;
+	  }
+	  return 0;
+	};
+
+	EventEmitter.listenerCount = function(emitter, type) {
+	  return emitter.listenerCount(type);
+	};
+
+	function isFunction(arg) {
+	  return typeof arg === 'function';
+	}
+
+	function isNumber(arg) {
+	  return typeof arg === 'number';
+	}
+
+	function isObject(arg) {
+	  return typeof arg === 'object' && arg !== null;
+	}
+
+	function isUndefined(arg) {
+	  return arg === void 0;
+	}
+
+
+/***/ },
+/* 168 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// Browser Request
+	//
+	// Licensed under the Apache License, Version 2.0 (the "License");
+	// you may not use this file except in compliance with the License.
+	// You may obtain a copy of the License at
+	//
+	//     http://www.apache.org/licenses/LICENSE-2.0
+	//
+	// Unless required by applicable law or agreed to in writing, software
+	// distributed under the License is distributed on an "AS IS" BASIS,
+	// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	// See the License for the specific language governing permissions and
+	// limitations under the License.
+
+	// UMD HEADER START 
+	(function (root, factory) {
+	    if (true) {
+	        // AMD. Register as an anonymous module.
+	        !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	    } else if (typeof exports === 'object') {
+	        // Node. Does not work with strict CommonJS, but
+	        // only CommonJS-like enviroments that support module.exports,
+	        // like Node.
+	        module.exports = factory();
+	    } else {
+	        // Browser globals (root is window)
+	        root.returnExports = factory();
+	  }
+	}(this, function () {
+	// UMD HEADER END
+
+	var XHR = XMLHttpRequest
+	if (!XHR) throw new Error('missing XMLHttpRequest')
+	request.log = {
+	  'trace': noop, 'debug': noop, 'info': noop, 'warn': noop, 'error': noop
+	}
+
+	var DEFAULT_TIMEOUT = 3 * 60 * 1000 // 3 minutes
+
+	//
+	// request
+	//
+
+	function request(options, callback) {
+	  // The entry-point to the API: prep the options object and pass the real work to run_xhr.
+	  if(typeof callback !== 'function')
+	    throw new Error('Bad callback given: ' + callback)
+
+	  if(!options)
+	    throw new Error('No options given')
+
+	  var options_onResponse = options.onResponse; // Save this for later.
+
+	  if(typeof options === 'string')
+	    options = {'uri':options};
+	  else
+	    options = JSON.parse(JSON.stringify(options)); // Use a duplicate for mutating.
+
+	  options.onResponse = options_onResponse // And put it back.
+
+	  if (options.verbose) request.log = getLogger();
+
+	  if(options.url) {
+	    options.uri = options.url;
+	    delete options.url;
+	  }
+
+	  if(!options.uri && options.uri !== "")
+	    throw new Error("options.uri is a required argument");
+
+	  if(typeof options.uri != "string")
+	    throw new Error("options.uri must be a string");
+
+	  var unsupported_options = ['proxy', '_redirectsFollowed', 'maxRedirects', 'followRedirect']
+	  for (var i = 0; i < unsupported_options.length; i++)
+	    if(options[ unsupported_options[i] ])
+	      throw new Error("options." + unsupported_options[i] + " is not supported")
+
+	  options.callback = callback
+	  options.method = options.method || 'GET';
+	  options.headers = options.headers || {};
+	  options.body    = options.body || null
+	  options.timeout = options.timeout || request.DEFAULT_TIMEOUT
+
+	  if(options.headers.host)
+	    throw new Error("Options.headers.host is not supported");
+
+	  if(options.json) {
+	    options.headers.accept = options.headers.accept || 'application/json'
+	    if(options.method !== 'GET')
+	      options.headers['content-type'] = 'application/json'
+
+	    if(typeof options.json !== 'boolean')
+	      options.body = JSON.stringify(options.json)
+	    else if(typeof options.body !== 'string')
+	      options.body = JSON.stringify(options.body)
+	  }
+	  
+	  //BEGIN QS Hack
+	  var serialize = function(obj) {
+	    var str = [];
+	    for(var p in obj)
+	      if (obj.hasOwnProperty(p)) {
+	        str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+	      }
+	    return str.join("&");
+	  }
+	  
+	  if(options.qs){
+	    var qs = (typeof options.qs == 'string')? options.qs : serialize(options.qs);
+	    if(options.uri.indexOf('?') !== -1){ //no get params
+	        options.uri = options.uri+'&'+qs;
+	    }else{ //existing get params
+	        options.uri = options.uri+'?'+qs;
+	    }
+	  }
+	  //END QS Hack
+	  
+	  //BEGIN FORM Hack
+	  var multipart = function(obj) {
+	    //todo: support file type (useful?)
+	    var result = {};
+	    result.boundry = '-------------------------------'+Math.floor(Math.random()*1000000000);
+	    var lines = [];
+	    for(var p in obj){
+	        if (obj.hasOwnProperty(p)) {
+	            lines.push(
+	                '--'+result.boundry+"\n"+
+	                'Content-Disposition: form-data; name="'+p+'"'+"\n"+
+	                "\n"+
+	                obj[p]+"\n"
+	            );
+	        }
+	    }
+	    lines.push( '--'+result.boundry+'--' );
+	    result.body = lines.join('');
+	    result.length = result.body.length;
+	    result.type = 'multipart/form-data; boundary='+result.boundry;
+	    return result;
+	  }
+	  
+	  if(options.form){
+	    if(typeof options.form == 'string') throw('form name unsupported');
+	    if(options.method === 'POST'){
+	        var encoding = (options.encoding || 'application/x-www-form-urlencoded').toLowerCase();
+	        options.headers['content-type'] = encoding;
+	        switch(encoding){
+	            case 'application/x-www-form-urlencoded':
+	                options.body = serialize(options.form).replace(/%20/g, "+");
+	                break;
+	            case 'multipart/form-data':
+	                var multi = multipart(options.form);
+	                //options.headers['content-length'] = multi.length;
+	                options.body = multi.body;
+	                options.headers['content-type'] = multi.type;
+	                break;
+	            default : throw new Error('unsupported encoding:'+encoding);
+	        }
+	    }
+	  }
+	  //END FORM Hack
+
+	  // If onResponse is boolean true, call back immediately when the response is known,
+	  // not when the full request is complete.
+	  options.onResponse = options.onResponse || noop
+	  if(options.onResponse === true) {
+	    options.onResponse = callback
+	    options.callback = noop
+	  }
+
+	  // XXX Browsers do not like this.
+	  //if(options.body)
+	  //  options.headers['content-length'] = options.body.length;
+
+	  // HTTP basic authentication
+	  if(!options.headers.authorization && options.auth)
+	    options.headers.authorization = 'Basic ' + b64_enc(options.auth.username + ':' + options.auth.password);
+
+	  return run_xhr(options)
+	}
+
+	var req_seq = 0
+	function run_xhr(options) {
+	  var xhr = new XHR
+	    , timed_out = false
+	    , is_cors = is_crossDomain(options.uri)
+	    , supports_cors = ('withCredentials' in xhr)
+
+	  req_seq += 1
+	  xhr.seq_id = req_seq
+	  xhr.id = req_seq + ': ' + options.method + ' ' + options.uri
+	  xhr._id = xhr.id // I know I will type "_id" from habit all the time.
+
+	  if(is_cors && !supports_cors) {
+	    var cors_err = new Error('Browser does not support cross-origin request: ' + options.uri)
+	    cors_err.cors = 'unsupported'
+	    return options.callback(cors_err, xhr)
+	  }
+
+	  xhr.timeoutTimer = setTimeout(too_late, options.timeout)
+	  function too_late() {
+	    timed_out = true
+	    var er = new Error('ETIMEDOUT')
+	    er.code = 'ETIMEDOUT'
+	    er.duration = options.timeout
+
+	    request.log.error('Timeout', { 'id':xhr._id, 'milliseconds':options.timeout })
+	    return options.callback(er, xhr)
+	  }
+
+	  // Some states can be skipped over, so remember what is still incomplete.
+	  var did = {'response':false, 'loading':false, 'end':false}
+
+	  xhr.onreadystatechange = on_state_change
+	  xhr.open(options.method, options.uri, true) // asynchronous
+	  if(is_cors)
+	    xhr.withCredentials = !! options.withCredentials
+	  xhr.send(options.body)
+	  return xhr
+
+	  function on_state_change(event) {
+	    if(timed_out)
+	      return request.log.debug('Ignoring timed out state change', {'state':xhr.readyState, 'id':xhr.id})
+
+	    request.log.debug('State change', {'state':xhr.readyState, 'id':xhr.id, 'timed_out':timed_out})
+
+	    if(xhr.readyState === XHR.OPENED) {
+	      request.log.debug('Request started', {'id':xhr.id})
+	      for (var key in options.headers)
+	        xhr.setRequestHeader(key, options.headers[key])
+	    }
+
+	    else if(xhr.readyState === XHR.HEADERS_RECEIVED)
+	      on_response()
+
+	    else if(xhr.readyState === XHR.LOADING) {
+	      on_response()
+	      on_loading()
+	    }
+
+	    else if(xhr.readyState === XHR.DONE) {
+	      on_response()
+	      on_loading()
+	      on_end()
+	    }
+	  }
+
+	  function on_response() {
+	    if(did.response)
+	      return
+
+	    did.response = true
+	    request.log.debug('Got response', {'id':xhr.id, 'status':xhr.status})
+	    clearTimeout(xhr.timeoutTimer)
+	    xhr.statusCode = xhr.status // Node request compatibility
+
+	    // Detect failed CORS requests.
+	    if(is_cors && xhr.statusCode == 0) {
+	      var cors_err = new Error('CORS request rejected: ' + options.uri)
+	      cors_err.cors = 'rejected'
+
+	      // Do not process this request further.
+	      did.loading = true
+	      did.end = true
+
+	      return options.callback(cors_err, xhr)
+	    }
+
+	    options.onResponse(null, xhr)
+	  }
+
+	  function on_loading() {
+	    if(did.loading)
+	      return
+
+	    did.loading = true
+	    request.log.debug('Response body loading', {'id':xhr.id})
+	    // TODO: Maybe simulate "data" events by watching xhr.responseText
+	  }
+
+	  function on_end() {
+	    if(did.end)
+	      return
+
+	    did.end = true
+	    request.log.debug('Request done', {'id':xhr.id})
+
+	    xhr.body = xhr.responseText
+	    if(options.json) {
+	      try        { xhr.body = JSON.parse(xhr.responseText) }
+	      catch (er) { return options.callback(er, xhr)        }
+	    }
+
+	    options.callback(null, xhr, xhr.body)
+	  }
+
+	} // request
+
+	request.withCredentials = false;
+	request.DEFAULT_TIMEOUT = DEFAULT_TIMEOUT;
+
+	//
+	// defaults
+	//
+
+	request.defaults = function(options, requester) {
+	  var def = function (method) {
+	    var d = function (params, callback) {
+	      if(typeof params === 'string')
+	        params = {'uri': params};
+	      else {
+	        params = JSON.parse(JSON.stringify(params));
+	      }
+	      for (var i in options) {
+	        if (params[i] === undefined) params[i] = options[i]
+	      }
+	      return method(params, callback)
+	    }
+	    return d
+	  }
+	  var de = def(request)
+	  de.get = def(request.get)
+	  de.post = def(request.post)
+	  de.put = def(request.put)
+	  de.head = def(request.head)
+	  return de
+	}
+
+	//
+	// HTTP method shortcuts
+	//
+
+	var shortcuts = [ 'get', 'put', 'post', 'head' ];
+	shortcuts.forEach(function(shortcut) {
+	  var method = shortcut.toUpperCase();
+	  var func   = shortcut.toLowerCase();
+
+	  request[func] = function(opts) {
+	    if(typeof opts === 'string')
+	      opts = {'method':method, 'uri':opts};
+	    else {
+	      opts = JSON.parse(JSON.stringify(opts));
+	      opts.method = method;
+	    }
+
+	    var args = [opts].concat(Array.prototype.slice.apply(arguments, [1]));
+	    return request.apply(this, args);
+	  }
+	})
+
+	//
+	// CouchDB shortcut
+	//
+
+	request.couch = function(options, callback) {
+	  if(typeof options === 'string')
+	    options = {'uri':options}
+
+	  // Just use the request API to do JSON.
+	  options.json = true
+	  if(options.body)
+	    options.json = options.body
+	  delete options.body
+
+	  callback = callback || noop
+
+	  var xhr = request(options, couch_handler)
+	  return xhr
+
+	  function couch_handler(er, resp, body) {
+	    if(er)
+	      return callback(er, resp, body)
+
+	    if((resp.statusCode < 200 || resp.statusCode > 299) && body.error) {
+	      // The body is a Couch JSON object indicating the error.
+	      er = new Error('CouchDB error: ' + (body.error.reason || body.error.error))
+	      for (var key in body)
+	        er[key] = body[key]
+	      return callback(er, resp, body);
+	    }
+
+	    return callback(er, resp, body);
+	  }
+	}
+
+	//
+	// Utility
+	//
+
+	function noop() {}
+
+	function getLogger() {
+	  var logger = {}
+	    , levels = ['trace', 'debug', 'info', 'warn', 'error']
+	    , level, i
+
+	  for(i = 0; i < levels.length; i++) {
+	    level = levels[i]
+
+	    logger[level] = noop
+	    if(typeof console !== 'undefined' && console && console[level])
+	      logger[level] = formatted(console, level)
+	  }
+
+	  return logger
+	}
+
+	function formatted(obj, method) {
+	  return formatted_logger
+
+	  function formatted_logger(str, context) {
+	    if(typeof context === 'object')
+	      str += ' ' + JSON.stringify(context)
+
+	    return obj[method].call(obj, str)
+	  }
+	}
+
+	// Return whether a URL is a cross-domain request.
+	function is_crossDomain(url) {
+	  var rurl = /^([\w\+\.\-]+:)(?:\/\/([^\/?#:]*)(?::(\d+))?)?/
+
+	  // jQuery #8138, IE may throw an exception when accessing
+	  // a field from window.location if document.domain has been set
+	  var ajaxLocation
+	  try { ajaxLocation = location.href }
+	  catch (e) {
+	    // Use the href attribute of an A element since IE will modify it given document.location
+	    ajaxLocation = document.createElement( "a" );
+	    ajaxLocation.href = "";
+	    ajaxLocation = ajaxLocation.href;
+	  }
+
+	  var ajaxLocParts = rurl.exec(ajaxLocation.toLowerCase()) || []
+	    , parts = rurl.exec(url.toLowerCase() )
+
+	  var result = !!(
+	    parts &&
+	    (  parts[1] != ajaxLocParts[1]
+	    || parts[2] != ajaxLocParts[2]
+	    || (parts[3] || (parts[1] === "http:" ? 80 : 443)) != (ajaxLocParts[3] || (ajaxLocParts[1] === "http:" ? 80 : 443))
+	    )
+	  )
+
+	  //console.debug('is_crossDomain('+url+') -> ' + result)
+	  return result
+	}
+
+	// MIT License from http://phpjs.org/functions/base64_encode:358
+	function b64_enc (data) {
+	    // Encodes string using MIME base64 algorithm
+	    var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+	    var o1, o2, o3, h1, h2, h3, h4, bits, i = 0, ac = 0, enc="", tmp_arr = [];
+
+	    if (!data) {
+	        return data;
+	    }
+
+	    // assume utf8 data
+	    // data = this.utf8_encode(data+'');
+
+	    do { // pack three octets into four hexets
+	        o1 = data.charCodeAt(i++);
+	        o2 = data.charCodeAt(i++);
+	        o3 = data.charCodeAt(i++);
+
+	        bits = o1<<16 | o2<<8 | o3;
+
+	        h1 = bits>>18 & 0x3f;
+	        h2 = bits>>12 & 0x3f;
+	        h3 = bits>>6 & 0x3f;
+	        h4 = bits & 0x3f;
+
+	        // use hexets to index into b64, and append result to encoded string
+	        tmp_arr[ac++] = b64.charAt(h1) + b64.charAt(h2) + b64.charAt(h3) + b64.charAt(h4);
+	    } while (i < data.length);
+
+	    enc = tmp_arr.join('');
+
+	    switch (data.length % 3) {
+	        case 1:
+	            enc = enc.slice(0, -2) + '==';
+	        break;
+	        case 2:
+	            enc = enc.slice(0, -1) + '=';
+	        break;
+	    }
+
+	    return enc;
+	}
+	    return request;
+	//UMD FOOTER START
+	}));
+	//UMD FOOTER END
+
+
+/***/ },
+/* 169 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(2);
+	var AppDispatcher = __webpack_require__(161);
+	var DeviceStore = __webpack_require__(165);
+	var request = __webpack_require__(168);
+
+	module.exports = React.createClass({
+		displayName: 'Groups',
+		getInitialState: function () {
+			return {
+				groups: {}
+			};
+		},
+		componentDidMount: function () {
+			var component = this;
+			request(component.props.source, function (error, response, body) {
+				if (error) {
+					console.log(error);
+				}
+				component.setState({
+					groups: JSON.parse(body)
+				});
+			});
+		},
+		render: function () {
+			var groups = this.state.groups;
+			var results = [];
+
+			Object.keys(groups).forEach(function (group) {
+				results.push(React.createElement(
+					'li',
+					{ key: group, className: 'list-group-item' },
+					React.createElement(
+						'span',
+						{ className: 'liHeader' },
+						groups[group].name
+					),
+					React.createElement(
+						'div',
+						{ style: { float: 'right' } },
+						React.createElement(
+							'button',
+							{ className: 'btn btn-success btn-lg' },
+							'On'
+						),
+						' ',
+						React.createElement(
+							'button',
+							{ className: 'btn btn-danger btn-lg' },
+							'Off'
+						)
+					)
+				));
+			});
+
+			return React.createElement(
+				'ul',
+				{ className: 'list-group' },
+				results
+			);
+		}
 	});
 
 /***/ }

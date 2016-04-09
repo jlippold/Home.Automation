@@ -45,31 +45,5 @@ module.exports = React.createClass({
 	      	{results}
 	      </ul>
 	    );
-	},
-	toggleSwitch: function(event, device, id) {
-
-		if (device.hasOwnProperty("toggle") && device.status != "waiting") {
-			request(device.toggle, function(error, response, body) {
-				if (error) {
-					console.log(error);
-
-					return AppDispatcher.dispatch({
-						actionName: 'device-state-change',
-						device: {
-							id: id,
-							status: "unknown"
-						}
-					});
-				}
-			});
-		}
-		
-		AppDispatcher.dispatch({
-			actionName: 'device-state-change',
-			device: {
-				id: id,
-				status: "waiting"
-			}
-		});
 	}
 });
