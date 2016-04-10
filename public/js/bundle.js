@@ -85,6 +85,13 @@
 				devices: devices
 			});
 		});
+
+		socket.on('device', function (device) {
+			AppDispatcher.dispatch({
+				actionName: 'device-state-change',
+				device: device
+			});
+		});
 	};
 
 /***/ },
@@ -19712,13 +19719,26 @@
 			DeviceStore.unbind('change', this.changed);
 		},
 		getInitialState: function () {
+			var devices = DeviceStore.devices();
 			return {};
 		},
-		changed: function () {
-			var devices = DeviceStore.devices();
-			this.setState({
-				devices: devices
-			});
+		changed: function (deviceId, device) {
+			var devices = this.state.devices;
+
+			if (!devices) {
+				devices = DeviceStore.devices();
+				this.setState({
+					devices: devices
+				});
+			} else {
+
+				if (devices && devices.hasOwnProperty(deviceId)) {
+					devices[deviceId] = device;
+					this.setState({
+						devices: devices
+					});
+				}
+			}
 		},
 		render: function () {
 
@@ -19761,21 +19781,53 @@
 						'blockquote',
 						{ className: 'card-blockquote' },
 						React.createElement('i', { className: icon }),
-						React.createElement(
-							'p',
-							null,
-							device.description
-						),
-						device.status ? React.createElement(
-							'footer',
+						device.manufacturer != "ecobee" || device.status == "off" ? React.createElement(
+							'div',
 							null,
 							React.createElement(
-								'small',
+								'p',
 								null,
-								'Status: ',
-								device.status
+								device.description
+							),
+							React.createElement(
+								'footer',
+								null,
+								React.createElement(
+									'small',
+									null,
+									'Status: ',
+									device.status
+								)
 							)
-						) : null
+						) : React.createElement(
+							'div',
+							null,
+							React.createElement(
+								'div',
+								{ className: 'temp' },
+								device.description,
+								' - ',
+								React.createElement(
+									'strong',
+									null,
+									device.current.temperature,
+									'° '
+								)
+							),
+							React.createElement(
+								'footer',
+								null,
+								React.createElement(
+									'small',
+									null,
+									'low: ',
+									device.current.low,
+									'° high: ',
+									device.current.high,
+									'°'
+								)
+							)
+						)
 					)
 				));
 			});
@@ -20147,8 +20199,8 @@
 		unbind: function (event, callback) {
 			this.removeListener("change", callback);
 		},
-		emitChange: function () {
-			this.emit("change");
+		emitChange: function (deviceId, device) {
+			this.emit("change", deviceId, device);
 		},
 		devices: function () {
 			return devices;
@@ -20168,7 +20220,7 @@
 					devices[deviceId].status = payload.device.status;
 				}
 
-				DeviceStore.emitChange();
+				DeviceStore.emitChange(deviceId, devices[deviceId]);
 				break;
 		}
 	});
@@ -21074,7 +21126,7 @@
 
 					var icon;
 
-					if (groups[group].hasOwnProperty("icon") && groups[group].icon == "waiting") {
+					if (groups[group].hasOwnProperty("status") && groups[group].status == "waiting") {
 						icon = "icon-spin5 animate-spin";
 					} else {
 						icon = groups[group].icon;
@@ -21124,7 +21176,7 @@
 			AppDispatcher.dispatch({
 				actionName: 'group-state-change',
 				groupName: group,
-				icon: "waiting"
+				status: "waiting"
 			});
 
 			request(url, function (error, response, body) {
@@ -21135,7 +21187,7 @@
 					return AppDispatcher.dispatch({
 						actionName: 'group-state-change',
 						groupName: group,
-						icon: "ready"
+						status: "ready"
 					});
 				}, 1000);
 			});
@@ -21174,7 +21226,7 @@
 				GroupStore.emitChange();
 				break;
 			case 'group-state-change':
-				groups[payload.groupName].icon = payload.icon;
+				groups[payload.groupName].status = payload.status;
 				GroupStore.emitChange();
 				break;
 		}

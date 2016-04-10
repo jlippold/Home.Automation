@@ -26,7 +26,7 @@ AppDispatcher.register(function(payload) {
 			GroupStore.emitChange();
 			break;
 		case 'group-state-change':
-			groups[payload.groupName].icon = payload.icon;
+			groups[payload.groupName].status = payload.status;
 			GroupStore.emitChange();
 			break;
 	}

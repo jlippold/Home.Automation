@@ -2,6 +2,7 @@ var express = require('express');
 var insteon = require('./api/insteon');
 var harmony = require('./api/harmony');
 var lifx = require('./api/lifx');
+var thermostat = require('./api/thermostat');
 var groups = require('./lib/groups');
 var motion = require('./lib/motion');
 var activities = require('./lib/activities');
@@ -10,7 +11,7 @@ var routes = express.Router();
 //wire up /insteon to give  a list
 
 // insteon on / offs
-// http://localhost:3000/insteon/1f527c/toggle
+
 
 routes.get('/status', function(req, res, next) {
 	activities.status(function(err, results) {
@@ -18,6 +19,7 @@ routes.get('/status', function(req, res, next) {
 	});
 });
 
+// http://localhost:3000/insteon/1f527c/toggle
 routes.get('/insteon', function(req, res, next) {
 	var id = req.params.id;
 	insteon.listDevices(function(err, devices) {
@@ -37,6 +39,28 @@ routes.get('/insteon/:id/:status', function(req, res, next) {
 
 	if (["on", "off", "toggle"].indexOf(status) > -1) {
 		insteon.setStatusOfDevice(id, status, function(err) {
+			if (err) {
+				res.status(500);
+				res.send(err);
+				console.log(err);
+			} else {
+				res.sendStatus(200);
+			}
+		});
+	} else {
+		res.send("Bad status");
+		res.status(500);
+	}
+});
+
+routes.get('/thermostat/:id/:status', function(req, res, next) {
+	var id = req.params.id;
+	var status = req.params.status;
+
+	if (["on", "off", "toggle"].indexOf(status) > -1) {
+		
+		thermostat.setStatusOfDevice(id, status, function(err) {
+			
 			if (err) {
 				res.status(500);
 				res.send(err);

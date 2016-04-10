@@ -14,20 +14,36 @@ module.exports = React.createClass({
 		DeviceStore.unbind('change', this.changed);
 	},
 	getInitialState: function() {
-        return {};
-    },
-	changed: function() {
 		var devices = DeviceStore.devices();
-        this.setState({
-            devices: devices
-        });
+		return {
+			
+		};
+	},
+	changed: function(deviceId, device) {
+		var devices = this.state.devices;
+		
+		if (!devices) {
+			devices = DeviceStore.devices();
+			this.setState({
+				devices: devices
+			});
+		} else {
+
+			if (devices && devices.hasOwnProperty(deviceId)) {
+				devices[deviceId] = device;				
+				this.setState({
+					devices: devices
+				});
+			}
+		}
+
 	},
 	render: function() {
-		
+
 		if (!this.state.hasOwnProperty("devices")) {
 			return (<div></div>);
 		}
-		
+
 		var devices = this.state.devices;
 		var cards = [];
 		var component = this;
@@ -60,16 +76,33 @@ module.exports = React.createClass({
 				>
 			        <blockquote className="card-blockquote">
 			          <i className={icon} />
-			          <p>
-			            {device.description}
-			          </p>
-						{device.status ? (
-							<footer>
-						        <small>
-								Status: {device.status}
-								</small>
-							</footer>
-						) : null}
+
+						{device.manufacturer != "ecobee" || device.status == "off" ? (
+							<div>
+								<p>
+									{device.description}
+								</p>
+								<footer>
+								    <small>
+									Status: {device.status}
+									</small>
+								</footer>
+							</div>
+						) : (
+							<div>
+								<div className="temp">
+						        	{device.description}
+						        	&nbsp;-&nbsp;
+						        	<strong>{device.current.temperature}° </strong>
+						        </div>
+								<footer>
+							        <small>
+										low: {device.current.low}°
+										high: {device.current.high}°
+									</small>
+								</footer>
+							</div>
+						)}
 			        </blockquote>
 			    </div>
 			);
@@ -95,7 +128,7 @@ module.exports = React.createClass({
 				}
 			});
 		}
-		
+
 		AppDispatcher.dispatch({
 			actionName: 'device-state-change',
 			device: {

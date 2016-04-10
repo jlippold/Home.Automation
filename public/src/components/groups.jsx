@@ -44,7 +44,7 @@ module.exports = React.createClass({
 				
 				var icon;
 				
-				if (groups[group].hasOwnProperty("icon") && groups[group].icon == "waiting") {
+				if (groups[group].hasOwnProperty("status") && groups[group].status == "waiting") {
 					icon = "icon-spin5 animate-spin";
 				} else {
 					icon = groups[group].icon;
@@ -87,7 +87,7 @@ module.exports = React.createClass({
 			AppDispatcher.dispatch({
 				actionName: 'group-state-change',
 				groupName: group,
-				icon: "waiting"
+				status: "waiting"
 			});
 
 			request(url, function(error, response, body) {
@@ -98,7 +98,7 @@ module.exports = React.createClass({
 					return AppDispatcher.dispatch({
 						actionName: 'group-state-change',
 						groupName: group,
-						icon: "ready"
+						status: "ready"
 					});
 				}, 1000);
 			});

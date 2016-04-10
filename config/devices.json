@@ -119,7 +119,7 @@
 			}
 		},
 		"3c2bbd": {
-			"description": "Master Bathroom Light",
+			"description": "Bathroom Light",
 			"icon": "icon-bathroom",
 			"group": "Master Bedroom",
 			"type": "switch",
@@ -161,7 +161,7 @@
 			"enabled": true
 		},
 		"237643": {
-			"description": "Christmas Tree", 
+			"description": "Christmas Tree",
 			"icon": "icon-tree-1",
 			"group": "Living Room",
 			"type": "switch",
@@ -201,7 +201,7 @@
 		"livingroom": {
 			"ip": "192.168.1.86",
 			"location": "livingroom",
-			"icon": "icon-desktop-1",
+			"icon": "icon-desktop",
 			"group": "Living Room",
 			"activities": {
 				"16466902": {
@@ -242,7 +242,7 @@
 		"bedroom": {
 			"ip": "192.168.1.66",
 			"location": "bedroom",
-			"icon": "icon-desktop",
+			"icon": "icon-desktop-1",
 			"group": "Master bedroom",
 			"activities": {
 				"16416816": {
@@ -281,11 +281,25 @@
 			}
 		}
 	},
-	"custom": {
-		"thermostat": {
+	"thermostat": {
+		"heat": {
 			"method": "get",
+			"icon": "icon-hot",
+			"description": "Heater",
+			"group": "House",
 			"address": "http://192.168.1.110/home/climate/",
 			"on": "mode=heat&hold=true",
+			"off": "mode=off",
+			"location": "house",
+			"enabled": true
+		},
+		"cool": {
+			"method": "get",
+			"icon": "icon-cold",
+			"description": "Air Conditioner",
+			"group": "House",
+			"address": "http://192.168.1.110/home/climate/",
+			"on": "mode=cool&hold=true",
 			"off": "mode=off",
 			"location": "house",
 			"enabled": true

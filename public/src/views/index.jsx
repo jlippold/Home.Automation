@@ -17,4 +17,11 @@ module.exports.listen = function(host) {
 			devices: devices
 		});
 	});
+
+	socket.on('device', function(device) {
+		AppDispatcher.dispatch({
+			actionName: 'device-state-change',
+			device: device
+		});
+	});
 }

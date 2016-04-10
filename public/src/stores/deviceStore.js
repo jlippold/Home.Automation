@@ -11,8 +11,8 @@ var DeviceStore = assign({}, EventEmitter.prototype, {
 	unbind: function(event, callback) {
 		this.removeListener("change", callback);
 	},
-	emitChange: function() {
-		this.emit("change");
+	emitChange: function(deviceId, device) {
+		this.emit("change", deviceId, device);
 	},
 	devices: function() {
 		return devices;
@@ -27,12 +27,12 @@ AppDispatcher.register(function(payload) {
 			break;
 		case 'device-state-change':
 			var deviceId = payload.device.id;
-			
-			if (devices.hasOwnProperty(deviceId) ) {
+
+			if (devices.hasOwnProperty(deviceId)) {
 				devices[deviceId].status = payload.device.status;
 			}
 
-			DeviceStore.emitChange();
+			DeviceStore.emitChange(deviceId, devices[deviceId]);
 			break;
 	}
 });
