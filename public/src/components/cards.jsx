@@ -46,7 +46,7 @@ module.exports = React.createClass({
 				}
 				if (device.status == "waiting") {
 					cssClass = "card-warning animate-pulse";
-					icon = "icon-spin2 animate-spin";
+					icon = "icon-spin5 animate-spin";
 				}
 			} else {
 				cssClass = "card-primary";

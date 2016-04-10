@@ -19,10 +19,19 @@
 	    		padding-bottom: 20px;
 	    	}
 
-	    	i {
+	    	.card i {
 	    		font-size: 62px;
 	    	}
-
+	    	.liHeader i {
+				float: left;
+				font-size: 24px;
+				margin-left: -13px;
+				margin-right: 6px;
+				margin-top: 13px;
+	    	}
+	    	.liHeader span {
+				float: left;
+	    	}
 	    	li.list-group-item {
 	    		height: 80px;
 	    	}
@@ -67,6 +76,14 @@
 			    }
 	    	}
 	    	@media (max-width: 544px) {
+	    		span.liHeader span {
+	    			display: none;
+	    		}
+
+	    		span.liHeader i {
+	    			margin-left: 0 !important;
+	    		}
+
 	    		span.liHeader {
 					display: block;
 					float: left;

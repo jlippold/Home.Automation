@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function(event) {
-	console.log("asd");
+	
 	var host = window.location.origin;
 
 	if (host.indexOf("localhost:8080") > -1) {
