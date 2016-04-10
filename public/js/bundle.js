@@ -45,7 +45,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	document.addEventListener("DOMContentLoaded", function (event) {
-		console.log("asd");
+
 		var host = window.location.origin;
 
 		if (host.indexOf("localhost:8080") > -1) {
@@ -19744,7 +19744,7 @@
 					}
 					if (device.status == "waiting") {
 						cssClass = "card-warning animate-pulse";
-						icon = "icon-spin2 animate-spin";
+						icon = "icon-spin5 animate-spin";
 					}
 				} else {
 					cssClass = "card-primary";
@@ -21032,15 +21032,25 @@
 
 	var React = __webpack_require__(2);
 	var AppDispatcher = __webpack_require__(161);
-	var DeviceStore = __webpack_require__(165);
+	var GroupStore = __webpack_require__(170);
 	var request = __webpack_require__(168);
 
 	module.exports = React.createClass({
 		displayName: 'Groups',
+		componentWillMount: function () {
+			GroupStore.bind('change', this.changed);
+		},
+		componentWillUnmount: function () {
+			GroupStore.unbind('change', this.changed);
+		},
 		getInitialState: function () {
-			return {
-				groups: {}
-			};
+			return {};
+		},
+		changed: function () {
+			var groups = GroupStore.groups();
+			this.setState({
+				groups: groups
+			});
 		},
 		componentDidMount: function () {
 			var component = this;
@@ -21048,7 +21058,8 @@
 				if (error) {
 					console.log(error);
 				}
-				component.setState({
+				AppDispatcher.dispatch({
+					actionName: 'update-group-list',
 					groups: JSON.parse(body)
 				});
 			});
@@ -21056,41 +21067,120 @@
 		render: function () {
 			var groups = this.state.groups;
 			var results = [];
+			var component = this;
+			if (groups) {
 
-			Object.keys(groups).forEach(function (group) {
-				results.push(React.createElement(
-					'li',
-					{ key: group, className: 'list-group-item' },
-					React.createElement(
-						'span',
-						{ className: 'liHeader' },
-						groups[group].name
-					),
-					React.createElement(
-						'div',
-						{ style: { float: 'right' } },
+				Object.keys(groups).forEach(function (group) {
+
+					var icon;
+
+					if (groups[group].hasOwnProperty("icon") && groups[group].icon == "waiting") {
+						icon = "icon-spin5 animate-spin";
+					} else {
+						icon = groups[group].icon;
+					}
+
+					results.push(React.createElement(
+						'li',
+						{ key: group, className: 'list-group-item' },
 						React.createElement(
-							'button',
-							{ className: 'btn btn-success btn-lg' },
-							'On'
+							'span',
+							{ className: 'liHeader' },
+							React.createElement('i', { className: icon }),
+							groups[group].name
 						),
-						' ',
 						React.createElement(
-							'button',
-							{ className: 'btn btn-danger btn-lg' },
-							'Off'
+							'div',
+							{ style: { float: 'right' } },
+							React.createElement(
+								'button',
+								{ onClick: component.runGroup.bind(null, null, group, "on"),
+									className: 'btn btn-success btn-lg' },
+								React.createElement('i', { className: 'icon-ok' }),
+								'On'
+							),
+							' ',
+							React.createElement(
+								'button',
+								{ onClick: component.runGroup.bind(null, null, group, "off"),
+									className: 'btn btn-danger btn-lg' },
+								React.createElement('i', { className: 'icon-cancel-1' }),
+								'Off'
+							)
 						)
-					)
-				));
-			});
+					));
+				});
+			}
 
 			return React.createElement(
 				'ul',
 				{ className: 'list-group' },
 				results
 			);
+		},
+		runGroup: function (event, group, status) {
+			var url = this.props.source + "/" + group + "/" + status;
+
+			AppDispatcher.dispatch({
+				actionName: 'group-state-change',
+				groupName: group,
+				icon: "waiting"
+			});
+
+			request(url, function (error, response, body) {
+				if (error) {
+					console.log(error);
+				}
+				setTimeout(function () {
+					return AppDispatcher.dispatch({
+						actionName: 'group-state-change',
+						groupName: group,
+						icon: "ready"
+					});
+				}, 1000);
+			});
 		}
 	});
+
+/***/ },
+/* 170 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var assign = __webpack_require__(166);
+	var EventEmitter = __webpack_require__(167).EventEmitter;
+	var AppDispatcher = __webpack_require__(161);
+
+	var groups;
+
+	var GroupStore = assign({}, EventEmitter.prototype, {
+		bind: function (event, callback) {
+			this.on("change", callback);
+		},
+		unbind: function (event, callback) {
+			this.removeListener("change", callback);
+		},
+		emitChange: function () {
+			this.emit("change");
+		},
+		groups: function () {
+			return groups;
+		}
+	});
+
+	AppDispatcher.register(function (payload) {
+		switch (payload.actionName) {
+			case 'update-group-list':
+				groups = payload.groups;
+				GroupStore.emitChange();
+				break;
+			case 'group-state-change':
+				groups[payload.groupName].icon = payload.icon;
+				GroupStore.emitChange();
+				break;
+		}
+	});
+
+	module.exports = GroupStore;
 
 /***/ }
 /******/ ]);
