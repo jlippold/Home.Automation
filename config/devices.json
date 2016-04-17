@@ -133,15 +133,15 @@
 			"enabled": true
 		},
 		"2f5595": {
-			"description": "Dining Room Small Lamp",
-			"icon": "icon-lamp",
+			"description": "Dining Room Tall Lamp",
+			"icon": "icon-lamp2",
 			"group": "Dining Room",
 			"type": "switch",
 			"enabled": true
 		},
 		"2998cd": {
-			"description": "Dining Room Tall Lamp",
-			"icon": "icon-lamp2",
+			"description": "Dining Room Small Lamp",
+			"icon": "icon-lamp",
 			"group": "Dining Room",
 			"type": "switch",
 			"enabled": true
@@ -207,35 +207,17 @@
 				"16466902": {
 					"id": "16466902",
 					"name": "Watch TV",
-					"supplementalCommands": [{
-						"device": "30691958",
-						"command": "F4"
-					}, {
-						"device": "30691958",
-						"command": "F1"
-					}]
+					"supplementalCommands": []
 				},
 				"16476999": {
 					"id": "16476999",
 					"name": "Watch a Movie",
-					"supplementalCommands": [{
-						"device": "30691958",
-						"command": "F5"
-					}, {
-						"device": "30691958",
-						"command": "F1"
-					}, {
-						"device": "30691958",
-						"command": "F3"
-					}]
+					"supplementalCommands": []
 				},
 				"-1": {
 					"id": "-1",
 					"name": "PowerOff",
-					"supplementalCommands": [{
-						"device": "30691958",
-						"command": "F2"
-					}]
+					"supplementalCommands": []
 				}
 			}
 		},
@@ -248,35 +230,17 @@
 				"16416816": {
 					"id": "16416816",
 					"name": "Watch TV",
-					"supplementalCommands": [{
-						"device": "30692460",
-						"command": "F4"
-					}, {
-						"device": "30692460",
-						"command": "F1"
-					}]
+					"supplementalCommands": []
 				},
 				"16416899": {
 					"id": "16416899",
 					"name": "Watch movie",
-					"supplementalCommands": [{
-						"device": "30692460",
-						"command": "F5"
-					}, {
-						"device": "30692460",
-						"command": "F1"
-					}, {
-						"device": "30692460",
-						"command": "F3"
-					}]
+					"supplementalCommands": []
 				},
 				"-1": {
 					"id": "-1",
 					"name": "PowerOff",
-					"supplementalCommands": [{
-						"device": "30692460",
-						"command": "F2"
-					}]
+					"supplementalCommands": []
 				}
 			}
 		}

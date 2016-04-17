@@ -21,6 +21,7 @@
     "hover.css": "^2.0.2",
     "moment": "^2.10.6",
     "node-expat": "^2.3.13",
+    "node-lifx": "^0.5.1",
     "object-assign": "^4.0.1",
     "react": "^0.14.8",
     "react-dom": "^0.14.8",
