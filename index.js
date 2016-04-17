@@ -2,6 +2,7 @@ var express = require('express');
 var async = require('async');
 var insteon = require('./api/insteon');
 var harmony = require('./api/harmony');
+var lifx = require('./api/lifx');
 var router = require('./router');
 var dispatcher = require('./lib/dispatch');
 var cors = require('cors');
@@ -43,6 +44,12 @@ async.auto({
 			next();
 		});
 	},
+	lifxClient: function(next) {
+		lifx.init(function() {
+			console.log("connected to lifx client");
+			next();
+		});
+	},
 	harmonyActivities: function(next) {
 		harmony.init(function() {
 			console.log("retrieved harmony commands");
@@ -54,13 +61,8 @@ async.auto({
 			console.log("got device list");
 			next(err);
 		});
-	}],
-	express: ['deviceList', function(next, results) {
-		//app.listen(3000);
-		console.log("web server is running");
-		next();
-	}],
-	sockets: ['express', function(next) {
+	}], 
+	sockets: ['lifxClient', 'deviceList', function(next) {
         var port = 3000;
 		server.listen(port, function() {
 			console.log("Listening from " + port);

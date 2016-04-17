@@ -1,28 +1,22 @@
 var express = require('express');
-var insteon = require('./api/insteon');
-var harmony = require('./api/harmony');
-var lifx = require('./api/lifx');
-var thermostat = require('./api/thermostat');
-var groups = require('./lib/groups');
-var motion = require('./lib/motion');
-var activities = require('./lib/activities');
+var api = require("./api/");
+var lib = require("./lib/");
 var routes = express.Router();
 
-//wire up /insteon to give  a list
-
-// insteon on / offs
-
-
-routes.get('/status', function(req, res, next) {
-	activities.status(function(err, results) {
+routes.get('/api/status', function(req, res, next) {
+	lib.activities.status(function(err, results) {
 		res.send(results);	
 	});
 });
 
-// http://localhost:3000/insteon/1f527c/toggle
-routes.get('/insteon', function(req, res, next) {
+routes.get('/api/refresh', function(req, res, next) {
+	lib.dispatch.updateStatus();
+	res.send("Refreshing");
+});
+
+routes.get('/api/groups', function(req, res, next) {
 	var id = req.params.id;
-	insteon.listDevices(function(err, devices) {
+	lib.groups.list(function(err, devices) {
 		if (err) {
 			res.status(500);
 			res.send(err);
@@ -33,12 +27,26 @@ routes.get('/insteon', function(req, res, next) {
 	});
 });
 
+routes.get('/insteon', function(req, res, next) {
+	var id = req.params.id;
+	api.insteon.listDevices(function(err, devices) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+			console.log(err);
+		} else {
+			res.send(devices);
+		}
+	});
+});
+
+// http://localhost:3000/insteon/1f527c/toggle
 routes.get('/insteon/:id/:status', function(req, res, next) {
 	var id = req.params.id;
 	var status = req.params.status;
 
 	if (["on", "off", "toggle"].indexOf(status) > -1) {
-		insteon.setStatusOfDevice(id, status, function(err) {
+		api.insteon.setStatusOfDevice(id, status, function(err) {
 			if (err) {
 				res.status(500);
 				res.send(err);
@@ -53,13 +61,50 @@ routes.get('/insteon/:id/:status', function(req, res, next) {
 	}
 });
 
+// http://localhost:3000/lifx/d073d5125481/toggle
+
+routes.get('/lifx/:id/:status', function(req, res, next) {
+	var id = req.params.id;
+	var status = req.params.status;
+
+	if (["on", "off", "toggle"].indexOf(status) > -1) {
+		api.lifx.setStatusOfDevice(id, status, function(err) {
+			if (err) {
+				res.status(500);
+				res.send(err);
+				console.log(err);
+			} else {
+				res.sendStatus(200);
+			}
+		});
+	} else {
+		res.send("Bad status");
+		res.status(500);
+	}
+});
+
+routes.get('/lifx', function(req, res, next) {
+	var id = req.params.id;
+	api.lifx.listDevices(function(err, devices) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+			console.log(err);
+		} else {
+			res.send(devices);
+		}
+	});
+});
+
+// http://localhost:3000/thermostat/heat/on
+
 routes.get('/thermostat/:id/:status', function(req, res, next) {
 	var id = req.params.id;
 	var status = req.params.status;
 
 	if (["on", "off", "toggle"].indexOf(status) > -1) {
 		
-		thermostat.setStatusOfDevice(id, status, function(err) {
+		api.thermostat.setStatusOfDevice(id, status, function(err) {
 			
 			if (err) {
 				res.status(500);
@@ -75,51 +120,11 @@ routes.get('/thermostat/:id/:status', function(req, res, next) {
 	}
 });
 
-routes.get('/lifx/:id/on', function(req, res, next) {
-	var id = req.params.id;
-	lifx.setStatus(id, "on", function(err) {
-		if (err) {
-			res.status(500);
-			res.send(err);
-			console.log(err);
-		} else {
-			res.sendStatus(200);
-		}
-	});
-});
-
-routes.get('/lifx/:id/off', function(req, res, next) {
-	var id = req.params.id;
-	lifx.setStatus(id, "off", function(err) {
-		if (err) {
-			res.status(500);
-			res.send(err);
-			console.log(err);
-		} else {
-			res.sendStatus(200);
-		}
-	});
-});
-
-
-// group on / offs
-routes.get('/groups', function(req, res, next) {
-	var id = req.params.id;
-	groups.list(function(err, devices) {
-		if (err) {
-			res.status(500);
-			res.send(err);
-			console.log(err);
-		} else {
-			res.send(devices);
-		}
-	});
-});
 
 // http://localhost:3000/groups/livingroom/off
 routes.get('/groups/:id/on', function(req, res, next) {
 	res.sendStatus(200);
-	groups.setStatus(req.params.id, "on", function(err) {
+	lib.groups.setStatus(req.params.id, "on", function(err) {
 		if (err) {
 			console.log(err);
 		}
@@ -128,16 +133,17 @@ routes.get('/groups/:id/on', function(req, res, next) {
 
 routes.get('/groups/:id/off', function(req, res, next) {
 	res.sendStatus(200);
-	groups.setStatus(req.params.id, "off", function(err) {
+	lib.groups.setStatus(req.params.id, "off", function(err) {
 		if (err) {
 			console.log(err);
 		}
 	});
 });
 
+
 // http://localhost:3000/harmony/hubs
 routes.get('/harmony/hubs', function(req, res, next) {
-	harmony.listHubs(function(hubs) {
+	api.harmony.listHubs(function(hubs) {
 		res.send(hubs);
 	});
 });
@@ -145,7 +151,7 @@ routes.get('/harmony/hubs', function(req, res, next) {
 // http://localhost:3000/harmony/hubs/livingroom
 routes.get('/harmony/hubs/:hub', function(req, res, next) {
 	var hub = req.params.hub;
-	harmony.listRoomCommands(hub, function(err, commands) {
+	api.harmony.listRoomCommands(hub, function(err, commands) {
 		res.send(commands);
 	});
 });
@@ -156,7 +162,7 @@ routes.get('/harmony/hubs/:hub/activities/:activity', function(req, res, next) {
 	var activity = req.params.activity;
 	res.sendStatus(200);
 	
-	harmony.runActivity(hub, activity, function(err) {
+	api.harmony.runActivity(hub, activity, function(err) {
 		if (err) {
 			console.log(err);
 		}
@@ -169,7 +175,7 @@ routes.get('/harmony/hubs/:hub/activities/:activity/toggle', function(req, res, 
 	var activity = req.params.activity;
 	res.sendStatus(200);
 
-	harmony.toggleActivity(hub, activity, function(err) {
+	api.harmony.toggleActivity(hub, activity, function(err) {
 		if (err) {
 			console.log(err);
 		}
@@ -181,7 +187,7 @@ routes.get('/harmony/hubs/:hub/devices/:device/commands/:command', function(req,
 	var hub = req.params.hub;
 	var device = req.params.device;
 	var command = req.params.command;
-	harmony.runCommand(hub, device, command, function(err) {
+	api.harmony.runCommand(hub, device, command, function(err) {
 		if (err) {
 			res.status(500);
 			res.send(err);
@@ -198,7 +204,7 @@ routes.get('/harmony/hubs/:hub/devices/:device/commands/:command', function(req,
 
 routes.get('/motion/testFire/:device', function(req, res, next) {
 	var device = req.params.device;
-	motion.testFire(device, function(err, commands) {
+	lib.motion.testFire(device, function(err, commands) {
 		if (err) {
 			res.status(500);
 			res.send(err);

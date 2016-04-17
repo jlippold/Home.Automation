@@ -176,15 +176,13 @@
 		}
 	},
 	"lifx": {
-		"bedroom": {
+		"d073d5125481": {
 			"description": "Master Bedroom Lamp",
-			"ifttt_maker": {
-				"on": "light_on",
-				"off": "light_off"
-			},
 			"icon": "icon-lightbulb",
 			"group": "Master Bedroom",
-			"enabled": true
+			"online": false,
+			"enabled": true,
+			"status": "offline"
 		}
 	},
 	"kodi": {

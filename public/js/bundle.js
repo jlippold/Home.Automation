@@ -71,12 +71,19 @@
 	var Cards = __webpack_require__(160);
 	var Groups = __webpack_require__(169);
 	var AppDispatcher = __webpack_require__(161);
+	var request = __webpack_require__(168);
 
 	module.exports.listen = function (host) {
 
 		ReactDOM.render(React.createElement(Cards, null), document.getElementById('cardContainer'));
-		var url = host + "/groups";
+		var url = host + "/api/groups";
 		ReactDOM.render(React.createElement(Groups, { source: url }), document.getElementById('groupContainer'));
+
+		request(host + "/api/refresh", function (error, response, body) {
+			if (error) {
+				console.log(error);
+			}
+		});
 
 		var socket = io.connect(host);
 		socket.on('devices', function (devices) {
@@ -19758,17 +19765,19 @@
 				if (device.status) {
 					if (device.status == "on") {
 						cssClass = "card-success";
-					}
-					if (device.status == "off") {
+					} else if (device.status == "off") {
 						cssClass = "card-danger";
-					}
-					if (device.status == "waiting") {
+					} else if (device.status == "waiting") {
 						cssClass = "card-warning animate-pulse";
 						icon = "icon-spin5 animate-spin";
+					} else if (device.status == "offline") {
+						cssClass = "card-default";
+						icon = "icon-cancel-1";
 					}
 				} else {
 					cssClass = "card-primary";
 				}
+
 				cssClass = "card card-block card-inverse text-xs-center " + cssClass;
 
 				cards.push(React.createElement(
@@ -19840,7 +19849,7 @@
 		},
 		toggleSwitch: function (event, device, id) {
 
-			if (device.hasOwnProperty("toggle") && device.status != "waiting") {
+			if (device.hasOwnProperty("toggle") && ["on", "off"].indexOf(device.status) > -1) {
 				request(device.toggle, function (error, response, body) {
 					if (error) {
 						console.log(error);
@@ -19849,11 +19858,13 @@
 							actionName: 'device-state-change',
 							device: {
 								id: id,
-								status: "unknown"
+								status: "offline"
 							}
 						});
 					}
 				});
+			} else {
+				return;
 			}
 
 			AppDispatcher.dispatch({

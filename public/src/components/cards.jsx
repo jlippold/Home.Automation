@@ -4,7 +4,6 @@ var AppDispatcher = require('../dispatcher/AppDispatcher.js');
 var DeviceStore = require('../stores/deviceStore.js');
 var request = require('browser-request');
 
-
 module.exports = React.createClass({
 	displayName: 'Cards',
 	componentWillMount: function() {
@@ -16,12 +15,12 @@ module.exports = React.createClass({
 	getInitialState: function() {
 		var devices = DeviceStore.devices();
 		return {
-			
+
 		};
 	},
 	changed: function(deviceId, device) {
 		var devices = this.state.devices;
-		
+
 		if (!devices) {
 			devices = DeviceStore.devices();
 			this.setState({
@@ -30,7 +29,7 @@ module.exports = React.createClass({
 		} else {
 
 			if (devices && devices.hasOwnProperty(deviceId)) {
-				devices[deviceId] = device;				
+				devices[deviceId] = device;
 				this.setState({
 					devices: devices
 				});
@@ -56,17 +55,19 @@ module.exports = React.createClass({
 			if (device.status) {
 				if (device.status == "on") {
 					cssClass = "card-success";
-				}
-				if (device.status == "off") {
+				} else if (device.status == "off") {
 					cssClass = "card-danger";
-				}
-				if (device.status == "waiting") {
+				} else if (device.status == "waiting") {
 					cssClass = "card-warning animate-pulse";
 					icon = "icon-spin5 animate-spin";
+				} else if (device.status == "offline") {
+					cssClass = "card-default";
+					icon = "icon-cancel-1";
 				}
 			} else {
 				cssClass = "card-primary";
 			}
+
 			cssClass = "card card-block card-inverse text-xs-center " + cssClass;
 
 			cards.push(
@@ -113,7 +114,7 @@ module.exports = React.createClass({
 	},
 	toggleSwitch: function(event, device, id) {
 
-		if (device.hasOwnProperty("toggle") && device.status != "waiting") {
+		if (device.hasOwnProperty("toggle") && ["on", "off"].indexOf(device.status) > -1) {
 			request(device.toggle, function(error, response, body) {
 				if (error) {
 					console.log(error);
@@ -122,11 +123,13 @@ module.exports = React.createClass({
 						actionName: 'device-state-change',
 						device: {
 							id: id,
-							status: "unknown"
+							status: "offline"
 						}
 					});
 				}
 			});
+		} else {
+			return;
 		}
 
 		AppDispatcher.dispatch({
