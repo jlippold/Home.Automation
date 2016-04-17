@@ -47,7 +47,7 @@ function getStatusOfDevice(mode, callback) {
 	var device = devices.thermostat[mode];
 
 	getStatus(device, function(err, thermostat) {
-		if (thermostat && thermostat.hasOwnProperty("current")) { 
+		if (thermostat && thermostat.hasOwnProperty("current")) {
 			if (mode == thermostat.current.mode) {
 				callback(err, "on", thermostat);
 			} else {
@@ -56,7 +56,7 @@ function getStatusOfDevice(mode, callback) {
 		} else {
 			device.current = {};
 			callback(err, "off", device);
-		} 
+		}
 	});
 
 }
@@ -82,10 +82,13 @@ function getStatus(thermostat, callback) {
 		if (error) {
 			return callback(error);
 		}
-		var result = parseJSON(body);
-		thermostat.current = result;
 
-		return callback(error, thermostat);
+		parseJSON(body, function(err, result) {
+			if (!err) {
+				thermostat.current = result;
+			}
+			return callback(err, thermostat);
+		});
 	});
 }
 
@@ -98,21 +101,32 @@ function setStatus(id, status, callback) {
 		if (error) {
 			return callback(error);
 		}
-		var result = parseJSON(body);
-		thermostat.current = result;
+		parseJSON(body, function(err, result) {
+			if (!err) {
+				thermostat.current = result;
+			}
+			return callback(err, thermostat);
+		});
 
-		return callback(error, thermostat);
 	});
 }
 
-function parseJSON(body) {
-	var result = JSON.parse(body);
+function parseJSON(body, callback) {
+
+	var result;
+
+	try {
+		result = JSON.parse(body);
+	} catch (e) {
+		return callback(e);
+	}
+
 	var device = result.thermostatList[0];
 
-	return {
+	return callback(null, {
 		mode: device.settings.hvacMode, //"off", "heat", "cool"
 		temperature: (device.runtime.actualTemperature / 10),
 		low: (device.runtime.desiredCool / 10),
 		high: (device.runtime.desiredHeat / 10)
-	};
+	});
 }
