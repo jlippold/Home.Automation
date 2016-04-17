@@ -63,7 +63,7 @@
 			"enabled": true
 		},
 		"357531": {
-			"description": "8 button keypad",
+			"description": "Livroom keypad",
 			"type": "keypad",
 			"enabled": true,
 			"actions": {
@@ -115,6 +115,62 @@
 					"id": "bedroom",
 					"description": "bedroom",
 					"status": "off"
+				}
+			}
+		},
+		"3EBF4E": {
+			"description": "Bedroom keypad",
+			"type": "keypad",
+			"enabled": true,
+			"actions": {
+				"1": {
+					"type": "harmony",
+					"id": "bedroom",
+					"activity": "16416899",
+					"description": "TV",
+					"status": "toggle"
+				},
+				"2": {
+					"type": "insteon",
+					"id": "3c2bbd",
+					"description": "Bathroom",
+					"status": "toggle"
+				},
+				"3": {
+					"type": "group",
+					"id": "bedroom",
+					"description": "bedroom",
+					"status": "off"
+				},
+				"4": {
+					"type": "ecobee",
+					"id": "cool",
+					"description": "AC On",
+					"status": "on"
+				},
+				"5": {
+					"type": "group",
+					"id": "livingroom",
+					"description": "Living Room",
+					"status": "off"
+				},
+				"6": {
+					"type": "ecobee",
+					"id": "cool",
+					"description": "AC Off",
+					"status": "off"
+				},
+				"7": {
+					"type": "group",
+					"id": "dining_room",
+					"description": "Dining Room",
+					"status": "off"
+				},
+				"8": {
+					"type": "ecobee",
+					"id": "heat",
+					"description": "Heat On",
+					"status": "on"
 				}
 			}
 		},
@@ -318,6 +374,10 @@
 				"id": "bedroom",
 				"activity": "16416899",
 				"description": "Watch TV"
+			}, {
+				"type": "lifx",
+				"id": "d073d5125481",
+				"description": "Bedroom Lamp"
 			}],
 			"off": [{
 				"type": "insteon",
@@ -332,6 +392,10 @@
 				"id": "bedroom",
 				"activity": "-1",
 				"description": "TV Off"
+			}, {
+				"type": "lifx",
+				"id": "d073d5125481",
+				"description": "Bedroom Lamp"
 			}]
 		},
 		"dining_room": {

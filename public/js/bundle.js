@@ -76,8 +76,7 @@
 	module.exports.listen = function (host) {
 
 		ReactDOM.render(React.createElement(Cards, null), document.getElementById('cardContainer'));
-		var url = host + "/api/groups";
-		ReactDOM.render(React.createElement(Groups, { source: url }), document.getElementById('groupContainer'));
+		ReactDOM.render(React.createElement(Groups, { host: host }), document.getElementById('groupContainer'));
 
 		request(host + "/api/refresh", function (error, response, body) {
 			if (error) {
@@ -21117,7 +21116,7 @@
 		},
 		componentDidMount: function () {
 			var component = this;
-			request(component.props.source, function (error, response, body) {
+			request(component.props.host + "/api/groups", function (error, response, body) {
 				if (error) {
 					console.log(error);
 				}
@@ -21182,7 +21181,7 @@
 			);
 		},
 		runGroup: function (event, group, status) {
-			var url = this.props.source + "/" + group + "/" + status;
+			var url = this.props.host + "/groups/" + group + "/" + status;
 
 			AppDispatcher.dispatch({
 				actionName: 'group-state-change',

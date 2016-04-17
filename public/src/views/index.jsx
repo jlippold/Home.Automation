@@ -8,8 +8,7 @@ var request = require('browser-request');
 module.exports.listen = function(host) {
 	
 	ReactDOM.render(<Cards />, document.getElementById('cardContainer'))
-	var url = host + "/api/groups";
-	ReactDOM.render(<Groups source={url} />, document.getElementById('groupContainer'))
+	ReactDOM.render(<Groups host={host} />, document.getElementById('groupContainer'))
 
 	request(host + "/api/refresh", function(error, response, body) {
 		if (error) {
