@@ -202,20 +202,21 @@
 			"icon": "icon-desktop",
 			"group": "Living Room",
 			"activities": {
-				"16466902": {
-					"id": "16466902",
-					"name": "Watch TV",
-					"supplementalCommands": []
-				},
 				"16476999": {
 					"id": "16476999",
 					"name": "Watch a Movie",
-					"supplementalCommands": []
+					"supplementalCommands": [{
+						"device": "30665096",
+						"command": "Green"
+					}]
 				},
 				"-1": {
 					"id": "-1",
 					"name": "PowerOff",
-					"supplementalCommands": []
+					"supplementalCommands": [{
+						"device": "30665096",
+						"command": "Red"
+					}]
 				}
 			}
 		},
@@ -225,20 +226,21 @@
 			"icon": "icon-desktop-1",
 			"group": "Master bedroom",
 			"activities": {
-				"16416816": {
-					"id": "16416816",
-					"name": "Watch TV",
-					"supplementalCommands": []
-				},
 				"16416899": {
 					"id": "16416899",
 					"name": "Watch movie",
-					"supplementalCommands": []
+					"supplementalCommands": [{
+						"device": "30275820",
+						"command": "Green"
+					}]
 				},
 				"-1": {
 					"id": "-1",
 					"name": "PowerOff",
-					"supplementalCommands": []
+					"supplementalCommands": [{
+						"device": "30275820",
+						"command": "Red"
+					}]
 				}
 			}
 		}
