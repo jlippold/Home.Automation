@@ -215,4 +215,8 @@ routes.get('/motion/testFire/:device', function(req, res, next) {
 	});
 });
 
+
+
+
+
 module.exports = routes;

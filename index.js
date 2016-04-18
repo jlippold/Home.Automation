@@ -6,19 +6,38 @@ var lifx = require('./api/lifx');
 var router = require('./router');
 var dispatcher = require('./lib/dispatch');
 var cors = require('cors');
+var auth = require('http-auth');
 
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 
+//authentication
+var basic = auth.basic({
+	realm: "Jeds House.",
+	file: __dirname + "/config/users.htpasswd"
+});
+
+app.use(function(req, res, next) {
+	if (req.headers.host == "jed.bz") {
+		auth.connect(basic)(req, res, next)
+	} else {
+		next();
+	}
+});
+
 //expose public folder as static assets
 app.use(express.static(__dirname + '/public'));
 
 app.use(cors({
-  origin: 'http://localhost:8080'
+	origin: 'http://localhost:8080'
 }));
 
-app.use('/', router);
+var prefix = ""
+if (process.env.NODE_ENV == "COME_BACK") {
+	prefix = "home";
+}
+app.use("/" + prefix, router);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -61,9 +80,9 @@ async.auto({
 			console.log("got device list");
 			next(err);
 		});
-	}], 
+	}],
 	sockets: ['lifxClient', 'deviceList', function(next) {
-        var port = 3000;
+		var port = 3000;
 		server.listen(port, function() {
 			console.log("Listening from " + port);
 		});
