@@ -24,7 +24,7 @@ module.exports = React.createClass({
 	},
 	componentDidMount: function() {
 		var component = this;
-		request(component.props.host + "/api/groups", function(error, response, body) {
+		request(component.props.host + "api/groups", function(error, response, body) {
 			if (error) {
 				console.log(error);
 			}
@@ -82,7 +82,7 @@ module.exports = React.createClass({
 	    );
 	},
 	runGroup: function(event, group, status) {
-			var url = this.props.host + "/groups/" + group + "/" + status;
+			var url = this.props.host + "groups/" + group + "/" + status;
 			
 			AppDispatcher.dispatch({
 				actionName: 'group-state-change',

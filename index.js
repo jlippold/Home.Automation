@@ -8,6 +8,7 @@ var dispatcher = require('./lib/dispatch');
 var cors = require('cors');
 var auth = require('http-auth');
 
+
 var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
@@ -20,24 +21,24 @@ var basic = auth.basic({
 
 app.use(function(req, res, next) {
 	if (req.headers.host == "jed.bz") {
-		auth.connect(basic)(req, res, next)
+		auth.connect(basic)(req, res, next);
 	} else {
 		next();
 	}
 });
 
-//expose public folder as static assets
+
 app.use(express.static(__dirname + '/public'));
 
 app.use(cors({
 	origin: 'http://localhost:8080'
 }));
 
-var prefix = ""
-if (process.env.NODE_ENV == "COME_BACK") {
-	prefix = "home";
-}
+var prefix = "home";
+
+app.use("/", router); //for legacy calls
 app.use("/" + prefix, router);
+app.use("/" + prefix, express.static(__dirname + '/public'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

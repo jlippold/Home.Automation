@@ -5,12 +5,12 @@ var Groups = require('../components/groups.jsx');
 var AppDispatcher = require('../dispatcher/AppDispatcher.js');
 var request = require('browser-request');
 
-module.exports.listen = function(host) {
-	
-	ReactDOM.render(<Cards />, document.getElementById('cardContainer'))
-	ReactDOM.render(<Groups host={host} />, document.getElementById('groupContainer'))
+module.exports.listen = function(host, path) {
 
-	request(host + "/api/refresh", function(error, response, body) {
+	ReactDOM.render(<Cards />, document.getElementById('cardContainer'))
+	ReactDOM.render(<Groups host={host + path} />, document.getElementById('groupContainer'))
+
+	request(host + path + "api/refresh", function(error, response, body) {
 		if (error) {
 			console.log(error);
 		}

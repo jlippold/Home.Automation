@@ -3,7 +3,6 @@ var async = require('async');
 var fs = require('fs');
 var devices = require("../config/devices.json");
 var dispatch = require("../lib/dispatch");
-var pool = require("../lib/pool");
 
 module.exports.init = init;
 module.exports.listHubs = listHubs;
@@ -20,10 +19,6 @@ function init(callback) {
 	async.each(Object.keys(devices.harmony), function(key, nextHub) {
 		var address = devices.harmony[key].ip;
 		HarmonyHub(address).then(function(hub) {
-
-			hubs[address] = {};
-			hubs[address].hub = hub;
-
 			async.series({
 				activities: function(complete) {
 
@@ -38,6 +33,10 @@ function init(callback) {
 							};
 						});
 
+						if (hubs.hasOwnProperty(address) === false) {
+							hubs[address] = {};
+						}
+
 						hubs[address].activities = activities;
 
 						complete();
@@ -46,6 +45,10 @@ function init(callback) {
 				},
 				commands: function(complete) {
 					hub.getAvailableCommands().then(function(json) {
+
+						if (hubs.hasOwnProperty(address) === false) {
+							hubs[address] = {};
+						}
 
 						hubs[address].devices = [];
 
@@ -95,8 +98,6 @@ function listHubs(callback) {
 	callback(Object.keys(devices.harmony));
 }
 
-
-
 function runActivity(hubName, activity, callback) {
 	if (devices.harmony.hasOwnProperty(hubName) === false) {
 		return callback("hub does not exist");
@@ -106,15 +107,16 @@ function runActivity(hubName, activity, callback) {
 		return callback("activity does not exist");
 	}
 
-	var hub = hubs[address].hub;
-	hub.startActivity(activity);
-
-	dispatch.setStatus(hubName, activity == "-1" ? "off" : "on");
-
-	runSupplementals(hubName, activity, function(err) {
-		return callback();
+	HarmonyHub(address).then(function(hub) {
+		hub.startActivity(activity);
+		hub.end();
+		dispatch.setStatus(hubName, activity == "-1" ? "off" : "on");
+		setTimeout(function() {
+			runSupplementals(hubName, activity, function(err) {
+				return callback();
+			});
+		}, 5000);
 	});
-
 }
 
 function getStatusOfHub(hubName, callback) {
@@ -124,15 +126,16 @@ function getStatusOfHub(hubName, callback) {
 	}
 
 	var address = devices.harmony[hubName].ip;
-	var hub = hubs[address].hub;
-	hub.isOff().then(function(off) {
-		if (off) {
-			callback(null, "off");
-		} else {
-			callback(null, "on");
-		}
+	HarmonyHub(address).then(function(hub) {
+		hub.isOff().then(function(off) {
+			if (off) {
+				callback(null, "off");
+			} else {
+				callback(null, "on");
+			}
+			hub.end();
+		});
 	});
-
 }
 
 function validHub(hubName) {
@@ -144,22 +147,23 @@ function toggleActivity(hubName, activity, callback) {
 	if (!validHub(hubName)) {
 		return callback("hub does not exist");
 	}
-
 	var address = devices.harmony[hubName].ip;
 	if (hubs[address].activities.hasOwnProperty(activity) === false) {
 		return callback("activity does not exist");
 	}
 
-	var hub = hubs[address].hub;
-	hub.isOff().then(function(off) {
-		if (!off) {
-			activity = "-1";
-		}
-		runActivity(hubName, activity, function() {
-			callback();
+	HarmonyHub(address).then(function(hub) {
+		hub.isOff().then(function(off) {
+			hub.end();
+			if (!off) {
+				activity = "-1";
+			}
+
+			runActivity(hubName, activity, function() {
+				callback();
+			});
 		});
 	});
-
 
 }
 
@@ -168,6 +172,7 @@ function runSupplementals(hubName, activity, callback) {
 	if (activityConfig.hasOwnProperty("supplementalCommands")) {
 		async.eachSeries(activityConfig.supplementalCommands, function(item, next) {
 			runCommand(hubName, item.device, item.command, function() {
+				console.log(item);
 				setTimeout(function() {
 					return next();
 				}, 1000);
@@ -180,11 +185,11 @@ function runSupplementals(hubName, activity, callback) {
 	}
 }
 
-function runCommand(hubName, device, command, callback) {
-	if (devices.harmony.hasOwnProperty(hubName) === false) {
-		return callback("hubName does not exist");
+function runCommand(hub, device, command, callback) {
+	if (devices.harmony.hasOwnProperty(hub) === false) {
+		return callback("hub does not exist");
 	}
-	var address = devices.harmony[hubName].ip;
+	var address = devices.harmony[hub].ip;
 	var foundDevice;
 
 	hubs[address].devices.forEach(function(d) {
@@ -201,9 +206,10 @@ function runCommand(hubName, device, command, callback) {
 		return callback("command does not exist");
 	}
 
-	var hub = hubs[address].hub;
-	var encodedAction = foundDevice.commands[command].action.replace(/\:/g, '::');
-	hub.send('holdAction', 'action=' + encodedAction + ':status=press');
-	callback();
-
+	HarmonyHub(address).then(function(hub) {
+		var encodedAction = foundDevice.commands[command].action.replace(/\:/g, '::');
+		hub.send('holdAction', 'action=' + encodedAction + ':status=press');
+		hub.end();
+		callback();
+	});
 }

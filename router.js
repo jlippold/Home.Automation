@@ -1,11 +1,16 @@
 var express = require('express');
 var api = require("./api/");
 var lib = require("./lib/");
+var path = require('path');
 var routes = express.Router();
+
+routes.get('/', function(req, res, next) {
+	res.sendFile(path.join(__dirname, '/public/source.html'));
+});
 
 routes.get('/api/status', function(req, res, next) {
 	lib.activities.status(function(err, results) {
-		res.send(results);	
+		res.send(results);
 	});
 });
 
@@ -103,9 +108,9 @@ routes.get('/thermostat/:id/:status', function(req, res, next) {
 	var status = req.params.status;
 
 	if (["on", "off", "toggle"].indexOf(status) > -1) {
-		
+
 		api.thermostat.setStatusOfDevice(id, status, function(err) {
-			
+
 			if (err) {
 				res.status(500);
 				res.send(err);
@@ -161,7 +166,7 @@ routes.get('/harmony/hubs/:hub/activities/:activity', function(req, res, next) {
 	var hub = req.params.hub;
 	var activity = req.params.activity;
 	res.sendStatus(200);
-	
+
 	api.harmony.runActivity(hub, activity, function(err) {
 		if (err) {
 			console.log(err);
@@ -214,9 +219,6 @@ routes.get('/motion/testFire/:device', function(req, res, next) {
 		}
 	});
 });
-
-
-
 
 
 module.exports = routes;

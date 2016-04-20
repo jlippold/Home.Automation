@@ -46,17 +46,18 @@
 
 	document.addEventListener("DOMContentLoaded", function (event) {
 
-		var host = window.location.origin;
+		var origin = window.location.origin;
+		var path = "/home/";
 
-		if (host.indexOf("localhost:8080") > -1) {
-			host = "http://localhost:3000";
+		if (origin.indexOf("localhost:8080") > -1) {
+			origin = "http://localhost:3000";
 		}
 
 		var s = document.createElement("script");
 		s.type = "text/javascript";
-		s.src = host + "/socket.io/socket.io.js";
+		s.src = origin + "/socket.io/socket.io.js";
 		s.onload = function () {
-			var r = __webpack_require__(1).listen(host);
+			var r = __webpack_require__(1).listen(origin, path);
 		};
 
 		document.body.appendChild(s);
@@ -73,12 +74,12 @@
 	var AppDispatcher = __webpack_require__(161);
 	var request = __webpack_require__(168);
 
-	module.exports.listen = function (host) {
+	module.exports.listen = function (host, path) {
 
 		ReactDOM.render(React.createElement(Cards, null), document.getElementById('cardContainer'));
-		ReactDOM.render(React.createElement(Groups, { host: host }), document.getElementById('groupContainer'));
+		ReactDOM.render(React.createElement(Groups, { host: host + path }), document.getElementById('groupContainer'));
 
-		request(host + "/api/refresh", function (error, response, body) {
+		request(host + path + "api/refresh", function (error, response, body) {
 			if (error) {
 				console.log(error);
 			}
@@ -21116,7 +21117,7 @@
 		},
 		componentDidMount: function () {
 			var component = this;
-			request(component.props.host + "/api/groups", function (error, response, body) {
+			request(component.props.host + "api/groups", function (error, response, body) {
 				if (error) {
 					console.log(error);
 				}
@@ -21181,7 +21182,7 @@
 			);
 		},
 		runGroup: function (event, group, status) {
-			var url = this.props.host + "/groups/" + group + "/" + status;
+			var url = this.props.host + "groups/" + group + "/" + status;
 
 			AppDispatcher.dispatch({
 				actionName: 'group-state-change',

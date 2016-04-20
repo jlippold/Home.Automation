@@ -56,7 +56,7 @@ gulp.task('default', ['server:start', 'webpack'], function(done) {
     gulp.watch(api, ['server:restart']); 
   
 	gutil.log("\n\n\tFrontend DEV server at: \n\t\t",
-		gutil.colors.magenta("http://localhost:8080/webpack-dev-server/public\n")
+		gutil.colors.magenta("http://localhost:8080/webpack-dev-server/public/source.html\n")
 	);
 	gutil.log("\n\n\tExpress API server at: \n\t\t",
 		gutil.colors.magenta("http://localhost:3000/\n")
