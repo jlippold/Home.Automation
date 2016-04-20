@@ -1,7 +1,6 @@
 var Insteon = require('home-controller').Insteon;
 var async = require('async');
 var nodeUtil = require('util');
-var util = require("../lib/util");
 var moment = require('moment');
 var devices = require("../config/devices.json");
 var motion = require("../lib/motion");
@@ -78,9 +77,9 @@ function listDevices(callback) {
 		var device = devices.insteon[id];
 
 		if (device.type == "switch") {
-			device.onUrl = util.getHost() + "/insteon/" + id + "/on";
-			device.offUrl = util.getHost() + "/insteon/" + id + "/off";
-			device.toggle = util.getHost() + "/insteon/" + id + "/toggle";
+			device.onUrl = "/insteon/" + id + "/on";
+			device.offUrl = "/insteon/" + id + "/off";
+			device.toggle = "/insteon/" + id + "/toggle";
 			device.status = "unknown";
 		}
 

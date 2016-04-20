@@ -1,5 +1,4 @@
 var request = require('request');
-var util = require('../lib/util');
 var dispatch = require("../lib/dispatch");
 var devices = require("../config/devices.json");
 
@@ -67,9 +66,9 @@ function listDevices(callback) {
 
 		var device = devices.thermostat[id];
 
-		device.onUrl = util.getHost() + "/thermostat/" + id + "/on";
-		device.offUrl = util.getHost() + "/thermostat/" + id + "/off";
-		device.toggle = util.getHost() + "/thermostat/" + id + "/toggle";
+		device.onUrl = "/thermostat/" + id + "/on";
+		device.offUrl = "/thermostat/" + id + "/off";
+		device.toggle = "/thermostat/" + id + "/toggle";
 		device.status = "unknown";
 
 		list[id] = device;

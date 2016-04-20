@@ -1,6 +1,5 @@
 var async = require('async');
 var nodeUtil = require('util');
-var util = require("../lib/util");
 var devices = require("../config/devices.json").lifx;
 var dispatch = require("../lib/dispatch");
 var LifxClient = require('node-lifx').Client;
@@ -59,9 +58,9 @@ function listDevices(callback) {
 	var list = {};
 	Object.keys(devices).forEach(function(id) {
 		var device = devices[id];
-		device.onUrl = util.getHost() + "/lifx/" + id + "/on";
-		device.offUrl = util.getHost() + "/lifx/" + id + "/off";
-		device.toggle = util.getHost() + "/lifx/" + id + "/toggle";
+		device.onUrl = "/lifx/" + id + "/on";
+		device.offUrl = "/lifx/" + id + "/off";
+		device.toggle = "/lifx/" + id + "/toggle";
 		device.status = "unknown";
 		list[id] = device;
 	});
