@@ -20,7 +20,7 @@ var basic = auth.basic({
 });
 
 app.use(function(req, res, next) {
-	if (req.headers.host == "jed.bz") {
+	if (req.headers["x-arr-ssl"]) {
 		auth.connect(basic)(req, res, next);
 	} else {
 		next();
