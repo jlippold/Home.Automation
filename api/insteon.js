@@ -77,11 +77,11 @@ function listDevices(callback) {
 		var device = devices.insteon[id];
 
 		if (device.type == "switch") {
-			device.onUrl = "/insteon/" + id + "/on";
-			device.offUrl = "/insteon/" + id + "/off";
-			device.toggle = "/insteon/" + id + "/toggle";
+			device.onUrl = "insteon/" + id + "/on";
+			device.offUrl = "insteon/" + id + "/off";
+			device.toggle = "insteon/" + id + "/toggle";
 			device.status = "unknown";
-		}
+		} 
 
 		if (device.type == "motion" || device.type == "door") {
 			device.events = [];

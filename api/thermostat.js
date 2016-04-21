@@ -66,9 +66,9 @@ function listDevices(callback) {
 
 		var device = devices.thermostat[id];
 
-		device.onUrl = "/thermostat/" + id + "/on";
-		device.offUrl = "/thermostat/" + id + "/off";
-		device.toggle = "/thermostat/" + id + "/toggle";
+		device.onUrl = "thermostat/" + id + "/on";
+		device.offUrl = "thermostat/" + id + "/off";
+		device.toggle = "thermostat/" + id + "/toggle";
 		device.status = "unknown";
 
 		list[id] = device;

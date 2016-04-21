@@ -58,9 +58,9 @@ function listDevices(callback) {
 	var list = {};
 	Object.keys(devices).forEach(function(id) {
 		var device = devices[id];
-		device.onUrl = "/lifx/" + id + "/on";
-		device.offUrl = "/lifx/" + id + "/off";
-		device.toggle = "/lifx/" + id + "/toggle";
+		device.onUrl = "lifx/" + id + "/on";
+		device.offUrl = "lifx/" + id + "/off";
+		device.toggle = "lifx/" + id + "/toggle";
 		device.status = "unknown";
 		list[id] = device;
 	});

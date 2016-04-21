@@ -19850,6 +19850,7 @@
 		toggleSwitch: function (event, device, id) {
 
 			if (device.hasOwnProperty("toggle") && ["on", "off"].indexOf(device.status) > -1) {
+				console.log(device.toggle);
 				request(device.toggle, function (error, response, body) {
 					if (error) {
 						console.log(error);
