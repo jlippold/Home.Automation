@@ -3,6 +3,7 @@ var async = require('async');
 var fs = require('fs');
 var devices = require("../config/devices.json");
 var dispatch = require("../lib/dispatch");
+var pool = require("../lib/pool");
 
 module.exports.init = init;
 module.exports.listHubs = listHubs;
@@ -107,16 +108,19 @@ function runActivity(hubName, activity, callback) {
 		return callback("activity does not exist");
 	}
 
-	HarmonyHub(address).then(function(hub) {
-		hub.startActivity(activity);
-		hub.end();
-		dispatch.setStatus(hubName, activity == "-1" ? "off" : "on");
-		setTimeout(function() {
-			runSupplementals(hubName, activity, function(err) {
-				return callback();
-			});
-		}, 5000);
+	pool.add(function() {
+		HarmonyHub(address).then(function(hub) {
+			hub.startActivity(activity);
+			hub.end();
+			dispatch.setStatus(hubName, activity == "-1" ? "off" : "on");
+			setTimeout(function() {
+				runSupplementals(hubName, activity, function(err) {
+					return callback();
+				});
+			}, 2000);
+		});
 	});
+
 }
 
 function getStatusOfHub(hubName, callback) {
@@ -126,14 +130,17 @@ function getStatusOfHub(hubName, callback) {
 	}
 
 	var address = devices.harmony[hubName].ip;
-	HarmonyHub(address).then(function(hub) {
-		hub.isOff().then(function(off) {
-			if (off) {
-				callback(null, "off");
-			} else {
-				callback(null, "on");
-			}
-			hub.end();
+
+	pool.add(function() {
+		HarmonyHub(address).then(function(hub) {
+			hub.isOff().then(function(off) {
+				hub.end();
+				if (off) {
+					callback(null, "off");
+				} else {
+					callback(null, "on");
+				}
+			});
 		});
 	});
 }
@@ -152,15 +159,17 @@ function toggleActivity(hubName, activity, callback) {
 		return callback("activity does not exist");
 	}
 
-	HarmonyHub(address).then(function(hub) {
-		hub.isOff().then(function(off) {
-			hub.end();
-			if (!off) {
-				activity = "-1";
-			}
+	pool.add(function() {
+		HarmonyHub(address).then(function(hub) {
+			hub.isOff().then(function(off) {
+				hub.end();
+				if (!off) {
+					activity = "-1";
+				}
 
-			runActivity(hubName, activity, function() {
-				callback();
+				runActivity(hubName, activity, function() {
+					callback();
+				});
 			});
 		});
 	});
@@ -172,10 +181,7 @@ function runSupplementals(hubName, activity, callback) {
 	if (activityConfig.hasOwnProperty("supplementalCommands")) {
 		async.eachSeries(activityConfig.supplementalCommands, function(item, next) {
 			runCommand(hubName, item.device, item.command, function() {
-				console.log(item);
-				setTimeout(function() {
-					return next();
-				}, 1000);
+				return next();
 			});
 		}, function(err) {
 			return callback(err);
@@ -206,10 +212,12 @@ function runCommand(hub, device, command, callback) {
 		return callback("command does not exist");
 	}
 
-	HarmonyHub(address).then(function(hub) {
-		var encodedAction = foundDevice.commands[command].action.replace(/\:/g, '::');
-		hub.send('holdAction', 'action=' + encodedAction + ':status=press');
-		hub.end();
-		callback();
+	pool.add(function() {
+		HarmonyHub(address).then(function(hub) {
+			var encodedAction = foundDevice.commands[command].action.replace(/\:/g, '::');
+			hub.send('holdAction', 'action=' + encodedAction + ':status=press');
+			hub.end();
+			callback();
+		});
 	});
 }
