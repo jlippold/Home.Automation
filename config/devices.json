@@ -250,7 +250,7 @@
 			"description": "Master Bedroom Lamp",
 			"icon": "icon-lightbulb",
 			"group": "Master Bedroom",
-			"online": false,
+			"online": true,
 			"enabled": true,
 			"status": "offline"
 		},
@@ -258,7 +258,7 @@
 			"description": "Living Room Lamp",
 			"icon": "icon-lamp-1",
 			"group": "Living Room",
-			"online": false,
+			"online": true,
 			"enabled": true,
 			"status": "offline"
 		},
@@ -266,7 +266,7 @@
 			"description": "Dining Room Lamp",
 			"icon": "icon-lamp-1",
 			"group": "Dining Room",
-			"online": false,
+			"online": true,
 			"enabled": true,
 			"status": "offline"
 		}

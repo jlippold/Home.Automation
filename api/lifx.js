@@ -22,7 +22,7 @@ function init(callback) {
 
 	client.on('light-new', function(light) {
 		var id = light.id;
-		console.log("DISCOVERED: " + id);
+		//console.log("DISCOVERED: " + id);
 		if (devices.hasOwnProperty(id)) {
 			devices[id].online = true;
 			devices[id].ipaddress = light.address;
@@ -33,7 +33,7 @@ function init(callback) {
 
 	client.on('light-offline', function(light) {
 		var id = light.id;
-		console.log("OFFLINE: " + id);
+		//console.log("OFFLINE: " + id);
 		if (devices.hasOwnProperty(id)) {
 			devices[id].online = false;
 			dispatch.setStatus(id, "offline");
@@ -42,7 +42,7 @@ function init(callback) {
 	});
 	client.on('light-online', function(light) {
 		var id = light.id;
-		console.log("ONLINE: " + id);
+		//console.log("ONLINE: " + id);
 		if (devices.hasOwnProperty(id)) {
 			devices[id].online = true;
 			devices[id].ipaddress = light.address;
@@ -74,6 +74,9 @@ function getStatusOfDevice(id, callback) {
 	}
 	var device = client.light(id);
 
+	if (!device) {
+		return callback("Offline Device");
+	}
 	device.getPower(function(err, isOn) {
 
 		if (err) {
@@ -124,7 +127,6 @@ function setStatusOfDevice(id, status, callback) {
 	} else if (status == "toggle") {
 		getStatusOfDevice(id, function(err, status) {
 			status = (status == "on" ? "off" : "on");
-			console.log(status);
 			client.light(id)[status](500, function(err) {
 				if (err) {
 					console.error(err);
