@@ -81,16 +81,16 @@
 					"status": "toggle"
 				},
 				"3": {
-					"type": "insteon",
-					"id": "3728ac",
-					"description": "cabinets",
+					"type": "lifx",
+					"id": "d073d511ea88",
+					"description": "Lamp",
 					"status": "toggle"
 				},
 				"4": {
-					"type": "insteon",
-					"id": "1a8dbd",
-					"description": "cora",
-					"status": "toggle"
+					"type": "group",
+					"id": "livingroom",
+					"description": "Living Room",
+					"status": "off"
 				},
 				"5": {
 					"type": "group",
@@ -105,10 +105,10 @@
 					"status": "off"
 				},
 				"7": {
-					"type": "group",
-					"id": "house",
-					"description": "house",
-					"status": "off"
+					"type": "insteon",
+					"id": "1a8dbd",
+					"description": "kids",
+					"status": "toggle"
 				},
 				"8": {
 					"type": "group",
@@ -132,32 +132,32 @@
 				},
 				"2": {
 					"type": "insteon",
+					"id": "3f4b99",
+					"description": "Ceiling Light",
+					"status": "toggle"
+				},
+				"3": {
+					"type": "insteon",
 					"id": "3c2bbd",
 					"description": "Bathroom",
 					"status": "toggle"
 				},
-				"3": {
+				"4": {
+					"type": "insteon",
+					"id": "3f4b99_fan",
+					"description": "Ceiling Fan",
+					"status": "toggle"
+				},
+				"5": {
+					"type": "lifx",
+					"id": "d073d5125481",
+					"description": "Lamp",
+					"status": "toggle"
+				},
+				"6": {
 					"type": "group",
 					"id": "bedroom",
 					"description": "bedroom",
-					"status": "off"
-				},
-				"4": {
-					"type": "ecobee",
-					"id": "cool",
-					"description": "AC On",
-					"status": "on"
-				},
-				"5": {
-					"type": "group",
-					"id": "livingroom",
-					"description": "Living Room",
-					"status": "off"
-				},
-				"6": {
-					"type": "ecobee",
-					"id": "cool",
-					"description": "AC Off",
 					"status": "off"
 				},
 				"7": {
@@ -167,10 +167,10 @@
 					"status": "off"
 				},
 				"8": {
-					"type": "ecobee",
-					"id": "heat",
-					"description": "Heat On",
-					"status": "on"
+					"type": "group",
+					"id": "livingroom",
+					"description": "Living Room",
+					"status": "off"
 				}
 			}
 		},
@@ -397,8 +397,12 @@
 				"description": "bathroom"
 			}, {
 				"type": "insteon",
-				"id": "3c2cc5",
-				"description": "ceiling"
+				"id": "3f4b99_fan",
+				"description": "ceiling fan"
+			}, {
+				"type": "insteon",
+				"id": "3f4b99",
+				"description": "ceiling light"
 			}, {
 				"type": "harmony",
 				"id": "bedroom",
@@ -415,8 +419,12 @@
 				"description": "bathroom"
 			}, {
 				"type": "insteon",
-				"id": "3c2cc5",
-				"description": "ceiling"
+				"id": "3f4b99_fan",
+				"description": "ceiling fan"
+			}, {
+				"type": "insteon",
+				"id": "3f4b99",
+				"description": "ceiling light"
 			}, {
 				"type": "harmony",
 				"id": "bedroom",
@@ -436,8 +444,8 @@
 				"id": "2f5595",
 				"description": "lamp"
 			}, {
-				"type": "insteon",
-				"id": "2998cd",
+				"type": "lifx",
+				"id": "d073d5122368",
 				"description": "tall lamp"
 			}],
 			"off": [{
@@ -445,8 +453,8 @@
 				"id": "2f5595",
 				"description": "lamp"
 			}, {
-				"type": "insteon",
-				"id": "2998cd",
+				"type": "lifx",
+				"id": "d073d5122368",
 				"description": "tall lamp"
 			}]
 		},
