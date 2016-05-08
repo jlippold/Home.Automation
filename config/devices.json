@@ -182,10 +182,24 @@
 			"enabled": true
 		},
 		"3c2cc5": {
+			"description": "Master Bedroom Light Old",
+			"icon": "icon-bedroom",
+			"group": "Master Bedroom",
+			"type": "switch",
+			"enabled": false
+		},
+		"3f4b99": {
 			"description": "Master Bedroom Light",
 			"icon": "icon-bedroom",
 			"group": "Master Bedroom",
 			"type": "switch",
+			"enabled": true
+		},
+		"3f4b99_fan": {
+			"description": "Master Bedroom Fan",
+			"icon": "icon-fan",
+			"group": "Master Bedroom",
+			"type": "fan",
 			"enabled": true
 		},
 		"2f5595": {
@@ -193,7 +207,7 @@
 			"icon": "icon-lamp2",
 			"group": "Dining Room",
 			"type": "switch",
-			"enabled": true
+			"enabled": false
 		},
 		"2998cd": {
 			"description": "Dining Room Small Lamp",
@@ -236,6 +250,22 @@
 			"description": "Master Bedroom Lamp",
 			"icon": "icon-lightbulb",
 			"group": "Master Bedroom",
+			"online": false,
+			"enabled": true,
+			"status": "offline"
+		},
+		"d073d511ea88": {
+			"description": "Living Room Lamp",
+			"icon": "icon-lamp-1",
+			"group": "Living Room",
+			"online": false,
+			"enabled": true,
+			"status": "offline"
+		},
+		"d073d5122368": {
+			"description": "Dining Room Lamp",
+			"icon": "icon-lamp-1",
+			"group": "Dining Room",
 			"online": false,
 			"enabled": true,
 			"status": "offline"

@@ -76,12 +76,12 @@ function listDevices(callback) {
 
 		var device = devices.insteon[id];
 
-		if (device.type == "switch") {
+		if (device.type == "switch" || device.type == "fan") {
 			device.onUrl = "insteon/" + id + "/on";
 			device.offUrl = "insteon/" + id + "/off";
 			device.toggle = "insteon/" + id + "/toggle";
 			device.status = "unknown";
-		} 
+		}
 
 		if (device.type == "motion" || device.type == "door") {
 			device.events = [];
@@ -108,56 +108,99 @@ function getStatusOfDevice(id, callback) {
 	if (isValidDeviceId(id) === false) {
 		return callback("Invalid Device");
 	}
-	var device = hub.light(id);
-	device.level(function(err, level) {
-		if (level > 0) { //is on 
-			return callback(err, "on");
-		} else { //is off
-			return callback(err, "off");
-		}
-	});
+
+	var device = hub.light(id.substring(0, 6)); //remove fan suffix
+	if (devices.insteon[id].type === "switch") {
+		device.level(function(err, level) {
+			if (level > 0) { //is on 
+				return callback(err, "on");
+			} else { //is off
+				return callback(err, "off");
+			}
+		});
+	} else if (devices.insteon[id].type === "fan") {
+		device.fan().then(function(speed) {
+			return callback(null, speed == "off" ? "off" : "on");
+		});
+	}
 }
 
 function setStatusOfDevice(id, status, callback) {
 	if (isValidDeviceId(id) === false) {
 		return callback("Invalid Device");
 	}
-
+	var device = hub.light(id.substring(0, 6));
 	if (status == "on") {
 		pool.add(function() {
-			hub.light(id).turnOn().then(function() {
-				dispatch.setStatus(id, status);
-				callback(null);
-			});
-		});
-	} else if (status == "off") {
-		pool.add(function() {
-			hub.light(id).turnOff().then(function() {
-				dispatch.setStatus(id, status);
-				callback(null);
-			});
-		});
-	} else if (status == "toggle") {
-		var device = hub.light(id);
-		device.level(function(err, level) {
-			if (level > 0) { //is on
-				pool.add(function() {
-					device.turnOff()
-						.then(function(status) {
-							dispatch.setStatus(id, "off");
-							callback(null);
-						});
+			if (devices.insteon[id].type == "switch") {
+				hub.light(id).turnOn().then(function() {
+					dispatch.setStatus(id, status);
+					callback(null);
 				});
-			} else { //is off
-				pool.add(function() {
-					device.turnOn()
-						.then(function(status) {
-							dispatch.setStatus(id, "on");
-							callback(null);
-						});
+			} else { //fan
+				hub.light(id.substring(0, 6)).fanOn().then(function() {
+					dispatch.setStatus(id, status);
+					callback(null);
 				});
 			}
 		});
+	} else if (status == "off") {
+		pool.add(function() {
+			if (devices.insteon[id].type == "switch") {
+				hub.light(id).turnOff().then(function() {
+					dispatch.setStatus(id, status);
+					callback(null);
+				});
+			} else { //fan
+				hub.light(id.substring(0, 6)).fanOff().then(function() {
+					dispatch.setStatus(id, status);
+					callback(null);
+				});
+			}
+		});
+	} else if (status == "toggle") {
+		if (devices.insteon[id].type == "switch") {
+			getStatusOfDevice(id, function(err, status) {
+				if (status == "on") {
+					pool.add(function() {
+						device.turnOff()
+							.then(function(status) {
+								dispatch.setStatus(id, "off");
+								callback(null);
+							});
+					});
+				} else {
+					pool.add(function() {
+						device.turnOn()
+							.then(function(status) {
+								dispatch.setStatus(id, "on");
+								callback(null);
+							});
+					});
+				}
+			});
+		} else { //fan
+			getStatusOfDevice(id, function(err, status) {
+				if (status == "on") {
+					pool.add(function() {
+						device.fanOff()
+							.then(function(status) {
+								dispatch.setStatus(id, "off");
+								callback(null);
+							});
+					});
+				} else {
+					pool.add(function() {
+						device.fanOn()
+							.then(function(status) {
+								dispatch.setStatus(id, "on");
+								callback(null);
+							});
+					});
+				}
+			});
+		}
+
 	}
 
 }
@@ -167,7 +210,7 @@ function isValidDeviceId(id) {
 		return false;
 	}
 	var device = devices.insteon[id];
-	if (device.type != "switch") {
+	if (!(device.type === "switch" || device.type === "fan")) {
 		return false;
 	}
 	if (device.enabled === false) {
