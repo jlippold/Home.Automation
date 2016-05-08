@@ -13,6 +13,7 @@ var hub = new Insteon();
 module.exports.register = register;
 module.exports.setStatusOfDevice = setStatusOfDevice;
 module.exports.getStatusOfDevice = getStatusOfDevice;
+module.exports.dim = dim;
 module.exports.listDevices = listDevices;
 
 
@@ -202,6 +203,25 @@ function setStatusOfDevice(id, status, callback) {
 		}
 
 	}
+
+}
+
+function dim(id, level, callback) {
+	if (isValidDeviceId(id) === false) {
+		return callback("Invalid Device");
+	}
+
+	var device = hub.light(id.substring(0, 6));
+
+	pool.add(function() {
+		if (devices.insteon[id].type == "switch") {
+			hub.light(id).level(level).then(function() {
+				callback(null);
+			});
+		} else {
+			callback(null);
+		}
+	});
 
 }
 

@@ -45,6 +45,21 @@ routes.get('/insteon', function(req, res, next) {
 	});
 });
 
+// http://localhost:3000/insteon/3f4b99/dim/45
+routes.get('/insteon/:id/dim/:level', function(req, res, next) {
+	var id = req.params.id;
+	var level = req.params.level;
+	api.insteon.dim(id, level, function(err) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+			console.log(err);
+		} else {
+			res.sendStatus(200);
+		}
+	});
+});
+
 // http://localhost:3000/insteon/1f527c/toggle
 routes.get('/insteon/:id/:status', function(req, res, next) {
 	var id = req.params.id;
