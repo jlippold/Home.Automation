@@ -441,7 +441,7 @@
 			"icon": "icon-table",
 			"on": [{
 				"type": "insteon",
-				"id": "2f5595",
+				"id": "2998cd",
 				"description": "lamp"
 			}, {
 				"type": "lifx",
@@ -450,7 +450,7 @@
 			}],
 			"off": [{
 				"type": "insteon",
-				"id": "2f5595",
+				"id": "2998cd",
 				"description": "lamp"
 			}, {
 				"type": "lifx",

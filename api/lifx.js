@@ -124,6 +124,7 @@ function setStatusOfDevice(id, status, callback) {
 	} else if (status == "toggle") {
 		getStatusOfDevice(id, function(err, status) {
 			status = (status == "on" ? "off" : "on");
+			console.log(status);
 			client.light(id)[status](500, function(err) {
 				if (err) {
 					console.error(err);
