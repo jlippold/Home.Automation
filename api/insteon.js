@@ -105,25 +105,44 @@ function getInsteonDevicesByType(type) {
 	return arr;
 }
 
-function getStatusOfDevice(id, callback) {
+function getStatusOfDevice(id, callback, cached) {
+
+	if (arguments.length == 2) {
+		cached = false;
+	}
+
 	if (isValidDeviceId(id) === false) {
 		return callback("Invalid Device");
 	}
 
-	var device = hub.light(id.substring(0, 6)); //remove fan suffix
-	if (devices.insteon[id].type === "switch") {
-		device.level(function(err, level) {
-			if (level > 0) { //is on 
-				return callback(err, "on");
-			} else { //is off
+	if (devices.insteon[id].hasManualOverride || cached) { //check the status in real time
+
+		var device = hub.light(id.substring(0, 6)); //remove fan suffix
+		if (devices.insteon[id].type === "switch") {
+			device.level(function(err, level) {
+				if (level > 0) { //is on 
+					return callback(err, "on");
+				} else { //is off
+					return callback(err, "off");
+				}
+			});
+		} else if (devices.insteon[id].type === "fan") {
+			device.fan().then(function(speed) {
+				return callback(null, speed == "off" ? "off" : "on");
+			});
+		}
+
+	} else {
+		dispatch.devices(function(err, d) {
+			if (d.hasOwnProperty(id)) {
+				return callback(err, d[id].status);
+			} else {
+				console.log(err);
 				return callback(err, "off");
 			}
 		});
-	} else if (devices.insteon[id].type === "fan") {
-		device.fan().then(function(speed) {
-			return callback(null, speed == "off" ? "off" : "on");
-		});
 	}
+
 }
 
 function setStatusOfDevice(id, status, callback) {
