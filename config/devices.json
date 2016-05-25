@@ -207,12 +207,12 @@
 			"enabled": true
 		},
 		"2f5595": {
-			"description": "Dining Room Tall Lamp",
+			"description": "Dining Room Tall Lamp 2",
 			"icon": "icon-lamp2",
 			"group": "Dining Room",
 			"hasManualOverride": false,
 			"type": "switch",
-			"enabled": false
+			"enabled": true
 		},
 		"2998cd": {
 			"description": "Dining Room Small Lamp",
@@ -374,9 +374,9 @@
 				"id": "1f527c",
 				"description": "fireplace"
 			}, {
-				"type": "insteon",
-				"id": "237643",
-				"description": "xmas tree"
+				"type": "lifx",
+				"id": "d073d511ea88",
+				"description": "Living Room Lamp"
 			}, {
 				"type": "harmony",
 				"id": "livingroom",
@@ -388,9 +388,9 @@
 				"id": "1f527c",
 				"description": "fireplace"
 			}, {
-				"type": "insteon",
-				"id": "237643",
-				"description": "xmas tree"
+				"type": "lifx",
+				"id": "d073d511ea88",
+				"description": "Living Room Lamp"
 			}, {
 				"type": "harmony",
 				"id": "livingroom",
@@ -457,6 +457,10 @@
 				"type": "lifx",
 				"id": "d073d5122368",
 				"description": "tall lamp"
+			}, {
+				"type": "insteon",
+				"id": "2f5595",
+				"description": "lamp"
 			}],
 			"off": [{
 				"type": "insteon",
@@ -466,80 +470,10 @@
 				"type": "lifx",
 				"id": "d073d5122368",
 				"description": "tall lamp"
-			}]
-		},
-		"house": {
-			"name": "Entire House",
-			"icon": "icon-home",
-			"on": [{
-				"type": "insteon",
-				"id": "1f527c",
-				"description": "fireplace"
-			}, {
-				"type": "insteon",
-				"id": "237643",
-				"description": "xmas tree"
-			}, {
-				"type": "harmony",
-				"id": "livingroom",
-				"activity": "16476999",
-				"description": "Watch TV"
-			}, {
-				"type": "insteon",
-				"id": "3c2bbd",
-				"description": "bathroom"
-			}, {
-				"type": "insteon",
-				"id": "3c2cc5",
-				"description": "ceiling"
-			}, {
-				"type": "harmony",
-				"id": "bedroom",
-				"activity": "16416899",
-				"description": "Watch TV"
 			}, {
 				"type": "insteon",
 				"id": "2f5595",
 				"description": "lamp"
-			}, {
-				"type": "insteon",
-				"id": "2998cd",
-				"description": "tall lamp"
-			}],
-			"off": [{
-				"type": "insteon",
-				"id": "1f527c",
-				"description": "fireplace"
-			}, {
-				"type": "insteon",
-				"id": "237643",
-				"description": "xmas tree"
-			}, {
-				"type": "harmony",
-				"id": "livingroom",
-				"activity": "-1",
-				"description": "TV Off"
-			}, {
-				"type": "insteon",
-				"id": "3c2bbd",
-				"description": "bathroom"
-			}, {
-				"type": "insteon",
-				"id": "3c2cc5",
-				"description": "ceiling"
-			}, {
-				"type": "harmony",
-				"id": "bedroom",
-				"activity": "-1",
-				"description": "TV Off"
-			}, {
-				"type": "insteon",
-				"id": "2f5595",
-				"description": "lamp"
-			}, {
-				"type": "insteon",
-				"id": "2998cd",
-				"description": "tall lamp"
 			}]
 		}
 	}
