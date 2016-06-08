@@ -12,6 +12,10 @@
 				"type": "kodi",
 				"camera": 1,
 				"cutoff": 15
+			}, {
+				"type": "log",
+				"event": "Motion Detected",
+				"location": "Front Door"
 			}],
 			"enabled": true
 		},
@@ -32,6 +36,10 @@
 					"start": 18,
 					"end": 8
 				}
+			}, {
+				"type": "log",
+				"event": "Motion Detected",
+				"location": "Garage"
 			}],
 			"enabled": true
 		},
@@ -59,6 +67,10 @@
 			"actions": [{
 				"type": "kodi",
 				"addon": "plugin.seinfeld.sound"
+			}, {
+				"type": "log",
+				"event": "Door Opened",
+				"location": "Front Door"
 			}],
 			"enabled": true
 		},
@@ -178,6 +190,22 @@
 			"description": "Bathroom Light",
 			"icon": "icon-bathroom",
 			"group": "Master Bedroom",
+			"type": "switch",
+			"hasManualOverride": true,
+			"enabled": true
+		},
+		"40A548": {
+			"description": "Family Room Light",
+			"icon": "icon-fan",
+			"group": "Living Room",
+			"type": "switch",
+			"hasManualOverride": true,
+			"enabled": true
+		},
+		"1A8D98": {
+			"description": "Garage Outdoor Light",
+			"icon": "icon-lightbulb",
+			"group": "Garage",
 			"type": "switch",
 			"hasManualOverride": true,
 			"enabled": true
@@ -371,6 +399,10 @@
 			"icon": "icon-sofa",
 			"on": [{
 				"type": "insteon",
+				"id": "40A548",
+				"description": "Family room"
+			}, {
+				"type": "insteon",
 				"id": "1f527c",
 				"description": "fireplace"
 			}, {
@@ -384,6 +416,10 @@
 				"description": "Watch TV"
 			}],
 			"off": [{
+				"type": "insteon",
+				"id": "40A548",
+				"description": "Family room"
+			}, {
 				"type": "insteon",
 				"id": "1f527c",
 				"description": "fireplace"

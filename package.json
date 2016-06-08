@@ -20,6 +20,7 @@
     "home-controller": "^0.6.0",
     "hover.css": "^2.0.2",
     "http-auth": "^2.3.1",
+    "jsonfile": "^2.3.1",
     "moment": "^2.10.6",
     "node-expat": "^2.3.13",
     "node-lifx": "^0.5.1",
