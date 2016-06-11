@@ -16,6 +16,14 @@
 				"type": "log",
 				"event": "Motion Detected",
 				"location": "Front Door"
+			}, {
+				"type": "toggle",
+				"insteon": "40954A",
+				"cutoff": 600,
+				"betweenHours": {
+					"start": 17,
+					"end": 9
+				}
 			}],
 			"enabled": true
 		},
@@ -71,6 +79,14 @@
 				"type": "log",
 				"event": "Door Opened",
 				"location": "Front Door"
+			}, {
+				"type": "toggle",
+				"insteon": "40954A",
+				"cutoff": 600,
+				"betweenHours": {
+					"start": 17,
+					"end": 9
+				}
 			}],
 			"enabled": true
 		},
@@ -217,6 +233,14 @@
 			"type": "switch",
 			"hasManualOverride": true,
 			"enabled": false
+		},
+		"40954A": {
+			"description": "Porch Light",
+			"icon": "icon-door",
+			"group": "Front Door ",
+			"type": "switch",
+			"hasManualOverride": true,
+			"enabled": true
 		},
 		"3f4b99": {
 			"description": "Master Bedroom Light",
