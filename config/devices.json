@@ -212,7 +212,7 @@
 		},
 		"40A548": {
 			"description": "Family Room Light",
-			"icon": "icon-fan",
+			"icon": "icon-lightbulb",
 			"group": "Living Room",
 			"type": "switch",
 			"hasManualOverride": true,
@@ -220,7 +220,7 @@
 		},
 		"1A8D98": {
 			"description": "Garage Light",
-			"icon": "icon-lightbulb",
+			"icon": "icon-garage",
 			"group": "Outside",
 			"type": "switch",
 			"hasManualOverride": true,
@@ -235,8 +235,8 @@
 			"enabled": true
 		},
 		"40954A": {
-			"description": "Porch Light",
-			"icon": "icon-door",
+			"description": "Front door Light",
+			"icon": "icon-door2",
 			"group": "Outside",
 			"type": "switch",
 			"hasManualOverride": true,
@@ -310,7 +310,7 @@
 	"lifx": {
 		"d073d5125481": {
 			"description": "Master Bedroom Lamp",
-			"icon": "icon-lightbulb",
+			"icon": "icon-lamp",
 			"group": "Master Bedroom",
 			"online": true,
 			"enabled": true,
@@ -318,15 +318,15 @@
 		},
 		"d073d511ea88": {
 			"description": "Living Room Lamp",
-			"icon": "icon-lamp-1",
+			"icon": "icon-lamp2",
 			"group": "Living Room",
 			"online": true,
 			"enabled": true,
 			"status": "offline"
 		},
 		"d073d5122368": {
-			"description": "Dining Room Lamp",
-			"icon": "icon-lamp-1",
+			"description": "Dining Room Tall Lamp 1",
+			"icon": "icon-lamp2",
 			"group": "Dining Room",
 			"online": true,
 			"enabled": true,
