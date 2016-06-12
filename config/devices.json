@@ -341,8 +341,8 @@
 			"status": "offline"
 		},
 		"d073d5118631": {
-			"description": "Garage Indoor Lamp",
-			"icon": "icon-light",
+			"description": "Garage Inside Light",
+			"icon": "icon-lightbulb",
 			"group": "Outside",
 			"online": true,
 			"enabled": true,
