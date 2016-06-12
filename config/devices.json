@@ -42,10 +42,6 @@
 				"cutoff": 15
 			}, {
 				"type": "toggle",
-				"lifx": "d073d5118631",
-				"cutoff": 600
-			}, {
-				"type": "toggle",
 				"insteon": "3C2CC5",
 				"cutoff": 600
 			}, {
