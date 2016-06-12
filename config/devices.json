@@ -3,7 +3,7 @@
 		"ip": "192.168.1.104"
 	},
 	"insteon": {
-		"367fa8": {
+		"367FA8": {
 			"description": "Front Door Motion Sensor",
 			"type": "motion",
 			"icon": "icon-pitch",
@@ -27,7 +27,7 @@
 			}],
 			"enabled": true
 		},
-		"3699ae": {
+		"3699AE": {
 			"description": "Garage Motion Sensor",
 			"type": "motion",
 			"icon": "icon-pitch",
@@ -38,7 +38,7 @@
 				"cutoff": 15
 			}, {
 				"type": "toggle",
-				"insteon": "3728ac",
+				"insteon": "3728AC",
 				"cutoff": 300,
 				"betweenHours": {
 					"start": 18,
@@ -51,14 +51,14 @@
 			}],
 			"enabled": true
 		},
-		"37b015": {
+		"37B015": {
 			"description": "Kitchen Motion Sensor",
 			"type": "motion",
 			"icon": "icon-pitch",
 			"group": "outside",
 			"actions": [{
 				"type": "toggle",
-				"insteon": "3728ac",
+				"insteon": "3728AC",
 				"cutoff": 300,
 				"betweenHours": {
 					"start": 17,
@@ -160,19 +160,19 @@
 				},
 				"2": {
 					"type": "insteon",
-					"id": "3f4b99",
+					"id": "3F4B99",
 					"description": "Ceiling Light",
 					"status": "toggle"
 				},
 				"3": {
 					"type": "insteon",
-					"id": "3c2bbd",
+					"id": "3C2BBD",
 					"description": "Bathroom",
 					"status": "toggle"
 				},
 				"4": {
 					"type": "insteon",
-					"id": "3f4b99_fan",
+					"id": "3F4B99_fan",
 					"description": "Ceiling Fan",
 					"status": "toggle"
 				},
@@ -202,7 +202,7 @@
 				}
 			}
 		},
-		"3c2bbd": {
+		"3C2BBD": {
 			"description": "Bathroom Light",
 			"icon": "icon-bathroom",
 			"group": "Master Bedroom",
@@ -219,30 +219,30 @@
 			"enabled": true
 		},
 		"1A8D98": {
-			"description": "Garage Outdoor Light",
+			"description": "Garage Light",
 			"icon": "icon-lightbulb",
-			"group": "Garage",
+			"group": "Outside",
 			"type": "switch",
 			"hasManualOverride": true,
 			"enabled": true
 		},
-		"3c2cc5": {
-			"description": "Master Bedroom Light Old",
-			"icon": "icon-bedroom",
-			"group": "Master Bedroom",
+		"3C2CC5": {
+			"description": "Sidedoor Light",
+			"icon": "icon-door",
+			"group": "Outside",
 			"type": "switch",
 			"hasManualOverride": true,
-			"enabled": false
+			"enabled": true
 		},
 		"40954A": {
 			"description": "Porch Light",
 			"icon": "icon-door",
-			"group": "Front Door ",
+			"group": "Outside",
 			"type": "switch",
 			"hasManualOverride": true,
 			"enabled": true
 		},
-		"3f4b99": {
+		"3F4B99": {
 			"description": "Master Bedroom Light",
 			"icon": "icon-bedroom",
 			"group": "Master Bedroom",
@@ -250,7 +250,7 @@
 			"type": "switch",
 			"enabled": true
 		},
-		"3f4b99_fan": {
+		"3F4B99_fan": {
 			"description": "Master Bedroom Fan",
 			"icon": "icon-fan",
 			"group": "Master Bedroom",
@@ -298,7 +298,7 @@
 			"type": "switch",
 			"enabled": false
 		},
-		"3728ac": {
+		"3728AC": {
 			"description": "Kitchen Cabinet Lights",
 			"icon": "icon-kitchen",
 			"group": "Kitchen",
@@ -463,15 +463,15 @@
 			"icon": "icon-bedroom",
 			"on": [{
 				"type": "insteon",
-				"id": "3c2bbd",
+				"id": "3C2BBD",
 				"description": "bathroom"
 			}, {
 				"type": "insteon",
-				"id": "3f4b99_fan",
+				"id": "3F4B99_fan",
 				"description": "ceiling fan"
 			}, {
 				"type": "insteon",
-				"id": "3f4b99",
+				"id": "3F4B99",
 				"description": "ceiling light"
 			}, {
 				"type": "harmony",
@@ -485,15 +485,15 @@
 			}],
 			"off": [{
 				"type": "insteon",
-				"id": "3c2bbd",
+				"id": "3C2BBD",
 				"description": "bathroom"
 			}, {
 				"type": "insteon",
-				"id": "3f4b99_fan",
+				"id": "3F4B99_fan",
 				"description": "ceiling fan"
 			}, {
 				"type": "insteon",
-				"id": "3f4b99",
+				"id": "3F4B99",
 				"description": "ceiling light"
 			}, {
 				"type": "harmony",
