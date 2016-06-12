@@ -20,6 +20,14 @@
 				"type": "toggle",
 				"insteon": "40954A",
 				"cutoff": 600
+			}, {
+				"type": "toggle",
+				"insteon": "3C2CC5",
+				"cutoff": 600
+			}, {
+				"type": "toggle",
+				"insteon": "1A8D98",
+				"cutoff": 600
 			}],
 			"enabled": true
 		},
@@ -34,12 +42,12 @@
 				"cutoff": 15
 			}, {
 				"type": "toggle",
-				"insteon": "3728AC",
-				"cutoff": 300,
-				"betweenHours": {
-					"start": 18,
-					"end": 8
-				}
+				"lifx": "d073d5118631",
+				"cutoff": 600
+			}, {
+				"type": "toggle",
+				"insteon": "3C2CC5",
+				"cutoff": 600
 			}, {
 				"type": "log",
 				"event": "Motion Detected",
@@ -78,6 +86,14 @@
 			}, {
 				"type": "toggle",
 				"insteon": "40954A",
+				"cutoff": 600
+			}, {
+				"type": "toggle",
+				"insteon": "3C2CC5",
+				"cutoff": 600
+			}, {
+				"type": "toggle",
+				"insteon": "1A8D98",
 				"cutoff": 600
 			}],
 			"enabled": true
@@ -211,7 +227,7 @@
 			"enabled": true
 		},
 		"1A8D98": {
-			"description": "Garage Light",
+			"description": "Driveway Light",
 			"icon": "icon-garage",
 			"group": "Outside",
 			"type": "switch",
@@ -227,7 +243,7 @@
 			"enabled": true
 		},
 		"40954A": {
-			"description": "Front door Light",
+			"description": "Front Door Light",
 			"icon": "icon-door2",
 			"group": "Outside",
 			"type": "switch",
