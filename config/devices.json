@@ -19,11 +19,7 @@
 			}, {
 				"type": "toggle",
 				"insteon": "40954A",
-				"cutoff": 600,
-				"betweenHours": {
-					"start": 17,
-					"end": 9
-				}
+				"cutoff": 600
 			}],
 			"enabled": true
 		},
@@ -59,7 +55,7 @@
 			"actions": [{
 				"type": "toggle",
 				"insteon": "3728AC",
-				"cutoff": 300,
+				"cutoff": 600,
 				"betweenHours": {
 					"start": 17,
 					"end": 9
@@ -82,11 +78,7 @@
 			}, {
 				"type": "toggle",
 				"insteon": "40954A",
-				"cutoff": 600,
-				"betweenHours": {
-					"start": 17,
-					"end": 9
-				}
+				"cutoff": 600
 			}],
 			"enabled": true
 		},
@@ -275,12 +267,12 @@
 			"enabled": true
 		},
 		"1a8dbd": {
-			"description": "Kids Room Light",
+			"description": "Bedroom controller",
 			"icon": "icon-teddy",
-			"group": "Kids Room",
+			"group": "Bedroom",
 			"hasManualOverride": true,
 			"type": "switch",
-			"enabled": true
+			"enabled": false
 		},
 		"1f527c": {
 			"description": "Fireplace",
@@ -328,6 +320,14 @@
 			"description": "Dining Room Tall Lamp 1",
 			"icon": "icon-lamp2",
 			"group": "Dining Room",
+			"online": true,
+			"enabled": true,
+			"status": "offline"
+		},
+		"d073d5118631": {
+			"description": "Garage Indoor Lamp",
+			"icon": "icon-light",
+			"group": "Outside",
 			"online": true,
 			"enabled": true,
 			"status": "offline"
