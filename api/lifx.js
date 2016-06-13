@@ -22,7 +22,7 @@ function init(callback) {
 
 	client.on('light-new', function(light) {
 		var id = light.id;
-		//console.log("DISCOVERED: " + id);
+		console.log("DISCOVERED: " + id);
 		if (devices.hasOwnProperty(id)) {
 			devices[id].online = true;
 			devices[id].ipaddress = light.address;
@@ -42,7 +42,7 @@ function init(callback) {
 	});
 	client.on('light-online', function(light) {
 		var id = light.id;
-		//console.log("ONLINE: " + id);
+		console.log("ONLINE: " + id);
 		if (devices.hasOwnProperty(id)) {
 			devices[id].online = true;
 			devices[id].ipaddress = light.address;

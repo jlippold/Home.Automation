@@ -81,7 +81,7 @@ function init(callback) {
 			});
 		});
 	}, function(err) {
-		callback();
+		callback(err);
 	});
 
 }

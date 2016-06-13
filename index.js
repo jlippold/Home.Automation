@@ -59,9 +59,9 @@ app.use(function(err, req, res, next) {
 
 async.auto({
 	insteonHub: function(next) {
-		insteon.register(function() {
+		insteon.register(function(err) {
 			console.log("connected to insteon hub");
-			next();
+			next(err);
 		});
 	},
 	lifxClient: function(next) {
@@ -71,9 +71,9 @@ async.auto({
 		});
 	},
 	harmonyActivities: function(next) {
-		harmony.init(function() {
+		harmony.init(function(err) {
 			console.log("retrieved harmony commands");
-			next();
+			next(err);
 		});
 	},
 	deviceList: ['insteonHub', 'harmonyActivities', function(next) {
@@ -95,7 +95,9 @@ async.auto({
 		next();
 	}],
 }, function(err, results) {
-
+	if (err) {
+		process.exit(1);
+	}
 });
 
 

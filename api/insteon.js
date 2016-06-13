@@ -66,8 +66,8 @@ function register(callback) {
 	});
 
 
-	hub.connect(devices.hub.ip, function() {
-		callback();
+	hub.connect(devices.hub.ip, function(err) {
+		callback(err);
 	});
 }
 
