@@ -33,7 +33,6 @@ routes.get('/api/groups', function(req, res, next) {
 });
 
 routes.get('/insteon', function(req, res, next) {
-	var id = req.params.id;
 	api.insteon.listDevices(function(err, devices) {
 		if (err) {
 			res.status(500);
@@ -47,7 +46,7 @@ routes.get('/insteon', function(req, res, next) {
 
 // http://localhost:3000/insteon/3f4b99/dim/45
 routes.get('/insteon/:id/dim/:level', function(req, res, next) {
-	var id = req.params.id;
+	var id = req.params.id.toUpperCase();
 	var level = req.params.level;
 	api.insteon.dim(id, level, function(err) {
 		if (err) {
@@ -62,7 +61,7 @@ routes.get('/insteon/:id/dim/:level', function(req, res, next) {
 
 // http://localhost:3000/insteon/1f527c/toggle
 routes.get('/insteon/:id/:status', function(req, res, next) {
-	var id = req.params.id;
+	var id = req.params.id.toUpperCase();
 	var status = req.params.status;
 
 	if (["on", "off", "toggle"].indexOf(status) > -1) {
