@@ -77,7 +77,7 @@ function init(callback) {
 					});
 				}
 			}, function(err, results) {
-				nextHub();
+				nextHub(err);
 			});
 		});
 	}, function(err) {
