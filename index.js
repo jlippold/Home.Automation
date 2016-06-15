@@ -27,6 +27,7 @@ app.use(function(req, res, next) {
 	}
 });
 
+app.set('view engine', 'ejs');
 
 app.use(express.static(__dirname + '/public'));
 
@@ -50,11 +51,9 @@ app.use(function(req, res, next) {
 // error handlers
 app.use(function(err, req, res, next) {
 	res.status(err.status || 500);
-	res.render('error', {
-		message: err.message,
-		error: app.get('env') === 'development' ? err : {}
-	});
+	res.type('txt').send(JSON.stringify(err));
 });
+
 
 
 async.auto({

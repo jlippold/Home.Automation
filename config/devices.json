@@ -43,7 +43,19 @@
 			}, {
 				"type": "toggle",
 				"insteon": "3C2CC5",
-				"cutoff": 600
+				"cutoff": 900
+			}, {
+				"type": "toggle",
+				"insteon": "1A8D98",
+				"cutoff": 900
+			}, {
+				"type": "toggle",
+				"insteon": "3728AC",
+				"cutoff": 600,
+				"betweenHours": {
+					"start": 17,
+					"end": 9
+				}
 			}, {
 				"type": "log",
 				"event": "Motion Detected",
