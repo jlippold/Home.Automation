@@ -10,7 +10,7 @@
 			"group": "outside",
 			"actions": [{
 				"type": "kodi",
-				"camera": 1,
+				"camera": "FrontDoor",
 				"cutoff": 15
 			}, {
 				"type": "log",
@@ -19,47 +19,107 @@
 			}, {
 				"type": "toggle",
 				"insteon": "40954A",
-				"cutoff": 600
+				"cutoff": 600,
+				"betweenHours": {
+					"start": 17,
+					"end": 7
+				}
 			}, {
 				"type": "toggle",
 				"insteon": "3C2CC5",
-				"cutoff": 600
+				"cutoff": 600,
+				"betweenHours": {
+					"start": 17,
+					"end": 7
+				}
 			}, {
 				"type": "toggle",
 				"insteon": "1A8D98",
-				"cutoff": 600
+				"cutoff": 600,
+				"betweenHours": {
+					"start": 17,
+					"end": 7
+				}
 			}],
 			"enabled": true
 		},
 		"3699AE": {
-			"description": "Garage Motion Sensor",
+			"description": "Side Door Sensor",
 			"type": "motion",
 			"icon": "icon-pitch",
 			"group": "outside",
 			"actions": [{
+				"type": "log",
+				"event": "Motion Detected",
+				"location": "Side Door"
+			}, {
 				"type": "kodi",
-				"camera": 2,
+				"camera": "SideDoor",
 				"cutoff": 15
 			}, {
 				"type": "toggle",
 				"insteon": "3C2CC5",
-				"cutoff": 900
+				"cutoff": 600,
+				"betweenHours": {
+					"start": 17,
+					"end": 7
+				}
 			}, {
 				"type": "toggle",
 				"insteon": "1A8D98",
-				"cutoff": 900
+				"cutoff": 600,
+				"betweenHours": {
+					"start": 17,
+					"end": 7
+				}
 			}, {
 				"type": "toggle",
 				"insteon": "3728AC",
 				"cutoff": 600,
 				"betweenHours": {
 					"start": 17,
-					"end": 9
+					"end": 7
 				}
-			}, {
+			}],
+			"enabled": true
+		},
+		"318D55": {
+			"description": "Driveway Sensor",
+			"type": "motion",
+			"icon": "icon-pitch",
+			"group": "outside",
+			"actions": [{
 				"type": "log",
 				"event": "Motion Detected",
-				"location": "Garage"
+				"location": "Driveway"
+			}, {
+				"type": "kodi",
+				"camera": "Driveway",
+				"cutoff": 15
+			}, {
+				"type": "toggle",
+				"insteon": "3C2CC5",
+				"cutoff": 600,
+				"betweenHours": {
+					"start": 17,
+					"end": 7
+				}
+			}, {
+				"type": "toggle",
+				"insteon": "1A8D98",
+				"cutoff": 600,
+				"betweenHours": {
+					"start": 17,
+					"end": 7
+				}
+			}, {
+				"type": "toggle",
+				"insteon": "3728AC",
+				"cutoff": 600,
+				"betweenHours": {
+					"start": 17,
+					"end": 7
+				}
 			}],
 			"enabled": true
 		},
@@ -80,29 +140,30 @@
 			"enabled": true
 		},
 		"37DF79": {
-			"description": "Front Door Sensor",
+			"description": "Garage Door Sensor",
 			"type": "door",
 			"icon": "icon-home",
 			"group": "outside",
 			"actions": [{
-				"type": "kodi",
-				"addon": "plugin.seinfeld.sound"
-			}, {
 				"type": "log",
 				"event": "Door Opened",
-				"location": "Front Door"
+				"location": "Garage"
 			}, {
-				"type": "toggle",
-				"insteon": "40954A",
-				"cutoff": 600
+				"type": "kodi",
+				"camera": "Garage",
+				"cutoff": 15
 			}, {
 				"type": "toggle",
 				"insteon": "3C2CC5",
-				"cutoff": 600
+				"cutoff": 600,
+				"betweenHours": {
+					"start": 17,
+					"end": 9
+				}
 			}, {
-				"type": "toggle",
-				"insteon": "1A8D98",
-				"cutoff": 600
+				"type": "kodi",
+				"camera": 3,
+				"cutoff": 15
 			}],
 			"enabled": true
 		},
@@ -188,7 +249,7 @@
 				},
 				"4": {
 					"type": "insteon",
-					"id": "3F4B99_fan",
+					"id": "3F4B99_FAN",
 					"description": "Ceiling Fan",
 					"status": "toggle"
 				},
@@ -266,7 +327,7 @@
 			"type": "switch",
 			"enabled": true
 		},
-		"3F4B99_fan": {
+		"3F4B99_FAN": {
 			"description": "Master Bedroom Fan",
 			"icon": "icon-fan",
 			"group": "Master Bedroom",
@@ -491,7 +552,7 @@
 				"description": "bathroom"
 			}, {
 				"type": "insteon",
-				"id": "3F4B99_fan",
+				"id": "3F4B99_FAN",
 				"description": "ceiling fan"
 			}, {
 				"type": "insteon",
@@ -513,7 +574,7 @@
 				"description": "bathroom"
 			}, {
 				"type": "insteon",
-				"id": "3F4B99_fan",
+				"id": "3F4B99_FAN",
 				"description": "ceiling fan"
 			}, {
 				"type": "insteon",
