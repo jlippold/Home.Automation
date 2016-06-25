@@ -1,3 +1,30 @@
+body {
+    background-color: #272b30;
+    color: #c8c8c8;
+}
+
+.list-group-item {
+  background-color: #32383e;
+  border: 1px solid rgba(0, 0, 0, 0.6);
+  display: block;
+  margin-bottom: -1px;
+  padding: 10px 15px;
+  position: relative;
+}
+
+.list-group-item span, .list-group-item i {
+  color: #c8c8c8 !important;
+}
+
+.list-group-item button span, .list-group-item button i {
+  color: #32383e !important;
+}
+i, p, span, strong {
+  color: #32383e;
+}
+
+
+
 .animate-pulse {
   -webkit-animation: animation 1000ms linear both;
   animation: animation 1000ms linear both;
