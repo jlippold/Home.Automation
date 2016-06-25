@@ -13,7 +13,7 @@ var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 
-//authentication
+/*
 var basic = auth.basic({
 	realm: "Jeds House.",
 	file: __dirname + "/config/users.htpasswd"
@@ -26,6 +26,7 @@ app.use(function(req, res, next) {
 		next();
 	}
 });
+*/
 
 app.use(express.static(__dirname + '/public'));
 
