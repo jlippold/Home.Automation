@@ -280,7 +280,7 @@
 			}
 		},
 		"3C2BBD": {
-			"description": "Bathroom Light",
+			"description": "Bathroom",
 			"icon": "icon-bathroom",
 			"group": "Master Bedroom",
 			"type": "switch",
@@ -288,7 +288,7 @@
 			"enabled": true
 		},
 		"40A548": {
-			"description": "Family Room Light",
+			"description": "Family Room",
 			"icon": "icon-lightbulb",
 			"group": "Living Room",
 			"type": "switch",
@@ -296,7 +296,7 @@
 			"enabled": true
 		},
 		"1A8D98": {
-			"description": "Driveway Light",
+			"description": "Driveway",
 			"icon": "icon-garage",
 			"group": "Outside",
 			"type": "switch",
@@ -304,7 +304,7 @@
 			"enabled": true
 		},
 		"3C2CC5": {
-			"description": "Sidedoor Light",
+			"description": "Sidedoor",
 			"icon": "icon-door",
 			"group": "Outside",
 			"type": "switch",
@@ -312,7 +312,7 @@
 			"enabled": true
 		},
 		"40954A": {
-			"description": "Front Door Light",
+			"description": "Front Door",
 			"icon": "icon-door2",
 			"group": "Outside",
 			"type": "switch",
@@ -320,7 +320,7 @@
 			"enabled": true
 		},
 		"3F4B99": {
-			"description": "Master Bedroom Light",
+			"description": "Light",
 			"icon": "icon-bedroom",
 			"group": "Master Bedroom",
 			"hasManualOverride": false,
@@ -328,7 +328,7 @@
 			"enabled": true
 		},
 		"3F4B99_FAN": {
-			"description": "Master Bedroom Fan",
+			"description": "Fan",
 			"icon": "icon-fan",
 			"group": "Master Bedroom",
 			"hasManualOverride": false,
@@ -336,7 +336,7 @@
 			"enabled": true
 		},
 		"2f5595": {
-			"description": "Dining Room Tall Lamp 2",
+			"description": "Window Lamp",
 			"icon": "icon-lamp2",
 			"group": "Dining Room",
 			"hasManualOverride": false,
@@ -344,7 +344,7 @@
 			"enabled": true
 		},
 		"2998cd": {
-			"description": "Dining Room Small Lamp",
+			"description": "Small Lamp",
 			"icon": "icon-lamp",
 			"group": "Dining Room",
 			"hasManualOverride": false,
@@ -376,7 +376,7 @@
 			"enabled": false
 		},
 		"3728AC": {
-			"description": "Kitchen Cabinet Lights",
+			"description": "Cabinet Lights",
 			"icon": "icon-kitchen",
 			"group": "Kitchen",
 			"hasManualOverride": false,
@@ -386,7 +386,7 @@
 	},
 	"lifx": {
 		"d073d5125481": {
-			"description": "Master Bedroom Lamp",
+			"description": "Lamp",
 			"icon": "icon-lamp",
 			"group": "Master Bedroom",
 			"online": true,
@@ -394,7 +394,7 @@
 			"status": "offline"
 		},
 		"d073d511ea88": {
-			"description": "Living Room Lamp",
+			"description": "Light",
 			"icon": "icon-lamp2",
 			"group": "Living Room",
 			"online": true,
@@ -402,7 +402,7 @@
 			"status": "offline"
 		},
 		"d073d5122368": {
-			"description": "Dining Room Tall Lamp 1",
+			"description": "Tall Lamp",
 			"icon": "icon-lamp2",
 			"group": "Dining Room",
 			"online": true,
@@ -410,7 +410,7 @@
 			"status": "offline"
 		},
 		"d073d5118631": {
-			"description": "Garage Inside Light",
+			"description": "Garage",
 			"icon": "icon-lightbulb",
 			"group": "Outside",
 			"online": true,
