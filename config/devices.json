@@ -282,7 +282,7 @@
 		"3C2BBD": {
 			"description": "Bathroom",
 			"icon": "icon-bathroom",
-			"group": "Master Bedroom",
+			"group": "Bedroom",
 			"type": "switch",
 			"hasManualOverride": true,
 			"enabled": true
@@ -322,7 +322,7 @@
 		"3F4B99": {
 			"description": "Light",
 			"icon": "icon-bedroom",
-			"group": "Master Bedroom",
+			"group": "Bedroom",
 			"hasManualOverride": false,
 			"type": "switch",
 			"enabled": true
@@ -330,7 +330,7 @@
 		"3F4B99_FAN": {
 			"description": "Fan",
 			"icon": "icon-fan",
-			"group": "Master Bedroom",
+			"group": "Bedroom",
 			"hasManualOverride": false,
 			"type": "fan",
 			"enabled": true
@@ -388,7 +388,7 @@
 		"d073d5125481": {
 			"description": "Lamp",
 			"icon": "icon-lamp",
-			"group": "Master Bedroom",
+			"group": "Bedroom",
 			"online": true,
 			"enabled": true,
 			"status": "offline"
@@ -457,7 +457,7 @@
 			"ip": "192.168.1.66",
 			"location": "bedroom",
 			"icon": "icon-desktop-1",
-			"group": "Master bedroom",
+			"group": "bedroom",
 			"activities": {
 				"16416899": {
 					"id": "16416899",
@@ -544,7 +544,7 @@
 			}]
 		},
 		"bedroom": {
-			"name": "Master Bedroom",
+			"name": "Bedroom",
 			"icon": "icon-bedroom",
 			"on": [{
 				"type": "insteon",
