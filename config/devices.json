@@ -288,6 +288,14 @@
 			"enabled": true
 		},
 		"40A548": {
+			"description": "Family Room - Old Dimmer",
+			"icon": "icon-lightbulb",
+			"group": "Living Room",
+			"type": "switch",
+			"hasManualOverride": true,
+			"enabled": false
+		},
+		"3E4300": {
 			"description": "Family Room",
 			"icon": "icon-lightbulb",
 			"group": "Living Room",
@@ -508,8 +516,8 @@
 			"icon": "icon-sofa",
 			"on": [{
 				"type": "insteon",
-				"id": "40A548",
-				"description": "Family room"
+				"id": "3E4300",
+				"description": "Family Room"
 			}, {
 				"type": "insteon",
 				"id": "1f527c",
@@ -526,8 +534,8 @@
 			}],
 			"off": [{
 				"type": "insteon",
-				"id": "40A548",
-				"description": "Family room"
+				"id": "3E4300",
+				"description": "Family Room"
 			}, {
 				"type": "insteon",
 				"id": "1f527c",
