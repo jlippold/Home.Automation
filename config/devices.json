@@ -447,16 +447,16 @@
 					"id": "16476999",
 					"name": "Watch a Movie",
 					"supplementalCommands": [{
-						"device": "30665096",
-						"command": "Green"
+						"device": "30691958",
+						"command": "F1"
 					}]
 				},
 				"-1": {
 					"id": "-1",
 					"name": "PowerOff",
 					"supplementalCommands": [{
-						"device": "30665096",
-						"command": "Red"
+						"device": "30691958",
+						"command": "F2"
 					}]
 				}
 			}
@@ -471,16 +471,16 @@
 					"id": "16416899",
 					"name": "Watch movie",
 					"supplementalCommands": [{
-						"device": "30275820",
-						"command": "Green"
+						"device": "30692460",
+						"command": "F1"
 					}]
 				},
 				"-1": {
 					"id": "-1",
 					"name": "PowerOff",
 					"supplementalCommands": [{
-						"device": "30275820",
-						"command": "Red"
+						"device": "30692460",
+						"command": "F2"
 					}]
 				}
 			}
