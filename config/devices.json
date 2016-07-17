@@ -376,12 +376,12 @@
 			"enabled": true
 		},
 		"237643": {
-			"description": "Christmas Tree",
+			"description": "Lizard",
 			"icon": "icon-tree-1",
 			"group": "Living Room",
 			"hasManualOverride": true,
 			"type": "switch",
-			"enabled": false
+			"enabled": true
 		},
 		"3728AC": {
 			"description": "Cabinet Lights",
