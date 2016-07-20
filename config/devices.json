@@ -376,12 +376,12 @@
 			"enabled": true
 		},
 		"237643": {
-			"description": "Lizard",
+			"description": "Plug adapter",
 			"icon": "icon-tree-1",
 			"group": "Living Room",
 			"hasManualOverride": true,
 			"type": "switch",
-			"enabled": true
+			"enabled": false
 		},
 		"3728AC": {
 			"description": "Cabinet Lights",

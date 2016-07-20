@@ -40,7 +40,7 @@ function register(callback) {
 	var doors = getInsteonDevicesByType("door");
 	doors.forEach(function(id) {
 		var device = hub.door(id);
-		device.on('opened', function() {
+		device.on('closed', function() {
 			var d = devices.insteon[id];
 			console.log(
 				nodeUtil.format(
