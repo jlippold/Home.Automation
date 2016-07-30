@@ -18,6 +18,14 @@
 				"location": "Front Door"
 			}, {
 				"type": "toggle",
+				"insteon": "1A8D98",
+				"cutoff": 600,
+				"betweenHours": {
+					"start": 17,
+					"end": 7
+				}
+			}, {
+				"type": "toggle",
 				"insteon": "40954A",
 				"cutoff": 600,
 				"betweenHours": {
@@ -27,14 +35,6 @@
 			}, {
 				"type": "toggle",
 				"insteon": "3C2CC5",
-				"cutoff": 600,
-				"betweenHours": {
-					"start": 17,
-					"end": 7
-				}
-			}, {
-				"type": "toggle",
-				"insteon": "1A8D98",
 				"cutoff": 600,
 				"betweenHours": {
 					"start": 17,
@@ -58,7 +58,7 @@
 				"cutoff": 15
 			}, {
 				"type": "toggle",
-				"insteon": "3C2CC5",
+				"insteon": "1A8D98",
 				"cutoff": 600,
 				"betweenHours": {
 					"start": 17,
@@ -66,7 +66,7 @@
 				}
 			}, {
 				"type": "toggle",
-				"insteon": "1A8D98",
+				"insteon": "3C2CC5",
 				"cutoff": 600,
 				"betweenHours": {
 					"start": 17,
@@ -98,7 +98,7 @@
 				"cutoff": 15
 			}, {
 				"type": "toggle",
-				"insteon": "3C2CC5",
+				"insteon": "1A8D98",
 				"cutoff": 600,
 				"betweenHours": {
 					"start": 17,
@@ -106,7 +106,7 @@
 				}
 			}, {
 				"type": "toggle",
-				"insteon": "1A8D98",
+				"insteon": "3C2CC5",
 				"cutoff": 600,
 				"betweenHours": {
 					"start": 17,
@@ -549,6 +549,28 @@
 				"id": "livingroom",
 				"activity": "-1",
 				"description": "TV Off"
+			}]
+		},
+		"livingroom_lights": {
+			"name": "Living Room",
+			"icon": "icon-sofa",
+			"on": [{
+				"type": "insteon",
+				"id": "3E4300",
+				"description": "Family Room"
+			}, {
+				"type": "lifx",
+				"id": "d073d511ea88",
+				"description": "Living Room Lamp"
+			}],
+			"off": [{
+				"type": "insteon",
+				"id": "3E4300",
+				"description": "Family Room"
+			}, {
+				"type": "lifx",
+				"id": "d073d511ea88",
+				"description": "Living Room Lamp"
 			}]
 		},
 		"bedroom": {
