@@ -547,7 +547,7 @@
 			}]
 		},
 		"livingroom_lights": {
-			"name": "Living Room",
+			"name": "Living Room Lights",
 			"icon": "icon-sofa",
 			"on": [{
 				"type": "insteon",
