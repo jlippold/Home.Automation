@@ -175,9 +175,10 @@
 				"1": {
 					"type": "harmony",
 					"id": "livingroom",
-					"activity": "16476999",
+					"device": "35482834",
+					"command": "F9",
 					"description": "Watch TV",
-					"status": "toggle"
+					"status": "on"
 				},
 				"2": {
 					"type": "insteon",
@@ -231,9 +232,10 @@
 				"1": {
 					"type": "harmony",
 					"id": "bedroom",
-					"activity": "16416899",
-					"description": "TV",
-					"status": "toggle"
+					"device": "35490649",
+					"command": "F9",
+					"description": "Watch TV",
+					"status": "on"
 				},
 				"2": {
 					"type": "insteon",
@@ -446,18 +448,12 @@
 				"16476999": {
 					"id": "16476999",
 					"name": "Watch a Movie",
-					"supplementalCommands": [{
-						"device": "35482834",
-						"command": "F1"
-					}]
+					"supplementalCommands": []
 				},
 				"-1": {
 					"id": "-1",
 					"name": "PowerOff",
-					"supplementalCommands": [{
-						"device": "35482834",
-						"command": "F2"
-					}]
+					"supplementalCommands": []
 				}
 			}
 		},
@@ -470,18 +466,12 @@
 				"16416899": {
 					"id": "16416899",
 					"name": "Watch movie",
-					"supplementalCommands": [{
-						"device": "35490649",
-						"command": "F1"
-					}]
+					"supplementalCommands": []
 				},
 				"-1": {
 					"id": "-1",
 					"name": "PowerOff",
-					"supplementalCommands": [{
-						"device": "35490649",
-						"command": "F2"
-					}]
+					"supplementalCommands": []
 				}
 			}
 		}
@@ -531,6 +521,11 @@
 				"id": "livingroom",
 				"activity": "16476999",
 				"description": "Watch TV"
+			}, {
+				"type": "harmony",
+				"id": "livingroom",
+				"device": "35482834",
+				"command": "F2"
 			}],
 			"off": [{
 				"type": "insteon",
@@ -547,8 +542,8 @@
 			}, {
 				"type": "harmony",
 				"id": "livingroom",
-				"activity": "-1",
-				"description": "TV Off"
+				"device": "35482834",
+				"command": "F1"
 			}]
 		},
 		"livingroom_lights": {
@@ -594,6 +589,11 @@
 				"activity": "16416899",
 				"description": "Watch TV"
 			}, {
+				"type": "harmony",
+				"id": "bedroom",
+				"device": "35490649",
+				"command": "F2"
+			}, {
 				"type": "lifx",
 				"id": "d073d5125481",
 				"description": "Bedroom Lamp"
@@ -613,8 +613,8 @@
 			}, {
 				"type": "harmony",
 				"id": "bedroom",
-				"activity": "-1",
-				"description": "TV Off"
+				"device": "35490649",
+				"command": "F1"
 			}, {
 				"type": "lifx",
 				"id": "d073d5125481",
@@ -649,6 +649,48 @@
 				"type": "insteon",
 				"id": "2f5595",
 				"description": "lamp"
+			}]
+		},
+		"lr-tv": {
+			"name": "Living Room TV",
+			"icon": "icon-desktop",
+			"on": [{
+				"type": "harmony",
+				"id": "livingroom",
+				"activity": "16476999",
+				"description": "Watch TV"
+			}, {
+				"type": "harmony",
+				"id": "livingroom",
+				"device": "35482834",
+				"command": "F2"
+			}],
+			"off": [{
+				"type": "harmony",
+				"id": "livingroom",
+				"device": "35482834",
+				"command": "F1"
+			}]
+		},
+		"br-tv": {
+			"name": "Bed Room TV",
+			"icon": "icon-desktop-1",
+			"on": [{
+				"type": "harmony",
+				"id": "bedroom",
+				"activity": "16416899",
+				"description": "Watch TV"
+			}, {
+				"type": "harmony",
+				"id": "bedroom",
+				"device": "35490649",
+				"command": "F2"
+			}],
+			"off": [{
+				"type": "harmony",
+				"id": "bedroom",
+				"device": "35490649",
+				"command": "F1"
 			}]
 		}
 	}

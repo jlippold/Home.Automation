@@ -214,10 +214,14 @@ function runCommand(hub, device, command, callback) {
 
 	pool.add(function() {
 		HarmonyHub(address).then(function(hub) {
+			console.log(foundDevice.commands[command].action);
 			var encodedAction = foundDevice.commands[command].action.replace(/\:/g, '::');
-			hub.send('holdAction', 'action=' + encodedAction + ':status=press');
-			hub.end();
-			callback();
+			hub.send('holdAction', 'action=' + encodedAction + ':status=press').then(function() {
+				hub.send('holdAction', 'action=' + encodedAction + ':status=release').then(function() {
+					hub.end();
+					return callback();
+				});
+			});
 		});
 	});
 }
