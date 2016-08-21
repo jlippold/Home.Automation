@@ -160,10 +160,6 @@
 					"start": 17,
 					"end": 9
 				}
-			}, {
-				"type": "kodi",
-				"camera": 3,
-				"cutoff": 15
 			}],
 			"enabled": true
 		},
