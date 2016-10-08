@@ -178,7 +178,7 @@
 				},
 				"2": {
 					"type": "insteon",
-					"id": "1f527c",
+					"id": "1F527C",
 					"description": "fireplace",
 					"status": "toggle"
 				},
@@ -208,7 +208,7 @@
 				},
 				"7": {
 					"type": "insteon",
-					"id": "1a8dbd",
+					"id": "1A8DBD",
 					"description": "kids",
 					"status": "toggle"
 				},
@@ -341,7 +341,7 @@
 			"type": "fan",
 			"enabled": true
 		},
-		"2f5595": {
+		"2F5595": {
 			"description": "Window Lamp",
 			"icon": "icon-lamp2",
 			"group": "Dining Room",
@@ -349,7 +349,7 @@
 			"type": "switch",
 			"enabled": true
 		},
-		"2998cd": {
+		"2998CD": {
 			"description": "Small Lamp",
 			"icon": "icon-lamp",
 			"group": "Dining Room",
@@ -357,7 +357,7 @@
 			"type": "switch",
 			"enabled": true
 		},
-		"1a8dbd": {
+		"1A8DBD": {
 			"description": "Bedroom controller",
 			"icon": "icon-teddy",
 			"group": "Bedroom",
@@ -365,7 +365,7 @@
 			"type": "switch",
 			"enabled": false
 		},
-		"1f527c": {
+		"1F527C": {
 			"description": "Fireplace",
 			"icon": "icon-fire",
 			"group": "Living Room",
@@ -506,7 +506,7 @@
 				"description": "Family Room"
 			}, {
 				"type": "insteon",
-				"id": "1f527c",
+				"id": "1F527C",
 				"description": "fireplace"
 			}, {
 				"type": "lifx",
@@ -529,7 +529,7 @@
 				"description": "Family Room"
 			}, {
 				"type": "insteon",
-				"id": "1f527c",
+				"id": "1F527C",
 				"description": "fireplace"
 			}, {
 				"type": "lifx",
@@ -622,7 +622,7 @@
 			"icon": "icon-table",
 			"on": [{
 				"type": "insteon",
-				"id": "2998cd",
+				"id": "2998CD",
 				"description": "lamp"
 			}, {
 				"type": "lifx",
@@ -630,12 +630,12 @@
 				"description": "tall lamp"
 			}, {
 				"type": "insteon",
-				"id": "2f5595",
+				"id": "2F5595",
 				"description": "lamp"
 			}],
 			"off": [{
 				"type": "insteon",
-				"id": "2998cd",
+				"id": "2998CD",
 				"description": "lamp"
 			}, {
 				"type": "lifx",
@@ -643,7 +643,7 @@
 				"description": "tall lamp"
 			}, {
 				"type": "insteon",
-				"id": "2f5595",
+				"id": "2F5595",
 				"description": "lamp"
 			}]
 		},
