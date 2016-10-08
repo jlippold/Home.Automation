@@ -2,7 +2,8 @@ var async = require('async');
 var nodeUtil = require('util');
 var devices = require("../config/devices.json").lifx;
 var dispatch = require("../lib/dispatch");
-var LifxClient = require('node-lifx').Client;
+var lifxObj = require('lifx-api');
+var lifx;
 
 var client;
 
@@ -12,46 +13,26 @@ module.exports.getStatusOfDevice = getStatusOfDevice;
 module.exports.listDevices = listDevices;
 
 function init(callback) {
-
-	client = new LifxClient();
-
-	client.init({
-		lightOfflineTolerance: 2,
-		messageHandlerTimeout: 15000
+	lifx = new lifxObj("ca8c5d14031577af07d6a2b233e06c80175870f4a9cfcabefc2c11436a1fbf45");
+	getLightStatus("all", function(lights) {
+		callback();
 	});
+}
 
-	client.on('light-new', function(light) {
-		var id = light.id;
-		console.log("DISCOVERED: " + id);
-		if (devices.hasOwnProperty(id)) {
-			devices[id].online = true;
-			devices[id].ipaddress = light.address;
-			var status = light.status == "off" ? "off" : "on";
+function getLightStatus(selector, callback) {
+	lifx.listLights(selector, function(err, lights) {
+		if (err) {
+			return callback(err);
+		}
+		lights.forEach(function(light) {
+			var id = light.id;
+			devices[id].online = light.connected;
+			//devices[id].ipaddress = light.address;
+			var status = light.power == "on" ? "on" : "off";
 			dispatch.setStatus(id, status);
-		}
+		});
+		callback(err, lights);
 	});
-
-	client.on('light-offline', function(light) {
-		var id = light.id;
-		//console.log("OFFLINE: " + id);
-		if (devices.hasOwnProperty(id)) {
-			devices[id].online = false;
-			dispatch.setStatus(id, "offline");
-		}
-
-	});
-	client.on('light-online', function(light) {
-		var id = light.id;
-		console.log("ONLINE: " + id);
-		if (devices.hasOwnProperty(id)) {
-			devices[id].online = true;
-			devices[id].ipaddress = light.address;
-			var status = light.status == "off" ? "off" : "on";
-			dispatch.setStatus(id, status);
-		}
-	});
-
-	callback();
 }
 
 function listDevices(callback) {
@@ -72,24 +53,15 @@ function getStatusOfDevice(id, callback) {
 	if (isValidDeviceId(id) === false) {
 		return callback("Invalid Device");
 	}
-	var device = client.light(id);
-
-	if (!device) {
-		return callback("Offline Device");
-	}
-	device.getPower(function(err, isOn) {
-
+	getLightStatus("id:" + id, function(err, lights) {
 		if (err) {
-			console.error(err);
-			dispatch.setStatus(id, "unknown");
-			return callback(err, "off");
+			return callback(err);
 		}
-
-		if (isOn == 1) { //is on 
-			return callback(err, "on");
-		} else { //is off
-			return callback(err, "off");
+		var device = devices[id];
+		if (!device.online) {
+			return callback("Offline Device");
 		}
+		return callback(null, device.status);
 	});
 }
 
@@ -98,50 +70,33 @@ function setStatusOfDevice(id, status, callback) {
 		return callback("Invalid Device");
 	}
 
-	var device = client.light(id);
-
-	if (status == "on") {
-
-		client.light(id).on(500, function(err) {
+	if (status == "on" || status == "off") {
+		lifx.setPower("id:" + id, status, .5, function(err, body) {
 			if (err) {
-				console.error(err);
 				dispatch.setStatus(id, "unknown");
-			} else {
+			}
+
+			if (body.results[0].status == "ok") {
 				dispatch.setStatus(id, status);
 			}
-			callback(null);
+			return callback(err);
+
 		});
-
-	} else if (status == "off") {
-
-		client.light(id).off(500, function(err) {
-			if (err) {
-				console.error(err);
-				dispatch.setStatus(id, "unknown");
-			} else {
-				dispatch.setStatus(id, status);
-			}
-			callback(null);
-		});
-
 	} else if (status == "toggle") {
-		getStatusOfDevice(id, function(err, status) {
+		lifx.togglePower("id:" + id, function(err, body) {
 			if (err) {
-				return callback(err);
+				dispatch.setStatus(id, "unknown");
 			}
-			status = (status == "on" ? "off" : "on");
-			client.light(id)[status](500, function(err) {
-				if (err) {
-					console.error(err);
-					dispatch.setStatus(id, "unknown");
-				} else {
-					dispatch.setStatus(id, status);
-				}
-				callback(null);
-			});
+			if (body.results[0].status == "ok") {
+				setTimeout(function() {
+					getStatusOfDevice(id, function() {});
+				}, 1000);
+			}
+			return callback(err);
 		});
+	} else {
+		return callback("Bad status recieved");
 	}
-
 }
 
 function isValidDeviceId(id) {
@@ -154,8 +109,5 @@ function isValidDeviceId(id) {
 		return false;
 	}
 
-	if (device.online === false) {
-		return false;
-	}
 	return true;
 }
