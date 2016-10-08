@@ -172,15 +172,17 @@
 					"type": "harmony",
 					"id": "livingroom",
 					"device": "35482834",
-					"command": "F9",
-					"description": "Watch TV",
+					"command": "F2",
+					"description": "TV On",
 					"status": "on"
 				},
 				"2": {
-					"type": "insteon",
-					"id": "1F527C",
-					"description": "fireplace",
-					"status": "toggle"
+					"type": "harmony",
+					"id": "livingroom",
+					"device": "35482834",
+					"command": "F1",
+					"description": "TV off",
+					"status": "on"
 				},
 				"3": {
 					"type": "lifx",
@@ -208,8 +210,8 @@
 				},
 				"7": {
 					"type": "insteon",
-					"id": "1A8DBD",
-					"description": "kids",
+					"id": "1F527C",
+					"description": "fireplace",
 					"status": "toggle"
 				},
 				"8": {
@@ -229,15 +231,17 @@
 					"type": "harmony",
 					"id": "bedroom",
 					"device": "35490649",
-					"command": "F9",
-					"description": "Watch TV",
+					"command": "F2",
+					"description": "TV on",
 					"status": "on"
 				},
 				"2": {
-					"type": "insteon",
-					"id": "3F4B99",
-					"description": "Ceiling Light",
-					"status": "toggle"
+					"type": "harmony",
+					"id": "bedroom",
+					"device": "35490649",
+					"command": "F1",
+					"description": "TV off",
+					"status": "on"
 				},
 				"3": {
 					"type": "insteon",
