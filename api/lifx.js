@@ -14,16 +14,19 @@ module.exports.listDevices = listDevices;
 
 function init(callback) {
 	lifx = new lifxObj(process.env.LIFX_Api_Key || "");
-	getLightStatus("all", function(lights) {
-		callback();
+	getLightStatus("all", function(err, lights) {
+		console.log(lights.length + " lifx devices found");
+		callback(err);
 	});
 }
 
 function getLightStatus(selector, callback) {
 	lifx.listLights(selector, function(err, lights) {
 		if (err) {
+			console.error(err);
 			return callback(err);
 		}
+
 		lights.forEach(function(light) {
 			var id = light.id;
 			devices[id].online = light.connected;
@@ -71,17 +74,14 @@ function setStatusOfDevice(id, status, callback) {
 	}
 
 	if (status == "on" || status == "off") {
-		lifx.setPower("id:" + id, status, .5, function(err, body) {
+		lifx.setPower("id:" + id, status, 0.5, function(err, body) {
+
 			if (err) {
 				dispatch.setStatus(id, "unknown");
-			}
-
-			if (body && body.results &&
-				body.results.count > 0 &&
-				body.results[0].status == "ok") {
-
+			} else {
 				dispatch.setStatus(id, status);
 			}
+
 			return callback(err);
 
 		});
@@ -89,10 +89,7 @@ function setStatusOfDevice(id, status, callback) {
 		lifx.togglePower("id:" + id, function(err, body) {
 			if (err) {
 				dispatch.setStatus(id, "unknown");
-			}
-			if (body && body.results &&
-				body.results.count > 0 &&
-				body.results[0].status == "ok") {
+			} else {
 				setTimeout(function() {
 					getStatusOfDevice(id, function() {});
 				}, 1000);

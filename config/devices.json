@@ -400,7 +400,7 @@
 			"status": "offline"
 		},
 		"d073d511ea88": {
-			"description": "Living room light",
+			"description": "LivingRoom Light",
 			"icon": "icon-lamp2",
 			"group": "Living Room",
 			"online": true,
