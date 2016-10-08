@@ -76,7 +76,10 @@ function setStatusOfDevice(id, status, callback) {
 				dispatch.setStatus(id, "unknown");
 			}
 
-			if (body.results[0].status == "ok") {
+			if (body && body.results &&
+				body.results.count > 0 &&
+				body.results[0].status == "ok") {
+
 				dispatch.setStatus(id, status);
 			}
 			return callback(err);
@@ -87,7 +90,9 @@ function setStatusOfDevice(id, status, callback) {
 			if (err) {
 				dispatch.setStatus(id, "unknown");
 			}
-			if (body.results[0].status == "ok") {
+			if (body && body.results &&
+				body.results.count > 0 &&
+				body.results[0].status == "ok") {
 				setTimeout(function() {
 					getStatusOfDevice(id, function() {});
 				}, 1000);

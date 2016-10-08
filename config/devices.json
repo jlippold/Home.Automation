@@ -392,7 +392,7 @@
 	},
 	"lifx": {
 		"d073d5125481": {
-			"description": "Lamp",
+			"description": "Window Lamp",
 			"icon": "icon-lamp",
 			"group": "Bedroom",
 			"online": true,
@@ -400,7 +400,7 @@
 			"status": "offline"
 		},
 		"d073d511ea88": {
-			"description": "Light",
+			"description": "Living room light",
 			"icon": "icon-lamp2",
 			"group": "Living Room",
 			"online": true,
