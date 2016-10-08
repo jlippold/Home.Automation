@@ -347,7 +347,7 @@
 			"group": "Dining Room",
 			"hasManualOverride": false,
 			"type": "switch",
-			"enabled": true
+			"enabled": false
 		},
 		"2998CD": {
 			"description": "Small Lamp",
@@ -392,7 +392,7 @@
 	},
 	"lifx": {
 		"d073d5125481": {
-			"description": "Window Lamp",
+			"description": "Night Light",
 			"icon": "icon-lamp",
 			"group": "Bedroom",
 			"online": true,
@@ -400,7 +400,7 @@
 			"status": "offline"
 		},
 		"d073d511ea88": {
-			"description": "LivingRoom Light",
+			"description": "Living Room Light",
 			"icon": "icon-lamp2",
 			"group": "Living Room",
 			"online": true,
@@ -408,7 +408,7 @@
 			"status": "offline"
 		},
 		"d073d5122368": {
-			"description": "Tall Lamp",
+			"description": "Dining Room Window",
 			"icon": "icon-lamp2",
 			"group": "Dining Room",
 			"online": true,
@@ -416,9 +416,9 @@
 			"status": "offline"
 		},
 		"d073d5118631": {
-			"description": "Garage",
+			"description": "Dining Room Wall",
 			"icon": "icon-lightbulb",
-			"group": "Outside",
+			"group": "Dining Room",
 			"online": true,
 			"enabled": true,
 			"status": "offline"
@@ -629,9 +629,9 @@
 				"id": "d073d5122368",
 				"description": "tall lamp"
 			}, {
-				"type": "insteon",
-				"id": "2F5595",
-				"description": "lamp"
+				"type": "lifx",
+				"id": "d073d5118631",
+				"description": "wall lamp"
 			}],
 			"off": [{
 				"type": "insteon",
@@ -642,9 +642,9 @@
 				"id": "d073d5122368",
 				"description": "tall lamp"
 			}, {
-				"type": "insteon",
-				"id": "2F5595",
-				"description": "lamp"
+				"type": "lifx",
+				"id": "d073d5118631",
+				"description": "wall lamp"
 			}]
 		},
 		"lr-tv": {
