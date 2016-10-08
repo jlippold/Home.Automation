@@ -13,7 +13,7 @@ module.exports.getStatusOfDevice = getStatusOfDevice;
 module.exports.listDevices = listDevices;
 
 function init(callback) {
-	lifx = new lifxObj("ca8c5d14031577af07d6a2b233e06c80175870f4a9cfcabefc2c11436a1fbf45");
+	lifx = new lifxObj(process.env.LIFX_Api_Key || "");
 	getLightStatus("all", function(lights) {
 		callback();
 	});
