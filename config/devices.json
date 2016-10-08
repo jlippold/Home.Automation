@@ -351,7 +351,7 @@
 			"group": "Dining Room",
 			"hasManualOverride": false,
 			"type": "switch",
-			"enabled": false
+			"enabled": true
 		},
 		"2998CD": {
 			"description": "Small Lamp",
@@ -424,7 +424,7 @@
 			"icon": "icon-lightbulb",
 			"group": "Dining Room",
 			"online": true,
-			"enabled": true,
+			"enabled": false,
 			"status": "offline"
 		}
 	},
@@ -633,8 +633,8 @@
 				"id": "d073d5122368",
 				"description": "tall lamp"
 			}, {
-				"type": "lifx",
-				"id": "d073d5118631",
+				"type": "insteon",
+				"id": "2F5595",
 				"description": "wall lamp"
 			}],
 			"off": [{
@@ -646,8 +646,8 @@
 				"id": "d073d5122368",
 				"description": "tall lamp"
 			}, {
-				"type": "lifx",
-				"id": "d073d5118631",
+				"type": "insteon",
+				"id": "2F5595",
 				"description": "wall lamp"
 			}]
 		},
