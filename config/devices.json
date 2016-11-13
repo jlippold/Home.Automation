@@ -383,7 +383,7 @@
 			"group": "Living Room",
 			"hasManualOverride": true,
 			"type": "switch",
-			"enabled": false
+			"enabled": true
 		},
 		"3728AC": {
 			"description": "Cabinet Lights",
