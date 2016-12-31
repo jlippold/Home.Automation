@@ -15,7 +15,7 @@ module.exports.listDevices = listDevices;
 function init(callback) {
 	lifx = new lifxObj(process.env.LIFX_Api_Key || "");
 	getLightStatus("all", function(err, lights) {
-		console.log(lights.length + " lifx devices found");
+		console.log((Array.isArray(lights) ? lights.length : 0) + " lifx devices found");
 		callback(err);
 	});
 }
