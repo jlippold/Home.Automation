@@ -230,7 +230,7 @@
 				"1": {
 					"type": "harmony",
 					"id": "bedroom",
-					"device": "35490649",
+					"device": "41215822",
 					"command": "F2",
 					"description": "TV on",
 					"status": "on"
@@ -238,7 +238,7 @@
 				"2": {
 					"type": "harmony",
 					"id": "bedroom",
-					"device": "35490649",
+					"device": "41215822",
 					"command": "F1",
 					"description": "TV off",
 					"status": "on"
@@ -591,7 +591,7 @@
 			}, {
 				"type": "harmony",
 				"id": "bedroom",
-				"device": "35490649",
+				"device": "41215822",
 				"command": "F2"
 			}, {
 				"type": "lifx",
@@ -613,7 +613,7 @@
 			}, {
 				"type": "harmony",
 				"id": "bedroom",
-				"device": "35490649",
+				"device": "41215822",
 				"command": "F1"
 			}, {
 				"type": "lifx",
