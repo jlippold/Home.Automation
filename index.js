@@ -57,6 +57,7 @@ app.use(function(err, req, res, next) {
 
 async.auto({
 	insteonHub: function(next) {
+		return next();
 		insteon.register(function(err) {
 			console.log("connected to insteon hub");
 			next(err);

@@ -217,6 +217,54 @@ routes.get('/harmony/hubs/:hub/devices/:device/commands/:command', function(req,
 	});
 });
 
+routes.get('/services/torrent', function(req, res, next) {
+	api.services.uTorrent(function(err, result) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+			console.log(err);
+		} else {
+			res.send(result);
+		}
+	});
+});
+
+routes.get('/services/nzb', function(req, res, next) {
+	api.services.nzbGet(function(err, result) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+			console.log(err);
+		} else {
+			res.send(result);
+		}
+	});
+});
+
+routes.get('/services/emby', function(req, res, next) {
+	api.services.emby(function(err, result) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+			console.log(err);
+		} else {
+			res.send(result);
+		}
+	});
+});
+
+routes.get('/services/router', function(req, res, next) {
+	api.services.router(function(err, result) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+			console.log(err);
+		} else {
+			res.send(result);
+		}
+	});
+});
+
 
 // http://localhost:3000/motion/testFire/367fa8
 // http://localhost:3000/motion/testFire/3699ae

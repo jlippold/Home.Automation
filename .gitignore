@@ -38,3 +38,5 @@ node_modules
 .htpassword
 
 volatile/harmony.json
+
+start.sh

@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "async": "^1.5.0",
+    "nzbget-nodejs": "git@github.com:jlippold/nzbget-nodejs.git",
     "babel-preset-react": "^6.5.0",
     "browser-request": "^0.3.3",
     "core-util-is": "^1.0.2",
@@ -28,7 +29,8 @@
     "object-assign": "^4.0.1",
     "react": "^0.14.8",
     "react-dom": "^0.14.8",
-    "socket.io": "^1.4.5"
+    "socket.io": "^1.4.5",
+    "utorrent-api": "^0.1.5"
   },
   "devDependencies": {
     "babel-core": "^6.7.4",
