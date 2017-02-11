@@ -22,6 +22,7 @@ module.exports.emby = emby;
 module.exports.uTorrent = uTorrent;
 module.exports.nzbGet = nzbGet;
 module.exports.router = router;
+module.exports.server = server;
 
 function nzbGet(callback) {
 
@@ -156,5 +157,27 @@ function router(callback) {
 			upload: uploadAvg,
 			download: downloadAvg
 		});
+	});
+}
+
+function server(callback) {
+	var spawn = require('child_process').spawn;
+	var path = 'D://Scripts//stats//ServerStats.exe';
+	if (!require('fs').existsSync(path)) {
+		return callback("file not found");
+	}
+	var child = spawn(path);
+	var output = "";
+	var err = "";
+	child.stdout.on('data',
+		function(data) {
+			output += data;
+		});
+	child.stderr.on('data', function(data) {
+		err += data;
+	});
+
+	child.on('close', function(code) {
+		callback(err, output);
 	});
 }
