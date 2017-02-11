@@ -150,8 +150,8 @@ function router(callback) {
 			}
 		});
 
-		var downloadAvg = (download.reduce((a, b) => a + b, 0) / total) * 1024; //convert MB to B
-		var uploadAvg = (upload.reduce((a, b) => a + b, 0) / total) * 1024;
+		var downloadAvg = (download.reduce((a, b) => a + b, 0) / total) * 1024 * 1024; //convert MB to B
+		var uploadAvg = (upload.reduce((a, b) => a + b, 0) / total) * 1024 * 1024;
 		var uploadMax = 700 * 1024;
 		var downloadMax = 6000 * 1024;
 
@@ -159,21 +159,21 @@ function router(callback) {
 			upload: {
 				average: uploadAvg,
 				maximum: uploadMax,
-				percentage: uploadAvg / uploadMax,
+				percentage: uploadAvg / uploadMax > 1 ? 1 : uploadAvg / uploadMax,
 				formatted: {
 					average: bytesToSize(uploadAvg) + "/s",
 					maximum: bytesToSize(uploadMax) + "/s",
-					percentage: Math.floor((uploadAvg / uploadMax) * 100).toFixed(1) +  "%"
+					percentage: Math.floor((uploadAvg / uploadMax) * 100).toFixed(1) + "%"
 				}
 			},
 			download: {
 				average: downloadAvg,
 				maximum: downloadMax,
-				percentage: downloadAvg / downloadMax,
+				percentage: downloadAvg / downloadMax > 1 ? 1 : downloadAvg / downloadMax,
 				formatted: {
 					average: bytesToSize(downloadAvg) + "/s",
 					maximum: bytesToSize(downloadMax) + "/s",
-					percentage: Math.floor((downloadAvg / downloadMax) * 100).toFixed(1) +  "%"
+					percentage: Math.floor((downloadAvg / downloadMax) * 100).toFixed(1) + "%"
 				}
 			}
 		});
