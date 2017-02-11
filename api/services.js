@@ -86,11 +86,25 @@ function emby(callback) {
 		},
 		json: true
 	};
-	request(url, options, function(err, r, body) {
+	request(url, options, function(err, r, sessions) {
 		if (err) {
 			return callback(err);
 		}
-		callback(err, body);
+		var arr = [];
+		sessions.forEach(function(session) {
+			if (session.hasOwnProperty("TranscodingInfo") && session.hasOwnProperty("NowPlayingItem")) {
+				arr.push({
+					user: session.UserName,
+					client: session.Client,
+					image: '/emby/Users/' + session.UserId + '/Images/Primary?tag=' + session.UserPrimaryImageTag,
+					title: session.NowPlayingItem.Type == "Episode" ? session.NowPlayingItem.SeriesName : session.NowPlayingItem.Name
+				});
+			}
+		});
+
+		arr.sort((a, b) => a.name.localeCompare(b.name));
+
+		callback(err, arr);
 	});
 }
 
