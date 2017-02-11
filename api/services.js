@@ -38,7 +38,7 @@ function nzbGet(callback) {
 					if (err) {
 						return next(err);
 					}
-					return next(err, (res.DownloadRate * .000001));
+					return next(err, res.DownloadRate);
 				});
 			},
 			downloadQueue: function(next) {
@@ -51,6 +51,8 @@ function nzbGet(callback) {
 			}
 		},
 		function(err, results) {
+			results.rawDownloadRate = results.downloadRate;
+			results.downloadRate = bytesToSize(results.downloadRate) + '/s';
 			callback(err, results);
 		});
 }
@@ -72,8 +74,10 @@ function uTorrent(callback) {
 		});
 
 		return callback(err, {
-			upload: (up * .000001),
-			download: (down * .000001)
+			upload: bytesToSize(up) + '/s',
+			download: bytesToSize(down) + '/s',
+			rawUpload: up,
+			rawDownload: down
 		});
 	});
 }
