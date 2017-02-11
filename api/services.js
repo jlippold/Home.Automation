@@ -152,8 +152,8 @@ function router(callback) {
 
 		var downloadAvg = (download.reduce((a, b) => a + b, 0) / total) * 1024 * 1024; //convert MB to B
 		var uploadAvg = (upload.reduce((a, b) => a + b, 0) / total) * 1024 * 1024;
-		var uploadMax = 700 * 1024;
-		var downloadMax = 6000 * 1024;
+		var uploadMax = 600 * 1024;
+		var downloadMax = 5000 * 1024;
 
 		return callback(err, {
 			upload: {
