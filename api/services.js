@@ -150,12 +150,32 @@ function router(callback) {
 			}
 		});
 
-		var downloadAvg = download.reduce((a, b) => a + b, 0) / total;
-		var uploadAvg = upload.reduce((a, b) => a + b, 0) / total;
+		var downloadAvg = (download.reduce((a, b) => a + b, 0) / total) * 1024; //convert MB to B
+		var uploadAvg = (upload.reduce((a, b) => a + b, 0) / total) * 1024;
+		var uploadMax = 700 * 1024;
+		var downloadMax = 6000 * 1024;
 
 		return callback(err, {
-			upload: uploadAvg,
-			download: downloadAvg
+			upload: {
+				average: uploadAvg,
+				maximum: uploadMax,
+				percentage: uploadAvg / uploadMax,
+				formatted: {
+					average: bytesToSize(uploadAvg) + "/s",
+					maximum: bytesToSize(uploadMax) + "/s",
+					percentage: Math.floor((uploadAvg / uploadMax) * 100).toFixed(1) +  "%"
+				}
+			},
+			download: {
+				average: downloadAvg,
+				maximum: downloadMax,
+				percentage: downloadAvg / downloadMax,
+				formatted: {
+					average: bytesToSize(downloadAvg) + "/s",
+					maximum: bytesToSize(downloadMax) + "/s",
+					percentage: Math.floor((downloadAvg / downloadMax) * 100).toFixed(1) +  "%"
+				}
+			}
 		});
 	});
 }
@@ -181,3 +201,10 @@ function server(callback) {
 		callback(err, output);
 	});
 }
+
+function bytesToSize(bytes) {
+	var sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+	if (bytes == 0) return '0 Byte';
+	var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+	return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+};
