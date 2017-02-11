@@ -272,7 +272,8 @@ routes.get('/services/server', function(req, res, next) {
 			res.send(err);
 			console.log(err);
 		} else {
-			res.json(result);
+			res.header("Content-Type", "application/json");
+			res.send(result);
 		}
 	});
 });
