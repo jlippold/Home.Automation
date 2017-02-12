@@ -4,6 +4,7 @@ var async = require('async');
 var nzbget = require('nzbget-nodejs');
 var torrent = require('utorrent-api');
 var apple = require("find-my-iphone");
+var appleDevices = require("../config/devices.json").icloud;
 
 var embyHost = process.env.embyHost || "localhost:8096";
 var embyToken = process.env.embyToken || "";
@@ -21,7 +22,7 @@ var orbiPass = process.env.orbiPass || "Orbi";
 var icloudUser = process.env.icloudUser || "hey";
 var icloudPass = process.env.icloudPass || "now";
 var latitude = process.env.latitude || 38.8977;
-var longitude = process.env.longitude || -77.0366; 
+var longitude = process.env.longitude || -77.0366;
 
 module.exports.emby = emby;
 module.exports.uTorrent = uTorrent;
@@ -238,16 +239,21 @@ function icloud(callback) {
 			return callback(error);
 		}
 		var allDevices = [];
-
+		
 		async.eachSeries(devices, function(device, next) {
 			if (device.location && device.lostModeCapable) {
+				var name = device.name;
+				if (appleDevices.hasOwnProperty(name)) {
+					device.url = appleDevices[name].url;
+				}
 				
 				icloud.getLocationOfDevice(device, function(err, address) {
 					if (err || !address) {
 						return next(null);
 					}
+
 					device.address = address;
-					
+
 					icloud.getDistanceOfDevice(device, latitude, longitude, function(err, result) {
 						if (err || !result || !result.distance) {
 							allDevices.push(device);

@@ -500,6 +500,26 @@
 			"enabled": true
 		}
 	},
+	"icloud": {
+		"Jeds iPhone": {
+			"url": "https://www.gravatar.com/avatar/470c3d02cad92d01bbd94c8ed01a2bbe.jpg?s=80&d=wavatar"
+		},
+		"Jed's Apple Watch": {
+			"url": "https://upload.wikimedia.org/wikipedia/commons/c/c0/White_AppleWatch_with_Screen.png"
+		},
+		"Syn’s Apple Watch": {
+			"url": "https://upload.wikimedia.org/wikipedia/commons/c/c0/White_AppleWatch_with_Screen.png"
+		},
+		"Syn Kaaos": {
+			"url": "https://graph.facebook.com/100004178495783/picture"
+		},
+		"Syn's iPad": {
+			"url": "https://graph.facebook.com/100004178495783/picture"
+		},
+		"Layla iPhone": {
+			"url": "https://scontent.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/c0.134.1080.1080/15056651_1614799348822260_3236656353191657472_n.jpg"
+		}
+	},
 	"groups": {
 		"livingroom": {
 			"name": "Living Room",
