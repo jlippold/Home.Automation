@@ -239,14 +239,16 @@ function icloud(callback) {
 			return callback(error);
 		}
 		var allDevices = [];
-		
+
 		async.eachSeries(devices, function(device, next) {
 			if (device.location && device.lostModeCapable) {
-				var name = device.name;
-				if (appleDevices.hasOwnProperty(name)) {
-					device.url = appleDevices[name].url;
+
+				if (appleDevices[device.name]) {
+					device.url = appleDevices[device.name].url;
 				}
-				
+				if (appleDevices[device.id]) {
+					device.url = appleDevices[device.id].url;
+				}
 				icloud.getLocationOfDevice(device, function(err, address) {
 					if (err || !address) {
 						return next(null);
