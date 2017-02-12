@@ -3,6 +3,7 @@ var moment = require('moment');
 var async = require('async');
 var nzbget = require('nzbget-nodejs');
 var torrent = require('utorrent-api');
+var apple = require("find-my-iphone");
 
 var embyHost = process.env.embyHost || "localhost:8096";
 var embyToken = process.env.embyToken || "";
@@ -17,12 +18,17 @@ var nzbGetPass = process.env.nzbGetPass || "";
 var orbiBaseUrl = process.env.orbiBaseUrl || "http://192.168.1.1";
 var orbiUser = process.env.orbiUser || "admin";
 var orbiPass = process.env.orbiPass || "Orbi";
+var icloudUser = process.env.icloudUser || "hey";
+var icloudPass = process.env.icloudPass || "now";
+var latitude = process.env.latitude || 38.8977;
+var longitude = process.env.longitude || -77.0366; 
 
 module.exports.emby = emby;
 module.exports.uTorrent = uTorrent;
 module.exports.nzbGet = nzbGet;
 module.exports.router = router;
 module.exports.server = server;
+module.exports.icloud = icloud;
 
 function nzbGet(callback) {
 
@@ -217,6 +223,50 @@ function server(callback) {
 
 	child.on('close', function(code) {
 		callback(err, output);
+	});
+}
+
+function icloud(callback) {
+	var icloud = apple.findmyphone;
+
+	icloud.apple_id = icloudUser;
+	icloud.password = icloudPass;
+
+	icloud.getDevices(function(error, devices) {
+
+		if (error) {
+			return callback(error);
+		}
+		var allDevices = [];
+
+		async.eachSeries(devices, function(device, next) {
+			if (device.location && device.lostModeCapable) {
+				
+				icloud.getLocationOfDevice(device, function(err, address) {
+					if (err || !address) {
+						return next(null);
+					}
+					device.address = address;
+					
+					icloud.getDistanceOfDevice(device, latitude, longitude, function(err, result) {
+						if (err || !result || !result.distance) {
+							allDevices.push(device);
+							return next(null);
+						}
+
+						device.distance = result.distance.text;
+						device.duration = result.duration.text;
+						allDevices.push(device);
+						return next(null);
+					});
+				});
+			} else {
+				return next(null);
+			}
+		}, function(err) {
+			callback(err, allDevices);
+		});
+
 	});
 }
 

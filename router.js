@@ -278,6 +278,18 @@ routes.get('/services/server', function(req, res, next) {
 	});
 });
 
+routes.get('/services/icloud', function(req, res, next) {
+	api.services.icloud(function(err, result) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+			console.log(err);
+		} else {
+			res.header("Content-Type", "application/json");
+			res.send(result);
+		}
+	});
+});
 
 // http://localhost:3000/motion/testFire/367fa8
 // http://localhost:3000/motion/testFire/3699ae
