@@ -245,12 +245,19 @@ function icloud(callback) {
 		async.eachSeries(devices, function(device, next) {
 			if (device.location && device.lostModeCapable) {
 
-				if (appleDevices[device.name]) {
-					device.url = appleDevices[device.name].url;
+				if (device.name.toLowerCase().indexOf("syn") > -1) {
+					device.url = "/img/syn.jpg"
 				}
-				if (appleDevices[device.id]) {
-					device.url = appleDevices[device.id].url;
+				if (device.name.toLowerCase().indexOf("jetta") > -1) {
+					device.url = "/img/jetta.jpg"
 				}
+				if (device.name.toLowerCase().indexOf("layla") > -1) {
+					device.url = "/img/layla.jpg"
+				}
+				if (device.name.toLowerCase().indexOf("jed") > -1) {
+					device.url = "/img/jed.jpg"
+				}
+
 				icloud.getLocationOfDevice(device, function(err, address) {
 					if (err || !address) {
 						return next(null);

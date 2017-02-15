@@ -500,26 +500,6 @@
 			"enabled": true
 		}
 	},
-	"icloud": {
-		"Jeds iPhone": {
-			"url": "https://www.gravatar.com/avatar/470c3d02cad92d01bbd94c8ed01a2bbe.jpg?s=80&d=wavatar"
-		},
-		"XQgkM4ufWxeJqf3W6mOHAT5GqCsiITf2b/hHIpj7tEwW2ZQ1ArpCj+HYVNSUzmWV": {
-			"url": "https://www.gravatar.com/avatar/470c3d02cad92d01bbd94c8ed01a2bbe.jpg?s=80&d=wavatar"
-		},
-		"ukHnNQftCClP/7h3mP+MbB20KDMzX1ukdh+aNoqIhTJdkEsjxZUkN1YXeDkBidGf4y7EIB98H5/dY6Nb4ELBSrXaHfkA2Hq4OO6fgOxDko1akcVLwhTRpA==": {
-			"url": "https://graph.facebook.com/100004178495783/picture"
-		},
-		"Syn Kaaos": {
-			"url": "https://graph.facebook.com/100004178495783/picture"
-		},
-		"Syn's iPad": {
-			"url": "https://graph.facebook.com/100004178495783/picture"
-		},
-		"Layla iPhone": {
-			"url": "https://scontent.cdninstagram.com/t51.2885-15/s640x640/sh0.08/e35/c0.134.1080.1080/15056651_1614799348822260_3236656353191657472_n.jpg"
-		}
-	},
 	"groups": {
 		"livingroom": {
 			"name": "Living Room",
