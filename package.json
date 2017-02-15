@@ -16,7 +16,7 @@
     "core-util-is": "^1.0.2",
     "cors": "^2.7.1",
     "express": "^4.13.3",
-    "find-my-iphone": "git+https://github.com/jlippold/find-my-iphone.git",
+    "find-my-iphone": "git+ssh://git@github.com/jlippold/find-my-iphone.git",
     "flux": "^2.1.1",
     "harmonyhubjs-client": "^1.1.6",
     "home-controller": "^0.6.0",

@@ -5,6 +5,7 @@ var nzbget = require('nzbget-nodejs');
 var torrent = require('utorrent-api');
 var apple = require("find-my-iphone");
 var appleDevices = require("../config/devices.json").icloud;
+var path = require("path");
 
 var embyHost = process.env.embyHost || "localhost:8096";
 var embyToken = process.env.embyToken || "";
@@ -207,11 +208,11 @@ function router(callback) {
 
 function server(callback) {
 	var spawn = require('child_process').spawn;
-	var path = 'D://Scripts//stats//ServerStats.exe';
-	if (!require('fs').existsSync(path)) {
+	var scriptPath = 'D://Scripts//stats//ServerStats.exe';
+	if (!require('fs').existsSync(scriptPath)) {
 		return callback("file not found");
 	}
-	var child = spawn(path);
+	var child = spawn(scriptPath);
 	var output = "";
 	var err = "";
 	child.stdout.on('data',
@@ -232,6 +233,7 @@ function icloud(callback) {
 
 	icloud.apple_id = icloudUser;
 	icloud.password = icloudPass;
+	icloud.cookieFileStore = path.join(path.basename(__dirname), "../", "icloud.cookie");
 
 	icloud.getDevices(function(error, devices) {
 
