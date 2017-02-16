@@ -291,8 +291,8 @@ routes.get('/services/icloud', function(req, res, next) {
 	});
 });
 
-routes.get('/services/icloud/:device/alert', function(req, res, next) {
-	var device = req.params.device;
+routes.post('/services/icloud/alert', function(req, res, next) {
+	var device = req.body.device;
 
 	api.services.icloudAlert(device, function(err, result) {
 		if (err) {
