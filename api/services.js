@@ -31,6 +31,13 @@ module.exports.nzbGet = nzbGet;
 module.exports.router = router;
 module.exports.server = server;
 module.exports.icloud = icloud;
+module.exports.icloudAlert = icloudAlert;
+
+
+var icloud = apple.findmyphone;
+icloud.apple_id = icloudUser;
+icloud.password = icloudPass;
+icloud.cookieFileStore = path.join(path.basename(__dirname), "../", "icloud.cookie");
 
 function nzbGet(callback) {
 
@@ -229,12 +236,6 @@ function server(callback) {
 }
 
 function icloud(callback) {
-	var icloud = apple.findmyphone;
-
-	icloud.apple_id = icloudUser;
-	icloud.password = icloudPass;
-	icloud.cookieFileStore = path.join(path.basename(__dirname), "../", "icloud.cookie");
-
 	icloud.getDevices(function(error, devices) {
 
 		if (error) {
@@ -283,7 +284,14 @@ function icloud(callback) {
 		}, function(err) {
 			callback(err, allDevices);
 		});
+	});
+}
 
+function icloudAlert(device, callback) {
+	icloud.alertDevice(device, function(err) {
+		callback(err, {
+			"status": "sent"
+		});
 	});
 }
 
