@@ -430,11 +430,11 @@
 	},
 	"kodi": {
 		"livingRoom": {
-			"ip": "192.168.1.85",
+			"ip": "192.168.1.99",
 			"location": "livingroom"
 		},
 		"bedRoom": {
-			"ip": "192.168.1.103",
+			"ip": "192.168.1.98",
 			"location": "bedroom"
 		}
 	},
