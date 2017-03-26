@@ -37,7 +37,7 @@ module.exports.icloudAlert = icloudAlert;
 var icloud = apple.findmyphone;
 icloud.apple_id = icloudUser;
 icloud.password = icloudPass;
-icloud.cookieFileStore = path.join(path.basename(__dirname), "../", "icloud.cookie");
+icloud.cookieFileStore = path.join(__dirname, "../", "icloud.cookie");
 
 function nzbGet(callback) {
 
