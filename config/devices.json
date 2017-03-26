@@ -171,7 +171,7 @@
 				"1": {
 					"type": "harmony",
 					"id": "livingroom",
-					"device": "35482834",
+					"device": "43708766",
 					"command": "F2",
 					"description": "TV On",
 					"status": "on"
@@ -179,7 +179,7 @@
 				"2": {
 					"type": "harmony",
 					"id": "livingroom",
-					"device": "35482834",
+					"device": "43708766",
 					"command": "F1",
 					"description": "TV off",
 					"status": "on"
@@ -230,7 +230,7 @@
 				"1": {
 					"type": "harmony",
 					"id": "bedroom",
-					"device": "41215822",
+					"device": "43709382",
 					"command": "F2",
 					"description": "TV on",
 					"status": "on"
@@ -238,7 +238,7 @@
 				"2": {
 					"type": "harmony",
 					"id": "bedroom",
-					"device": "41215822",
+					"device": "43709382",
 					"command": "F1",
 					"description": "TV off",
 					"status": "on"
@@ -445,8 +445,8 @@
 			"icon": "icon-desktop",
 			"group": "Living Room",
 			"activities": {
-				"16476999": {
-					"id": "16476999",
+				"25614547": {
+					"id": "25614547",
 					"name": "Watch a Movie",
 					"supplementalCommands": []
 				},
@@ -463,8 +463,8 @@
 			"icon": "icon-desktop-1",
 			"group": "bedroom",
 			"activities": {
-				"16416899": {
-					"id": "16416899",
+				"25625298": {
+					"id": "25625298",
 					"name": "Watch movie",
 					"supplementalCommands": []
 				},
@@ -519,12 +519,12 @@
 			}, {
 				"type": "harmony",
 				"id": "livingroom",
-				"activity": "16476999",
+				"activity": "25614547",
 				"description": "Watch TV"
 			}, {
 				"type": "harmony",
 				"id": "livingroom",
-				"device": "35482834",
+				"device": "43708766",
 				"command": "F2"
 			}],
 			"off": [{
@@ -542,7 +542,7 @@
 			}, {
 				"type": "harmony",
 				"id": "livingroom",
-				"device": "35482834",
+				"device": "43708766",
 				"command": "F1"
 			}]
 		},
@@ -586,12 +586,12 @@
 			}, {
 				"type": "harmony",
 				"id": "bedroom",
-				"activity": "16416899",
+				"activity": "25625298",
 				"description": "Watch TV"
 			}, {
 				"type": "harmony",
 				"id": "bedroom",
-				"device": "41215822",
+				"device": "43709382",
 				"command": "F2"
 			}, {
 				"type": "lifx",
@@ -613,7 +613,7 @@
 			}, {
 				"type": "harmony",
 				"id": "bedroom",
-				"device": "41215822",
+				"device": "43709382",
 				"command": "F1"
 			}, {
 				"type": "lifx",
@@ -657,18 +657,18 @@
 			"on": [{
 				"type": "harmony",
 				"id": "livingroom",
-				"activity": "16476999",
+				"activity": "25614547",
 				"description": "Watch TV"
 			}, {
 				"type": "harmony",
 				"id": "livingroom",
-				"device": "35482834",
+				"device": "43708766",
 				"command": "F2"
 			}],
 			"off": [{
 				"type": "harmony",
 				"id": "livingroom",
-				"device": "35482834",
+				"device": "43708766",
 				"command": "F1"
 			}]
 		},
@@ -678,18 +678,18 @@
 			"on": [{
 				"type": "harmony",
 				"id": "bedroom",
-				"activity": "16416899",
+				"activity": "25625298",
 				"description": "Watch TV"
 			}, {
 				"type": "harmony",
 				"id": "bedroom",
-				"device": "41215822",
+				"device": "43709382",
 				"command": "F2"
 			}],
 			"off": [{
 				"type": "harmony",
 				"id": "bedroom",
-				"device": "41215822",
+				"device": "43709382",
 				"command": "F1"
 			}]
 		},
