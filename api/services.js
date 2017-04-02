@@ -120,9 +120,9 @@ function emby(callback) {
 				});
 			}
 		});
-
-		arr.sort((a, b) => a.name.localeCompare(b.name));
-
+		if (arr.length > 0) {
+			arr.sort((a, b) => a.title.localeCompare(b.title));
+		}
 		callback(err, arr);
 	});
 }
