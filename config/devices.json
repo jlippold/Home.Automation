@@ -127,8 +127,12 @@
 			"description": "Kitchen Motion Sensor",
 			"type": "motion",
 			"icon": "icon-pitch",
-			"group": "outside",
+			"group": "Kitchen",
 			"actions": [{
+				"type": "log",
+				"event": "Motion Detected",
+				"location": "Kitchen"
+			}, {
 				"type": "toggle",
 				"insteon": "3728AC",
 				"cutoff": 600,
