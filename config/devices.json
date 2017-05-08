@@ -20,26 +20,17 @@
 				"type": "toggle",
 				"insteon": "1A8D98",
 				"cutoff": 600,
-				"betweenHours": {
-					"start": 17,
-					"end": 7
-				}
+				"nightOnly": true
 			}, {
 				"type": "toggle",
 				"insteon": "40954A",
 				"cutoff": 600,
-				"betweenHours": {
-					"start": 17,
-					"end": 7
-				}
+				"nightOnly": true
 			}, {
 				"type": "toggle",
 				"insteon": "3C2CC5",
 				"cutoff": 600,
-				"betweenHours": {
-					"start": 17,
-					"end": 7
-				}
+				"nightOnly": true
 			}],
 			"enabled": true
 		},
@@ -60,26 +51,17 @@
 				"type": "toggle",
 				"insteon": "1A8D98",
 				"cutoff": 600,
-				"betweenHours": {
-					"start": 17,
-					"end": 7
-				}
+				"nightOnly": true
 			}, {
 				"type": "toggle",
 				"insteon": "3C2CC5",
 				"cutoff": 600,
-				"betweenHours": {
-					"start": 17,
-					"end": 7
-				}
+				"nightOnly": true
 			}, {
 				"type": "toggle",
 				"insteon": "3728AC",
 				"cutoff": 600,
-				"betweenHours": {
-					"start": 17,
-					"end": 7
-				}
+				"nightOnly": true
 			}],
 			"enabled": true
 		},
@@ -100,26 +82,17 @@
 				"type": "toggle",
 				"insteon": "1A8D98",
 				"cutoff": 600,
-				"betweenHours": {
-					"start": 17,
-					"end": 7
-				}
+				"nightOnly": true
 			}, {
 				"type": "toggle",
 				"insteon": "3C2CC5",
 				"cutoff": 600,
-				"betweenHours": {
-					"start": 17,
-					"end": 7
-				}
+				"nightOnly": true
 			}, {
 				"type": "toggle",
 				"insteon": "3728AC",
 				"cutoff": 600,
-				"betweenHours": {
-					"start": 17,
-					"end": 7
-				}
+				"nightOnly": true
 			}],
 			"enabled": true
 		},
@@ -136,10 +109,7 @@
 				"type": "toggle",
 				"insteon": "3728AC",
 				"cutoff": 600,
-				"betweenHours": {
-					"start": 17,
-					"end": 9
-				}
+				"nightOnly": true
 			}],
 			"enabled": true
 		},
@@ -160,10 +130,7 @@
 				"type": "toggle",
 				"insteon": "3C2CC5",
 				"cutoff": 600,
-				"betweenHours": {
-					"start": 17,
-					"end": 9
-				}
+				"nightOnly": true
 			}],
 			"enabled": true
 		},
