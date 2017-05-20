@@ -13,6 +13,7 @@ var app = express();
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 
+require( "console-stamp" )( console, { pattern : "yyyy-mm-dd HH:MM:ss" } );
 /*
 var basic = auth.basic({
 	realm: "Jeds House.",
