@@ -278,7 +278,7 @@
 			"group": "Outside",
 			"type": "switch",
 			"hasManualOverride": true,
-			"enabled": true
+			"enabled": false
 		},
 		"3C2CC5": {
 			"description": "Sidedoor",
