@@ -128,7 +128,7 @@
 				"cutoff": 600,
 				"nightOnly": true
 			}],
-			"enabled": true
+			"enabled": false
 		},
 		"357531": {
 			"description": "Livroom keypad",
@@ -321,12 +321,12 @@
 			"enabled": false
 		},
 		"2998CD": {
-			"description": "Small Lamp",
+			"description": "Small Lamp old dead bulb",
 			"icon": "icon-lamp",
 			"group": "Dining Room",
 			"hasManualOverride": false,
 			"type": "switch",
-			"enabled": true
+			"enabled": false
 		},
 		"1A8DBD": {
 			"description": "Bedroom controller",
@@ -345,12 +345,12 @@
 			"enabled": true
 		},
 		"237643": {
-			"description": "Plug adapter",
-			"icon": "icon-tree-1",
-			"group": "Living Room",
+			"description": "Small Lamp Linc",
+			"icon": "icon-lamp",
+			"group": "Dining Room",
 			"hasManualOverride": true,
 			"type": "switch",
-			"enabled": false
+			"enabled": true
 		},
 		"3728AC": {
 			"description": "Cabinet Lights",
@@ -601,7 +601,7 @@
 			"icon": "icon-table",
 			"on": [{
 				"type": "insteon",
-				"id": "2998CD",
+				"id": "237643",
 				"description": "lamp"
 			}, {
 				"type": "lifx",
@@ -614,7 +614,7 @@
 			}],
 			"off": [{
 				"type": "insteon",
-				"id": "2998CD",
+				"id": "237643",
 				"description": "lamp"
 			}, {
 				"type": "lifx",
