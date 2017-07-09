@@ -25,7 +25,7 @@ routes.get('/api/groups', function(req, res, next) {
 		if (err) {
 			res.status(500);
 			res.send(err);
-			console.log(err);
+			console.error(err);
 		} else {
 			res.send(devices);
 		}
@@ -37,7 +37,7 @@ routes.get('/insteon', function(req, res, next) {
 		if (err) {
 			res.status(500);
 			res.send(err);
-			console.log(err);
+			console.error(err);
 		} else {
 			res.send(devices);
 		}
@@ -52,7 +52,7 @@ routes.get('/insteon/:id/dim/:level', function(req, res, next) {
 		if (err) {
 			res.status(500);
 			res.send(err);
-			console.log(err);
+			console.error(err);
 		} else {
 			res.sendStatus(200);
 		}
@@ -108,7 +108,7 @@ routes.get('/lifx', function(req, res, next) {
 		if (err) {
 			res.status(500);
 			res.send(err);
-			console.log(err);
+			console.error(err);
 		} else {
 			res.send(devices);
 		}
@@ -145,7 +145,7 @@ routes.get('/groups/:id/on', function(req, res, next) {
 	res.sendStatus(200);
 	lib.groups.setStatus(req.params.id, "on", function(err) {
 		if (err) {
-			console.log(err);
+			console.error(err);
 		}
 	});
 });
@@ -154,10 +154,22 @@ routes.get('/groups/:id/off', function(req, res, next) {
 	res.sendStatus(200);
 	lib.groups.setStatus(req.params.id, "off", function(err) {
 		if (err) {
-			console.log(err);
+			console.error(err);
 		}
 	});
 });
+
+
+// http://localhost:3000/sequence/night_mode/
+routes.get('/sequence/:id', function(req, res, next) {
+	res.sendStatus(200);
+	lib.sequences.runSequence(req.params.id, function(err) {
+		if (err) {
+			console.error(err);
+		}
+	});
+});
+
 
 
 // http://localhost:3000/harmony/hubs
@@ -183,7 +195,7 @@ routes.get('/harmony/hubs/:hub/activities/:activity', function(req, res, next) {
 
 	api.harmony.runActivity(hub, activity, function(err) {
 		if (err) {
-			console.log(err);
+			console.error(err);
 		}
 	});
 });
@@ -196,7 +208,7 @@ routes.get('/harmony/hubs/:hub/activities/:activity/toggle', function(req, res, 
 
 	api.harmony.toggleActivity(hub, activity, function(err) {
 		if (err) {
-			console.log(err);
+			console.error(err);
 		}
 	});
 });
@@ -210,7 +222,7 @@ routes.get('/harmony/hubs/:hub/devices/:device/commands/:command', function(req,
 		if (err) {
 			res.status(500);
 			res.send(err);
-			console.log(err);
+			console.error(err);
 		} else {
 			res.sendStatus(200);
 		}
@@ -222,7 +234,7 @@ routes.get('/services/torrent', function(req, res, next) {
 		if (err) {
 			res.status(500);
 			res.send(err);
-			console.log(err);
+			console.error(err);
 		} else {
 			res.send(result);
 		}
@@ -234,7 +246,7 @@ routes.get('/services/nzb', function(req, res, next) {
 		if (err) {
 			res.status(500);
 			res.send(err);
-			console.log(err);
+			console.error(err);
 		} else {
 			res.send(result);
 		}
@@ -246,7 +258,7 @@ routes.get('/services/emby', function(req, res, next) {
 		if (err) {
 			res.status(500);
 			res.send(err);
-			console.log(err);
+			console.error(err);
 		} else {
 			res.send(result);
 		}
@@ -258,7 +270,7 @@ routes.get('/services/router', function(req, res, next) {
 		if (err) {
 			res.status(500);
 			res.send(err);
-			console.log(err);
+			console.error(err);
 		} else {
 			res.send(result);
 		}
@@ -270,7 +282,7 @@ routes.get('/services/server', function(req, res, next) {
 		if (err) {
 			res.status(500);
 			res.send(err);
-			console.log(err);
+			console.error(err);
 		} else {
 			res.header("Content-Type", "application/json");
 			res.send(result);
@@ -283,7 +295,7 @@ routes.get('/services/icloud', function(req, res, next) {
 		if (err) {
 			res.status(500);
 			res.send(err);
-			console.log(err);
+			console.error(err);
 		} else {
 			res.header("Content-Type", "application/json");
 			res.send(result);
@@ -298,7 +310,7 @@ routes.post('/services/icloud/alert', function(req, res, next) {
 		if (err) {
 			res.status(500);
 			res.send(err);
-			console.log(err);
+			console.error(err);
 		} else {
 			res.header("Content-Type", "application/json");
 			res.send(result);
@@ -315,7 +327,7 @@ routes.get('/motion/testFire/:device', function(req, res, next) {
 		if (err) {
 			res.status(500);
 			res.send(err);
-			console.log(err);
+			console.error(err);
 		} else {
 			res.sendStatus(200);
 		}

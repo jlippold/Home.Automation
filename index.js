@@ -64,7 +64,7 @@ app.use(function(err, req, res, next) {
 
 async.auto({
 	insteonHub: function(next) {
-		if (process.env.NODE_ENV == "dev") {
+		if (process.env.NODE_ENV != "production") {
 			return next();
 		}
 		insteon.register(function(err) {
