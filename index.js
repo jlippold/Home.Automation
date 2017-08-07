@@ -3,6 +3,7 @@ var async = require('async');
 var insteon = require('./api/insteon');
 var harmony = require('./api/harmony');
 var lifx = require('./api/lifx');
+var cams = require('./api/cams');
 var router = require('./router');
 var dispatcher = require('./lib/dispatch');
 var cors = require('cors');
@@ -63,8 +64,15 @@ app.use(function(err, req, res, next) {
 
 
 async.auto({
+	camWatcher: function(next) {
+		cams.init(function() {
+			console.log("cam watcher initiated")
+			next();
+		});
+	},
 	insteonHub: function(next) {
 		if (process.env.NODE_ENV != "production") {
+			console.log("skipping insteon hub")
 			return next();
 		}
 		insteon.register(function(err) {
@@ -79,6 +87,7 @@ async.auto({
 		});
 	},
 	harmonyActivities: function(next) {
+		console.log("Starting harmony");
 		harmony.init(function(err) {
 			console.log("retrieved harmony commands");
 			next(err);
@@ -90,7 +99,7 @@ async.auto({
 			next(err);
 		});
 	}],
-	sockets: ['lifxClient', 'deviceList', function(next) {
+	sockets: ['camWatcher', 'lifxClient', 'deviceList', function(next) {
 		var port = 3000;
 		server.listen(port, function() {
 			console.log("Listening from " + port);
@@ -101,7 +110,7 @@ async.auto({
 		});
 		console.log("socket server is running");
 		next();
-	}],
+	}]
 }, function(err, results) {
 	if (err) {
 		process.exit(1);

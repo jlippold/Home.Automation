@@ -3,6 +3,7 @@ logs
 *.log
 npm-debug.log*
 *.htpasswd
+.vscode
 
 # Runtime data
 pids
@@ -36,8 +37,6 @@ node_modules
 
 .DS_Store
 .htpassword
-
-volatile/harmony.json
 
 start.sh
 *.cookie
