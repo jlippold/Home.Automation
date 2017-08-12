@@ -40,3 +40,4 @@ node_modules
 
 start.sh
 *.cookie
+recordings.db

@@ -10,7 +10,7 @@
 			"group": "outside",
 			"actions": [{
 				"type": "kodi",
-				"camera": "FrontDoor",
+				"camera": "porch",
 				"cutoff": 15
 			}, {
 				"type": "log",
@@ -45,7 +45,7 @@
 				"location": "Side Door"
 			}, {
 				"type": "kodi",
-				"camera": "SideDoor",
+				"camera": "sidedoor",
 				"cutoff": 15
 			}, {
 				"type": "toggle",
@@ -76,7 +76,7 @@
 				"location": "Driveway"
 			}, {
 				"type": "kodi",
-				"camera": "Driveway",
+				"camera": "porch",
 				"cutoff": 15
 			}, {
 				"type": "toggle",
@@ -120,7 +120,7 @@
 				"location": "Garage"
 			}, {
 				"type": "kodi",
-				"camera": "Garage",
+				"camera": "garage",
 				"cutoff": 15
 			}, {
 				"type": "toggle",
@@ -361,6 +361,56 @@
 			"enabled": true
 		}
 	},
+	"reolink": {
+		"porch": {
+			"description": "Porch Camera Sensor",
+			"type": "motion",
+			"icon": "icon-pitch",
+			"group": "outside",
+			"actions": [{
+				"type": "kodi",
+				"camera": "FrontDoor",
+				"cutoff": 15
+			}, {
+				"type": "log",
+				"event": "Motion Detected",
+				"location": "Porch Cam"
+			}],
+			"enabled": true
+		},
+		"sidedoor": {
+			"description": "Side Door Camera Sensor",
+			"type": "motion",
+			"icon": "icon-pitch",
+			"group": "outside",
+			"actions": [{
+				"type": "log",
+				"event": "Motion Detected",
+				"location": "Side Door Cam"
+			}, {
+				"type": "kodi",
+				"camera": "SideDoor",
+				"cutoff": 15
+			}],
+			"enabled": true
+		},
+		"garage": {
+			"description": "Garage Door Camera Sensor",
+			"type": "door",
+			"icon": "icon-home",
+			"group": "outside",
+			"actions": [{
+				"type": "log",
+				"event": "Door Opened",
+				"location": "Garage"
+			}, {
+				"type": "kodi",
+				"camera": "Garage",
+				"cutoff": 15
+			}],
+			"enabled": false
+		}
+	},
 	"lifx": {
 		"d073d5125481": {
 			"description": "Night Light",
@@ -407,10 +457,6 @@
 		"basement": {
 			"ip": "192.168.1.23",
 			"location": "basement"
-		},
-		"cora": {
-			"ip": "192.168.1.17",
-			"location": "cora"
 		}
 	},
 	"harmony": {
