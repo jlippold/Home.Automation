@@ -65,11 +65,9 @@ app.use(function (err, req, res, next) {
 
 async.auto({
 	camWatcher: function (next) {
-		if (process.env.NODE_ENV != "production") {
-			cams.init(function () {
-				console.log("cam watcher initiated");
-			});
-		}
+		cams.init(function () {
+			console.log("cam watcher initiated");
+		});
 		next();
 	},
 	insteonHub: function (next) {

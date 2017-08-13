@@ -334,5 +334,43 @@ routes.get('/motion/testFire/:device', function(req, res, next) {
 	});
 });
 
+routes.get("/cameras/recordings", function(req, res, next) {
+	var dateString = req.query.dateString;
+	api.cams.getRecordingsForDay(dateString, function(err, recordings) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+			console.error(err);
+		} else {
+			res.send(recordings);
+		}
+	});
+});
+
+routes.get("/cameras/recordings/:recording_id/image", function(req, res, next) {
+	var recording_id = req.params.recording_id;
+	api.cams.getRecordingById(recording_id, function(err, recording) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+			console.error(err);
+		} else {
+			res.sendFile(recording.jpg);
+		}
+	});
+});
+
+routes.get("/cameras/recordings/:recording_id/video", function(req, res, next) {
+	var recording_id = req.params.recording_id;
+	api.cams.getRecordingById(recording_id, function(err, recording) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+			console.error(err);
+		} else {
+			res.sendFile(recording.mp4);
+		}
+	});
+});
 
 module.exports = routes;

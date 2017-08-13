@@ -6,19 +6,21 @@ var moment = require('moment');
 var chokidar = require('chokidar');
 var sqlite3 = require('sqlite3').verbose();
 var lib = require("../lib/");
+var crypto = require("crypto");
 
 var db = new sqlite3.Database("recordings.db");
 
 var ftpPath = "G:\\FTP";
 
 module.exports.init = init;
-
+module.exports.getRecordingsForDay = getRecordingsForDay;
+module.exports.getRecordingById = getRecordingById;
 function initdb(callback) {
   db.serialize(function () {
     var createTable = `CREATE TABLE IF NOT EXISTS 
-        recordings (mp4 TEXT PRIMARY KEY, 
-          location TEXT, jpg TEXT NULL, date DATETIME, 
-          gif TEXT NULL, duration TEXT NULL)`;
+        recordings (recording_id TEXT, mp4 TEXT PRIMARY KEY, 
+          location TEXT, jpg TEXT NULL, date DATETIME, dateString TEXT,
+        CONSTRAINT id_unique UNIQUE (recording_id))`;
     db.run(createTable, function (err) {
       callback(err)
     });
@@ -26,6 +28,34 @@ function initdb(callback) {
   //db.close();
 }
 
+function getRecordingsForDay(dateString, callback) {
+  var sql = "SELECT * FROM recordings where dateString = $dateString ORDER BY date ASC";
+  db.all(sql, { $dateString: dateString }, function (err, rows) {
+    var output = { recordings: [] };
+    if (rows) {
+      output.recordings = rows.map(function (row) {
+        row.fullDate = moment(row.date).format("dddd, MMMM Do YYYY, h:mm:ss a");
+        row.time = moment(row.date).format("hA");
+        row.thumbnail = "https://jed.bz/camera/live/getThumbnail.aspx?width=120&file=" + row.jpg
+        row.image = "https://jed.bz/home/cameras/recordings/" + row.recording_id + "/image"
+        row.video = "https://jed.bz/home/cameras/recordings/" + row.recording_id + "/video"
+        return row;
+      });
+    }
+    callback(err, output);
+  });
+}
+
+function getRecordingById(recording_id, callback) {
+  var sql = "SELECT * FROM recordings where recording_id = $recording_id";
+  db.all(sql, { $recording_id: recording_id }, function (err, rows) {
+    if (rows && rows.length > 0) {
+      callback(err, rows[0]);
+    } else {
+      callback(err);
+    }
+  });
+}
 
 function init(callback) {
   initdb(function (err) {
@@ -38,7 +68,7 @@ function init(callback) {
       var paths = cameraBasePaths();
       var watcher = chokidar.watch(paths, {
         ignored: /(^|[\/\\])\../,
-        ignoreInitial: ctrue,
+        ignoreInitial: true,
         depth: 1
       });
 
@@ -86,7 +116,7 @@ function indexRecordingsOnDisk(callback) {
 function insertRecordings(items, callback) {
 
   db.serialize(function () {
-    async.eachLimit(items, 3, function (file, next) {
+    async.eachLimit(items, 20, function (file, next) {
 
       var name = path.basename(file, path.extname(file));
       var ext = path.extname(file);
@@ -98,14 +128,15 @@ function insertRecordings(items, callback) {
 
         var jpg = newPathWithExtension(file, ".jpg");
         var sql = `INSERT INTO recordings VALUES (
-            $mp4, $location, $jpg, 
-            $date, $gif, $duration )`;
+            $id, $mp4, $location, $jpg, 
+            $date, $dateString )`;
 
         fileExists(jpg, function (exists) {
           jpg = exists ? jpg : null;
+          var id = crypto.randomBytes(16).toString("hex");
           db.run(sql, {
-            $mp4: file, $location: cameraName, $jpg: jpg,
-            $date: fileDate.toDate(), $gif: null, $duration: null
+            $id: id, $mp4: file, $location: cameraName, $jpg: jpg,
+            $date: fileDate.toDate(), $dateString: fileDate.format('YYYY-MM-DD')
           }, function (err) {
             err = err && JSON.stringify(err).indexOf("CONSTRAINT") > 0 ? null : err;
             return next(err);
