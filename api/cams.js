@@ -49,6 +49,9 @@ function getRecordingsForDay(dateString, callback) {
 function getRecordingById(recording_id, callback) {
   var sql = "SELECT * FROM recordings where recording_id = $recording_id";
   db.all(sql, { $recording_id: recording_id }, function (err, rows) {
+    if (err) {
+      return callback(err);
+    }
     if (rows && rows.length > 0) {
       callback(err, rows[0]);
     } else {
