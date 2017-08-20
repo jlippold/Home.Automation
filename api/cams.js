@@ -79,13 +79,15 @@ function init(callback) {
         if (filename.indexOf(ftpPath) > 0) {
 
           //TRIGGER MOTION YALL
-          console.log(filename);
+          console.log("New file found: " + filename);
+          /*
           var cameraName = path.basename(path.dirname(file)).toLowerCase();
           if (devices.reolink.hasOwnProperty(id)) {
             return callback("no device found");
             lib.motion.fired(devices.reolink[id]);
           }
-
+          */
+          
           setTimeout(function () {
             insertRecordings([filename], function () {
               if (err) {
