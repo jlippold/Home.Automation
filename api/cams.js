@@ -11,6 +11,7 @@ var crypto = require("crypto");
 var db = new sqlite3.Database("recordings.db");
 
 var ftpPath = "G:\\FTP";
+var watcher;
 
 module.exports.init = init;
 module.exports.getRecordingsForDay = getRecordingsForDay;
@@ -29,7 +30,7 @@ function initdb(callback) {
 }
 
 function getRecordingsForDay(dateString, callback) {
-  var sql = "SELECT * FROM recordings where dateString = $dateString ORDER BY date ASC";
+  var sql = "SELECT * FROM recordings where dateString = $dateString ORDER BY date DESC";
   db.all(sql, { $dateString: dateString }, function (err, rows) {
     var output = { recordings: [] };
     if (rows) {
@@ -63,23 +64,24 @@ function getRecordingById(recording_id, callback) {
 function init(callback) {
   initdb(function (err) {
     if (err) {
+      console.log(err);
       return callback(err);
     }
 
     indexRecordingsOnDisk(function () {
 
       var paths = cameraBasePaths();
-      var watcher = chokidar.watch(paths, {
-        ignored: /(^|[\/\\])\../,
+      watcher = chokidar.watch(paths, {
         ignoreInitial: true,
-        depth: 1
+        depth: 1,
+        persistent: true
       });
 
       watcher.on('add', function (filename, stat) {
-        if (filename.indexOf(ftpPath) > 0) {
-
+        if (filename.indexOf(ftpPath) == 0) {
+          console.log("New file created: " + filename);
           //TRIGGER MOTION YALL
-          console.log("New file found: " + filename);
+          
           /*
           var cameraName = path.basename(path.dirname(file)).toLowerCase();
           if (devices.reolink.hasOwnProperty(id)) {
@@ -91,7 +93,7 @@ function init(callback) {
           setTimeout(function () {
             insertRecordings([filename], function () {
               if (err) {
-                console.log(err);
+                console.log("new file insert error" + err);
               }
             });
           }, 1000);
