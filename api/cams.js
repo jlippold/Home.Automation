@@ -7,6 +7,8 @@ var chokidar = require('chokidar');
 var sqlite3 = require('sqlite3').verbose();
 var lib = require("../lib/");
 var crypto = require("crypto");
+var request = require("request");
+var Stream = require('stream').Transform;
 
 var db = new sqlite3.Database("recordings.db");
 
@@ -16,6 +18,7 @@ var watcher;
 module.exports.init = init;
 module.exports.getRecordingsForDay = getRecordingsForDay;
 module.exports.getRecordingById = getRecordingById;
+
 function initdb(callback) {
   db.serialize(function () {
     var createTable = `CREATE TABLE IF NOT EXISTS 
@@ -23,10 +26,49 @@ function initdb(callback) {
           location TEXT, jpg TEXT NULL, date DATETIME, dateString TEXT,
         CONSTRAINT id_unique UNIQUE (recording_id))`;
     db.run(createTable, function (err) {
-      callback(err)
+      downloader(function () {
+        callback(err);
+      });
     });
   });
+
   //db.close();
+
+}
+
+var downloader = function (callback) {
+  var tasks = [];
+  var paths = cameraBasePaths();
+  paths.forEach(function (folder) {
+    async.forever(
+      function (nextImage) {
+        var camera = path.basename(folder);
+        var destination = path.join(folder, 'snapshot.jpg');
+        var uri = "https://jed.bz/camera/live/downloadcam.aspx?cam=" + camera;
+        request.get({ url: uri, encoding: null }, function (err, res) {
+          if (err || res.statusCode == 500) {
+            console.log("Error downloading:  " + camera);
+            setTimeout(function() {
+              return nextImage();
+            }, 60000);
+          } else {
+            fs.writeFile(destination, res.body, function (err) {
+              if (err) {
+                console.log("could not save image from " + uri);
+              }
+              //console.log("completed: " + camera);
+              return nextImage();
+            });
+          }
+        });
+      },
+      function (err) {
+        console.log("downloader crashed");
+        console.error(err);
+      }
+    );
+  });
+  callback();
 }
 
 function getRecordingsForDay(dateString, callback) {
@@ -81,7 +123,7 @@ function init(callback) {
         if (filename.indexOf(ftpPath) == 0) {
           console.log("New file created: " + filename);
           //TRIGGER MOTION YALL
-          
+
           /*
           var cameraName = path.basename(path.dirname(file)).toLowerCase();
           if (devices.reolink.hasOwnProperty(id)) {
@@ -89,7 +131,7 @@ function init(callback) {
             lib.motion.fired(devices.reolink[id]);
           }
           */
-          
+
           setTimeout(function () {
             insertRecordings([filename], function () {
               if (err) {
