@@ -9,6 +9,7 @@ var lib = require("../lib/");
 var crypto = require("crypto");
 var request = require("request");
 var Stream = require('stream').Transform;
+var dispatch = require("../lib/dispatch");
 
 var db = new sqlite3.Database("recordings.db");
 
@@ -44,7 +45,7 @@ var downloader = function (callback) {
       function (nextImage) {
         var camera = path.basename(folder);
         var destination = path.join(folder, 'snapshot.jpg');
-        var uri = "https://jed.bz/camera/live/downloadcam.aspx?cam=" + camera;
+        var uri = "https://jed.bz/camera/live/downloadcam.aspx?cam=" + camera + "&width=640";
         request.get({ url: uri, encoding: null }, function (err, res) {
           if (err || res.statusCode == 500) {
             console.log("Error downloading:  " + camera);
@@ -52,9 +53,13 @@ var downloader = function (callback) {
               return nextImage();
             }, 60000);
           } else {
+            
             fs.writeFile(destination, res.body, function (err) {
               if (err) {
                 console.log("could not save image from " + uri);
+              } else {
+                var base64Image = new Buffer(res.body, 'binary').toString('base64');
+                dispatch.picture(camera, base64Image);
               }
               //console.log("completed: " + camera);
               return nextImage();
