@@ -10,11 +10,22 @@ var crypto = require("crypto");
 var request = require("request");
 var Stream = require('stream').Transform;
 var dispatch = require("../lib/dispatch");
+var spawn = require('child_process').spawn;
+var reoLinkPassword = process.env.reoLinkPassword || "";
 
 var db = new sqlite3.Database("recordings.db");
 
 var ftpPath = "G:\\FTP";
+var ffmpeg = "D:\\Scripts\\FFMpeg\\ffmpeg.exe";
 var watcher;
+
+var cams = [
+  {ip: "192.168.1.201", name: "garage"},
+  {ip: "192.168.1.202", name: "basement"},
+  {ip: "192.168.1.204", name: "porch"},
+  {ip: "192.168.1.205", name: "driveway"}
+];
+
 
 module.exports.init = init;
 module.exports.getRecordingsForDay = getRecordingsForDay;
@@ -38,37 +49,27 @@ function initdb(callback) {
 }
 
 var downloader = function (callback) {
-  var tasks = [];
-  var paths = cameraBasePaths();
-  paths.forEach(function (folder) {
+  if (reoLinkPassword == "") {
+    return;
+  }
+
+  cams.forEach(function (cam) {
     async.forever(
-      function (nextImage) {
-        var camera = path.basename(folder);
-        var destination = path.join(folder, 'snapshot.jpg');
-        var uri = "https://jed.bz/camera/live/downloadcam.aspx?cam=" + camera + "&width=640";
-        request.get({ url: uri, encoding: null }, function (err, res) {
-          if (err || res.statusCode == 500) {
-            console.log("Error downloading:  " + camera);
-            setTimeout(function() {
-              return nextImage();
-            }, 60000);
-          } else {
-            
-            fs.writeFile(destination, res.body, function (err) {
-              if (err) {
-                console.log("could not save image from " + uri);
-              } else {
-                var base64Image = new Buffer(res.body, 'binary').toString('base64');
-                dispatch.picture(camera, base64Image);
-              }
-              //console.log("completed: " + camera);
-              return nextImage();
-            });
-          }
+      function (restart) {
+        var args = ["-i",
+        "rtsp://admin:" + reoLinkPassword + "@" + cam.ip + "/h264Preview_01_sub", 
+        "-vf", "fps=fps=1/2", "-update", "1", 
+        path.join(ftpPath, cam.name + ".jpg"), "-y"];
+
+        var ls = spawn(ffmpeg, args);
+        ls.on('close', (code) => {
+          setTimeout(function() {
+            restart();
+          }, 2000);
         });
       },
       function (err) {
-        console.log("downloader crashed");
+        console.log("recorder crashed");
         console.error(err);
       }
     );

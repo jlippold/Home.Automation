@@ -128,6 +128,7 @@ function emby(callback) {
 }
 
 function router(callback) {
+	return callback();
 	var url = orbiBaseUrl + '/traffic.htm';
 	var options = {
 		'strictSSL': false,
