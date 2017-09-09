@@ -2,6 +2,62 @@
 	"hub": {
 		"ip": "192.168.1.104"
 	},
+	"ring": {
+		"Front Door": {
+			"description": "Ring Front Door",
+			"type": "motion",
+			"icon": "icon-pitch",
+			"group": "outside",
+			"actions": [{
+				"type": "kodi",
+				"camera": "porch",
+				"cutoff": 15
+			}, {
+				"type": "toggle",
+				"insteon": "1A8D98",
+				"cutoff": 600,
+				"nightOnly": true
+			}, {
+				"type": "toggle",
+				"insteon": "40954A",
+				"cutoff": 600,
+				"nightOnly": true
+			}, {
+				"type": "toggle",
+				"insteon": "3C2CC5",
+				"cutoff": 600,
+				"nightOnly": true
+			}],
+			"enabled": true
+		},
+		"Driveway": {
+			"description": "Ring Driveway Sensor",
+			"type": "motion",
+			"icon": "icon-pitch",
+			"group": "outside",
+			"actions": [{
+				"type": "kodi",
+				"camera": "porch",
+				"cutoff": 15
+			}, {
+				"type": "toggle",
+				"insteon": "1A8D98",
+				"cutoff": 600,
+				"nightOnly": true
+			}, {
+				"type": "toggle",
+				"insteon": "3C2CC5",
+				"cutoff": 600,
+				"nightOnly": true
+			}, {
+				"type": "toggle",
+				"insteon": "3728AC",
+				"cutoff": 600,
+				"nightOnly": true
+			}],
+			"enabled": true
+		}
+	},
 	"insteon": {
 		"367FA8": {
 			"description": "Front Door Motion Sensor",
@@ -12,10 +68,6 @@
 				"type": "kodi",
 				"camera": "porch",
 				"cutoff": 15
-			}, {
-				"type": "log",
-				"event": "Motion Detected",
-				"location": "Front Door"
 			}, {
 				"type": "toggle",
 				"insteon": "1A8D98",
@@ -40,10 +92,6 @@
 			"icon": "icon-pitch",
 			"group": "outside",
 			"actions": [{
-				"type": "log",
-				"event": "Motion Detected",
-				"location": "Side Door"
-			}, {
 				"type": "kodi",
 				"camera": "sidedoor",
 				"cutoff": 15
@@ -71,10 +119,6 @@
 			"icon": "icon-pitch",
 			"group": "outside",
 			"actions": [{
-				"type": "log",
-				"event": "Motion Detected",
-				"location": "Driveway"
-			}, {
 				"type": "kodi",
 				"camera": "porch",
 				"cutoff": 15
@@ -115,10 +159,6 @@
 			"icon": "icon-home",
 			"group": "outside",
 			"actions": [{
-				"type": "log",
-				"event": "Door Opened",
-				"location": "Garage"
-			}, {
 				"type": "kodi",
 				"camera": "garage",
 				"cutoff": 15
@@ -371,10 +411,6 @@
 				"type": "kodi",
 				"camera": "FrontDoor",
 				"cutoff": 15
-			}, {
-				"type": "log",
-				"event": "Motion Detected",
-				"location": "Porch Cam"
 			}],
 			"enabled": true
 		},
@@ -384,10 +420,6 @@
 			"icon": "icon-pitch",
 			"group": "outside",
 			"actions": [{
-				"type": "log",
-				"event": "Motion Detected",
-				"location": "Side Door Cam"
-			}, {
 				"type": "kodi",
 				"camera": "SideDoor",
 				"cutoff": 15
@@ -400,10 +432,6 @@
 			"icon": "icon-home",
 			"group": "outside",
 			"actions": [{
-				"type": "log",
-				"event": "Door Opened",
-				"location": "Garage"
-			}, {
 				"type": "kodi",
 				"camera": "Garage",
 				"cutoff": 15

@@ -9,8 +9,13 @@ var lib = require("../lib/");
 var crypto = require("crypto");
 var request = require("request");
 var Stream = require('stream').Transform;
-var dispatch = require("../lib/dispatch");
 var spawn = require('child_process').spawn;
+var RingAPI = require('doorbot');
+
+var devices = require("../config/devices.json");
+
+var ringUser = process.env.ringUser || "";
+var ringPass = process.env.ringPass || "";
 var reoLinkPassword = process.env.reoLinkPassword || "";
 
 var db = new sqlite3.Database("recordings.db");
@@ -20,10 +25,10 @@ var ffmpeg = "D:\\Scripts\\FFMpeg\\ffmpeg.exe";
 var watcher;
 
 var cams = [
-  {ip: "192.168.1.201", name: "garage"},
-  {ip: "192.168.1.202", name: "basement"},
-  {ip: "192.168.1.204", name: "porch"},
-  {ip: "192.168.1.205", name: "driveway"}
+  { ip: "192.168.1.201", name: "garage" },
+  { ip: "192.168.1.202", name: "basement" },
+  { ip: "192.168.1.204", name: "porch" },
+  { ip: "192.168.1.205", name: "driveway" }
 ];
 
 
@@ -38,6 +43,7 @@ function initdb(callback) {
           location TEXT, jpg TEXT NULL, date DATETIME, dateString TEXT,
         CONSTRAINT id_unique UNIQUE (recording_id))`;
     db.run(createTable, function (err) {
+
       downloader(function () {
         callback(err);
       });
@@ -56,17 +62,37 @@ var downloader = function (callback) {
   cams.forEach(function (cam) {
     async.forever(
       function (restart) {
+        var pic = path.join(ftpPath, cam.name + ".jpg");
+
         var args = ["-i",
-        "rtsp://admin:" + reoLinkPassword + "@" + cam.ip + "/h264Preview_01_sub", 
-        "-vf", "fps=fps=1/2", "-update", "1", 
-        path.join(ftpPath, cam.name + ".jpg"), "-y"];
+          "rtsp://admin:" + reoLinkPassword + "@" + cam.ip + "/h264Preview_01_sub",
+          "-vf", "fps=fps=1", "-update", "1", pic, "-y"];
 
         var ls = spawn(ffmpeg, args);
+        var interval;
+
         ls.on('close', (code) => {
-          setTimeout(function() {
+          console.error("connection closed for " + cam.name);
+          setTimeout(function () {
+            if (interval) {
+              clearInterval(interval);
+            }
             restart();
           }, 2000);
         });
+
+        setTimeout(function() {
+          interval = setInterval(function() {
+            fs.stat(pic, function(err, stats){
+                var secondsOld = (new Date().getTime() - stats.mtime) / 1000;
+                if (secondsOld > 30) {
+                  console.error("killing failing connection " + cam.name);
+                  ls.kill();
+                }
+            }); 
+          }, 10000);
+        }, 10000);
+
       },
       function (err) {
         console.log("recorder crashed");
@@ -74,6 +100,40 @@ var downloader = function (callback) {
       }
     );
   });
+  motionDetector(callback);
+}
+
+var motionDetector = function (callback) {
+  if (ringUser == "") {
+    return;
+  }
+  var seen = [];
+  async.forever(function (restart) {
+
+    const ring = RingAPI({
+      email: ringUser,
+      password: ringPass
+    });
+
+    ring.dings(function (err, rings) {
+      if (!err) {
+        rings.forEach(function (event) {
+          if (seen.indexOf(event.id) == -1) {
+            //new event!
+            var name = event.doorbot_description;
+            var type = event.kind;
+            seen.push(event.id);
+            lib.motion.fired(devices.ring[name]);
+          }
+        });
+      }
+      setTimeout(function () {
+        return restart(err);
+      }, 2500);
+    });
+
+  });
+
   callback();
 }
 
