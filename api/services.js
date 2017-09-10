@@ -5,6 +5,7 @@ var nzbget = require('nzbget-nodejs');
 var torrent = require('utorrent-api');
 var apple = require("find-my-iphone");
 var appleDevices = require("../config/devices.json").icloud;
+var lib = require("../lib");
 var path = require("path");
 
 var embyHost = process.env.embyHost || "localhost:8096";
@@ -32,7 +33,7 @@ module.exports.router = router;
 module.exports.server = server;
 module.exports.icloud = icloud;
 module.exports.icloudAlert = icloudAlert;
-
+module.exports.weather = weather;
 
 var icloud = apple.findmyphone;
 icloud.apple_id = icloudUser;
@@ -95,6 +96,10 @@ function uTorrent(callback) {
 			rawDownload: down
 		});
 	});
+}
+
+function weather(callback) {
+	lib.weather.forecast(callback);
 }
 
 function emby(callback) {

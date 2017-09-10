@@ -303,6 +303,19 @@ routes.get('/services/icloud', function (req, res, next) {
 	});
 });
 
+routes.get('/services/weather', function (req, res, next) {
+	api.services.weather(function (err, result) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+			console.error(err);
+		} else {
+			res.header("Content-Type", "application/json");
+			res.send(result);
+		}
+	});
+});
+
 routes.post('/services/icloud/alert', function (req, res, next) {
 	var device = req.body.device;
 

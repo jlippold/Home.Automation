@@ -37,7 +37,7 @@
 			"group": "outside",
 			"actions": [{
 				"type": "kodi",
-				"camera": "porch",
+				"camera": "driveway",
 				"cutoff": 15
 			}, {
 				"type": "toggle",
@@ -479,7 +479,7 @@
 			"location": "livingroom"
 		},
 		"bedRoom": {
-			"ip": "192.168.1.33",
+			"ip": "192.168.1.98",
 			"location": "bedroom"
 		},
 		"basement": {

@@ -145,7 +145,9 @@ var picBroadcaster = function () {
     if (lib.dispatch.hasClients()) {
       async.eachLimit(cams, 2, function (cam, next) {
         getBase64Picture(cam.name, function (err, base64) {
-          lib.dispatch.picture(cam.name, base64);
+          if (base64.length > 100) { //dont dispatch blanks
+            lib.dispatch.picture(cam.name, base64);
+          }
           next();
         });
       }, function (err) {
