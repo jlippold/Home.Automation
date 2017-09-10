@@ -9,7 +9,7 @@ var lib = require("../lib/");
 var crypto = require("crypto");
 var request = require("request");
 var Stream = require('stream').Transform;
-var spawn = require('child_process').spawn;
+var spawn = require('child_process').execFile;
 var RingAPI = require('doorbot');
 
 var devices = require("../config/devices.json");
@@ -35,6 +35,7 @@ var cams = [
 module.exports.init = init;
 module.exports.getRecordingsForDay = getRecordingsForDay;
 module.exports.getRecordingById = getRecordingById;
+module.exports.getBase64Picture = getBase64Picture;
 
 function initdb(callback) {
   db.serialize(function () {
@@ -45,6 +46,7 @@ function initdb(callback) {
     db.run(createTable, function (err) {
 
       downloader(function () {
+        picBroadcaster();
         callback(err);
       });
     });
@@ -72,7 +74,7 @@ var downloader = function (callback) {
         var interval;
 
         ls.on('close', (code) => {
-          console.error("connection closed for " + cam.name);
+          //console.error("connection closed for " + cam.name);
           setTimeout(function () {
             if (interval) {
               clearInterval(interval);
@@ -81,15 +83,16 @@ var downloader = function (callback) {
           }, 2000);
         });
 
-        setTimeout(function() {
-          interval = setInterval(function() {
-            fs.stat(pic, function(err, stats){
-                var secondsOld = (new Date().getTime() - stats.mtime) / 1000;
-                if (secondsOld > 30) {
-                  console.error("killing failing connection " + cam.name);
-                  ls.kill();
-                }
-            }); 
+        setTimeout(function () {
+          interval = setInterval(function () {
+            fs.stat(pic, function (err, stats) {
+              var secondsOld = (new Date().getTime() - stats.mtime) / 1000;
+              if (secondsOld > 30) {
+                //console.error("killing failing connection " + cam.name);
+                clearInterval(interval);
+                ls.kill('SIGKILL');
+              }
+            });
           }, 10000);
         }, 10000);
 
@@ -135,6 +138,33 @@ var motionDetector = function (callback) {
   });
 
   callback();
+}
+
+var picBroadcaster = function () {
+  async.forever(function (restart) {
+    if (lib.dispatch.hasClients()) {
+      async.eachLimit(cams, 2, function (cam, next) {
+        getBase64Picture(cam.name, function (err, base64) {
+          lib.dispatch.picture(cam.name, base64);
+          next();
+        });
+      }, function (err) {
+        setTimeout(function () {
+          restart();
+        }, 750);
+      });
+    } else {
+      setTimeout(function () {
+        restart();
+      }, 2000);
+    }
+  });
+}
+
+
+function getBase64Picture(cam, callback) {
+  var pic = path.join(ftpPath, cam + ".jpg");
+  fs.readFile(pic, { encoding: 'base64' }, callback);
 }
 
 function getRecordingsForDay(dateString, callback) {
