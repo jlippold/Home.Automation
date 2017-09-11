@@ -4,3 +4,4 @@ exports.lifx = require("../api/lifx.js");
 exports.thermostat = require("../api/thermostat.js");
 exports.services = require("../api/services.js");
 exports.cams = require("../api/cams.js");
+exports.ring = require("../api/ring.js");

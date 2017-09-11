@@ -80,6 +80,39 @@ routes.get('/insteon/:id/:status', function (req, res, next) {
 	}
 });
 
+routes.get('/ring', function (req, res, next) {
+	api.ring.listDevices(function (err, devices) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+			console.error(err);
+		} else {
+			res.send(devices);
+		}
+	});
+});
+
+// http://localhost:3000/ring/2686950/status
+routes.get('/ring/:id/:status', function (req, res, next) {
+	var id = req.params.id.toUpperCase();
+	var status = req.params.status;
+
+	if (["on", "off", "toggle"].indexOf(status) > -1) {
+		api.ring.setStatusOfDevice(id, status, function (err) {
+			if (err) {
+				res.status(500);
+				res.send(err);
+				console.log(err);
+			} else {
+				res.sendStatus(200);
+			}
+		});
+	} else {
+		res.send("Bad status");
+		res.status(500);
+	}
+});
+
 // http://localhost:3000/lifx/d073d5125481/toggle
 
 routes.get('/lifx/:id/:status', function (req, res, next) {

@@ -3,10 +3,18 @@
 		"ip": "192.168.1.104"
 	},
 	"ring": {
+		"2686950": {
+			"description": "Driveway light",
+			"icon": "icon-car",
+			"group": "Outside",
+			"type": "switch",
+			"hasManualOverride": true,
+			"enabled": true
+		},
 		"Front Door": {
 			"description": "Ring Front Door",
 			"type": "motion",
-			"icon": "icon-pitch",
+			"icon": "icon-home",
 			"group": "outside",
 			"actions": [{
 				"type": "kodi",
@@ -33,7 +41,7 @@
 		"Driveway": {
 			"description": "Ring Driveway Sensor",
 			"type": "motion",
-			"icon": "icon-pitch",
+			"icon": "icon-garage",
 			"group": "outside",
 			"actions": [{
 				"type": "kodi",
