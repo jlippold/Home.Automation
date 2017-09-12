@@ -4,6 +4,15 @@ var lib = require("./lib/");
 var path = require('path');
 var routes = express.Router();
 
+routes.use(function (req, res, next) {
+  if (req.hostname == "jed.bz") {
+	var err = new Error('not Found');
+	err.status = 404;
+	return next(err);
+  }
+  next()
+})
+
 routes.get('/', function (req, res, next) {
 	res.sendFile(path.join(__dirname, '/public/source.html'));
 });

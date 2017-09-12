@@ -8,13 +8,26 @@ var router = require('./router');
 var dispatcher = require('./lib/dispatch');
 var cors = require('cors');
 var auth = require('http-auth');
-
+var fs = require('fs');
 
 var app = express();
 var server = require('http').createServer(app);
-var io = require('socket.io').listen(server);
+var io;
+
+if (process.env.NODE_ENV == "production") {
+
+	var secureServer = require('https').createServer({
+		key: fs.readFileSync(process.env.CERT_KEY),
+		cert: fs.readFileSync(process.env.CERT)
+	}, app);
+
+	io = require('socket.io').listen(secureServer);
+	io.set('transports', ['websocket']);
+}
+
 
 require("console-stamp")(console, { pattern: "yyyy-mm-dd HH:MM:ss" });
+
 /*
 var basic = auth.basic({
 	realm: "Jeds House.",
@@ -100,15 +113,20 @@ async.auto({
 		});
 	}],
 	sockets: ['camWatcher', 'lifxClient', 'deviceList', function (next) {
-		var port = process.env.NODE_ENV == "production" ? 3000 : 3001;
-		server.listen(port, function () {
-			console.log("Listening from " + port);
+
+		server.listen(3000, function () {
+			console.log("API Listening from 3000");
 		});
-		dispatcher.server(io);
-		io.on('connection', function (socket) {
-			dispatcher.broadcastDevices();
-		});
-		console.log("socket server is running");
+
+		if (process.env.NODE_ENV = "production") {
+			secureServer.listen(3333, function () {
+				console.log("Socket server running from 3333");
+			});
+			dispatcher.server(io);
+			io.on('connection', function (socket) {
+				dispatcher.broadcastDevices();
+			});
+		}
 		next();
 	}]
 }, function (err, results) {
