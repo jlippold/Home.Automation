@@ -24,9 +24,16 @@ var ftpPath = "G:\\FTP";
 var ffmpeg = "D:\\Scripts\\FFMpeg\\ffmpeg.exe";
 var watcher;
 
+    const ring = RingAPI({
+      email: ringUser,
+      password: ringPass
+    });
+
+    
 var cams = [
   { ip: "192.168.1.201", name: "garage" },
   { ip: "192.168.1.202", name: "basement" },
+  { ip: "192.168.1.203", name: "sidedoor" },
   { ip: "192.168.1.204", name: "porch" },
   { ip: "192.168.1.205", name: "driveway" }
 ];
@@ -74,13 +81,13 @@ var downloader = function (callback) {
         var interval;
 
         ls.on('close', (code) => {
-          //console.error("connection closed for " + cam.name);
+          console.error("connection closed for " + cam.name);
           setTimeout(function () {
             if (interval) {
               clearInterval(interval);
             }
             restart();
-          }, 2000);
+          }, 500);
         });
 
         setTimeout(function () {
@@ -88,13 +95,15 @@ var downloader = function (callback) {
             fs.stat(pic, function (err, stats) {
               var secondsOld = (new Date().getTime() - stats.mtime) / 1000;
               if (secondsOld > 30) {
-                //console.error("killing failing connection " + cam.name);
-                clearInterval(interval);
+                console.error("killing failing connection " + cam.name);
+                if (interval) {
+                  clearInterval(interval);
+                }
                 ls.kill('SIGKILL');
               }
             });
-          }, 10000);
-        }, 10000);
+          }, 5000);
+        }, 5000);
 
       },
       function (err) {
@@ -113,13 +122,10 @@ var motionDetector = function (callback) {
   var seen = [];
   async.forever(function (restart) {
 
-    const ring = RingAPI({
-      email: ringUser,
-      password: ringPass
-    });
-
     ring.dings(function (err, rings) {
-      if (!err) {
+      if (err) {
+        console.error("ring error: ", err)
+      } else {
         rings.forEach(function (event) {
           if (seen.indexOf(event.id) == -1) {
             //new event!
@@ -127,11 +133,13 @@ var motionDetector = function (callback) {
             var type = event.kind;
             seen.push(event.id);
             lib.motion.fired(devices.ring[name]);
+            console.log("Ring motion fired: " + name);
           }
         });
       }
       setTimeout(function () {
-        return restart(err);
+        //console.log("fired ring again", rings);
+        return restart();
       }, 2500);
     });
 
@@ -143,12 +151,19 @@ var motionDetector = function (callback) {
 var picBroadcaster = function () {
   async.forever(function (restart) {
     if (lib.dispatch.hasClients()) {
-      async.eachLimit(cams, 2, function (cam, next) {
+      async.eachLimit(cams, 1, function (cam, next) {
         getBase64Picture(cam.name, function (err, base64) {
-          if (base64.length > 100) { //dont dispatch blanks
-            lib.dispatch.picture(cam.name, base64);
+          if (err) {
+            //console.error("err in base64 pic: ", err);
+          } else {
+            if (base64.length > 100) { //dont dispatch blanks
+              lib.dispatch.picture(cam.name, base64);
+              //console.log("Dispatched: ", cam.name);
+            }
           }
-          next();
+          setTimeout(function() {
+            next();
+          }, 100);
         });
       }, function (err) {
         setTimeout(function () {
@@ -219,7 +234,7 @@ function init(callback) {
 
       watcher.on('add', function (filename, stat) {
         if (filename.indexOf(ftpPath) == 0) {
-          console.log("New file created: " + filename);
+          //console.log("New file created: " + filename);
           //TRIGGER MOTION YALL
 
           /*

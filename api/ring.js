@@ -4,7 +4,7 @@ var ringPass = process.env.ringPass || "";
 var devices = require("../config/devices.json");
 var dispatch = require("../lib/dispatch");
 
-var ring = RingAPI({
+const ring = RingAPI({
     email: ringUser,
     password: ringPass
 });;
@@ -43,6 +43,11 @@ function getStatusOfDevice(id, callback, cached) {
 
     if (devices.ring[id].hasManualOverride || cached) { //check the status in real time
         ring.devices(function (err, d) {
+            if (d && d.hasOwnProperty("stickup_cams")) {
+                
+            } else {
+                return callback(err, "off");
+            }
             var device = d.stickup_cams.find(function (el) {
                 return el.id == id;
             });
