@@ -122,6 +122,39 @@ routes.get('/ring/:id/:status', function (req, res, next) {
 	}
 });
 
+routes.get('/garage', function (req, res, next) {
+	api.myq.listDevices(function (err, devices) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+			console.error(err);
+		} else {
+			res.send(devices);
+		}
+	});
+});
+
+// http://localhost:3000/garage/2686950/status
+routes.get('/garage/:id/:status', function (req, res, next) {
+	var id = req.params.id.toUpperCase();
+	var status = req.params.status;
+
+	if (["on", "off", "toggle"].indexOf(status) > -1) {
+		api.myq.setStatusOfDevice(id, status, function (err) {
+			if (err) {
+				res.status(500);
+				res.send(err);
+				console.log(err);
+			} else {
+				res.sendStatus(200);
+			}
+		});
+	} else {
+		res.send("Bad status");
+		res.status(500);
+	}
+});
+
 // http://localhost:3000/lifx/d073d5125481/toggle
 
 routes.get('/lifx/:id/:status', function (req, res, next) {

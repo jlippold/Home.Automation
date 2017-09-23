@@ -118,7 +118,7 @@ async.auto({
 			console.log("API Listening from 3000");
 		});
 
-		if (process.env.NODE_ENV = "production") {
+		if (process.env.NODE_ENV == "production") {
 			secureServer.listen(3333, function () {
 				console.log("Socket server running from 3333");
 			});

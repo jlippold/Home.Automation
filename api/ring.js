@@ -1,6 +1,6 @@
 var RingAPI = require('doorbot');
-var ringUser = process.env.ringUser || "";
-var ringPass = process.env.ringPass || "";
+var ringUser = process.env.ringUser || "username@no.com";
+var ringPass = process.env.ringPass || "somePass";
 var devices = require("../config/devices.json");
 var dispatch = require("../lib/dispatch");
 

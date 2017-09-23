@@ -31,6 +31,7 @@
     "klaw": "^2.0.0",
     "lifx-api": "github:jlippold/lifx",
     "moment": "^2.18.1",
+    "myq-node": "^0.1.4",
     "node-expat": "^2.3.15",
     "nzbget-nodejs": "git@github.com:jlippold/nzbget-nodejs.git",
     "object-assign": "^4.0.1",

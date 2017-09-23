@@ -14,8 +14,8 @@ var RingAPI = require('doorbot');
 
 var devices = require("../config/devices.json");
 
-var ringUser = process.env.ringUser || "";
-var ringPass = process.env.ringPass || "";
+var ringUser = process.env.ringUser || "username@no.com";
+var ringPass = process.env.ringPass || "somePass";
 var reoLinkPassword = process.env.reoLinkPassword || "";
 
 var db = new sqlite3.Database("recordings.db");
@@ -24,10 +24,10 @@ var ftpPath = "G:\\FTP";
 var ffmpeg = "D:\\Scripts\\FFMpeg\\ffmpeg.exe";
 var watcher;
 
-    const ring = RingAPI({
-      email: ringUser,
-      password: ringPass
-    });
+const ring = RingAPI({
+  email: ringUser,
+  password: ringPass
+});
 
     
 var cams = [
