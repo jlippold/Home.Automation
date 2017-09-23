@@ -5,7 +5,7 @@
 	"ring": {
 		"2686950": {
 			"description": "Driveway light",
-			"icon": "icon-car",
+			"icon": "icon-lightbulb",
 			"group": "Outside",
 			"type": "switch",
 			"hasManualOverride": true,

@@ -35,11 +35,13 @@ function getStatusOfDevice(id, callback, cached) {
     if (devices.myq[id].hasManualOverride || cached) { //check the status in real time
         myq.getState([id]).then(state => {
             var status = "unknown";
-            if (state == 9) {
-                status = "on"
-            }
-            if (state == 2) {
-                status = "off"
+            if (state) {
+                if (state.code && state.code == 9) {
+                    status = "on"
+                }
+                if (state.code && state.code == 2) {
+                    status = "off"
+                }
             }
             return callback(null, status)
         }).catch(callback)
@@ -59,7 +61,7 @@ function setStatusOfDevice(id, status, callback) {
     if (isValidDeviceId(id) === false) {
         return callback("Invalid Device");
     }
-    
+
     if (status == "on") {
         myq.openDoor(id).then(door => {
             if (door) {
