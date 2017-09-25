@@ -296,6 +296,22 @@
 				}
 			}
 		},
+		"46D72A": {
+			"description": "Kitchen Fan",
+			"icon": "icon-table",
+			"group": "Kitchen",
+			"type": "switch",
+			"hasManualOverride": true,
+			"enabled": true
+		},
+		"40A548": {
+			"description": "Kitchen Lights",
+			"icon": "icon-food",
+			"group": "Kitchen",
+			"type": "switch",
+			"hasManualOverride": true,
+			"enabled": true
+		},
 		"3C2BBD": {
 			"description": "Bathroom",
 			"icon": "icon-bathroom",
@@ -303,14 +319,6 @@
 			"type": "switch",
 			"hasManualOverride": true,
 			"enabled": true
-		},
-		"40A548": {
-			"description": "Family Room - Old Dimmer",
-			"icon": "icon-lightbulb",
-			"group": "Living Room",
-			"type": "switch",
-			"hasManualOverride": true,
-			"enabled": false
 		},
 		"3E4300": {
 			"description": "Family Room",

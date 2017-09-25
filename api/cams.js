@@ -81,7 +81,7 @@ var downloader = function (callback) {
         var interval;
 
         ls.on('close', (code) => {
-          console.error("connection closed for " + cam.name);
+          //console.error("connection closed for " + cam.name);
           setTimeout(function () {
             if (interval) {
               clearInterval(interval);
@@ -95,7 +95,7 @@ var downloader = function (callback) {
             fs.stat(pic, function (err, stats) {
               var secondsOld = (new Date().getTime() - stats.mtime) / 1000;
               if (secondsOld > 30) {
-                console.error("killing failing connection " + cam.name);
+                //console.error("killing failing connection " + cam.name);
                 if (interval) {
                   clearInterval(interval);
                 }

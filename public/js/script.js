@@ -155,6 +155,11 @@ var state = {
         title: "Outside",
         icon: "icon-snow-heavy",
         items: []
+      },
+      {
+        title: "Kitchen",
+        icon: "icon-kitchen",
+        items: []
       }
     ]
   },
@@ -626,7 +631,7 @@ $(document).ready(function () {
     },
     methods: {
       camLoaded: function() {
-        console.log("Updated cam: " + this.data.id + " " + new Date());
+        //console.log("Updated cam: " + this.data.id + " " + new Date());
         this.data.timestamp = new Date();
       },
       update: function (data) {
