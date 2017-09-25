@@ -217,6 +217,11 @@ function getRecordingById(recording_id, callback) {
 }
 
 function init(callback) {
+
+  if (process.env.NODE_ENV != "production") {
+    return callback();
+  }
+  
   initdb(function (err) {
     if (err) {
       console.log(err);

@@ -1,0 +1,249 @@
+input.search {
+	border-radius: 0 !important;
+	-webkit-appearance: none;
+}
+
+div.remoteModal, div.cameraModal {
+	height: 100vh; 
+	max-height: 100vh !important;
+}
+
+div.remote {
+	height: 100vh; 
+	padding: 0
+}
+
+div.remote div.row {
+	height: 20%; 
+	margin-bottom: 0;
+}
+
+.tabs .indicator {
+	margin-left: 8px;
+    width: 60px;
+}
+
+div.remote div.row div.col i {
+	position: relative;
+	display: block;
+	top: 50%;
+	transform: perspective(1px) translateY(-50%);
+	font-size: 2rem;
+}
+
+div.remote div.row div.col a {
+	position: relative;
+	display: block;
+	top: 50%;
+	color: black;
+	transform: perspective(1px) translateY(-50%);
+}
+div.remote div.row div.col {
+	height: 100%;
+	text-align: center;
+}
+
+ul.movie {
+	-moz-columns: 3 375px;
+	-webkit-columns: 3 375px;
+	columns: 3 375px;
+}
+
+ul.movie li {
+	padding: 0 !important;
+	width: 100%;
+	border-bottom: none !important;
+	display: flex;
+	align-items: stretch;
+}
+
+ul.movie li div.boxCover {
+	margin: 10px;
+}
+
+ul.movie li div.boxCover img {
+	width: 100px;
+}
+
+ul.movie li div.boxDescription {
+	min-width: 0px;
+	flex: 1;
+}
+
+ul.movie li div.boxDescription h2  {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+ul.movie li div.boxDescription h2 {
+	font-size: 1.4em;
+	line-height: 1.8em;
+}
+
+ul.movie li div.boxDescription p {
+	max-height: 100px;
+    overflow: hidden;
+}
+
+div.charts {
+	display: flex;
+	justify-content: space-around;
+	padding-top: 20px;
+}
+
+div.chartContainer {
+	align-items: center;
+	display: flex;
+	flex-direction: column-reverse;
+}
+
+div.chartLabel {
+	font-size: 0.8em;
+	text-align: center;
+}
+
+div.chartPlot {
+	font-size: 0.8em;
+	text-align: center;
+}
+
+div.chart {
+	border: 1px solid #e0e0e0;
+	width: 40px;
+}
+
+div.chartFiller {
+	height: 140px;
+}
+
+
+.battery {
+  position: relative;
+  width: 36px;
+  height: 12px;
+  border: 1px solid #000;
+  border-radius: 2px;
+  position: relative;
+  padding: 1px;
+  -webkit-transform: scale(0.5);
+}
+
+.battery:before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 50%;
+  right: -5.1px;
+  margin-top: -3px;
+  width: 6px;
+  height: 6px;
+  background: #000;
+  clip: rect(0, 6px, 6px, 3.9px);
+  border-radius: 50%;
+}
+.battery.plugged:after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 50%;
+  right: -19px;
+  margin-top: -3px;
+  width: 6px;
+  height: 6px;
+  background: #f00;
+  border-radius: 50%;
+}
+.battery .level {
+  width: 10%;
+  height: 100%;
+  background: #000;
+  border-radius: 1px;
+}
+
+
+input[type="search"] ~ i#custom-close {
+	color: white;
+}
+
+input[type="search"]:focus ~ i#custom-close {
+	color: black;
+}
+
+div.cameraModal > .cam {
+	text-align: center;
+	padding-top: 6px;
+	height: 75vh;
+}
+
+div.cameraModal > .cam img {
+	width: 100%; 
+	height: 100%;
+	object-fit: contain;
+	overflow: hidden
+}
+
+a.camThumbnail div {
+    font-size: 10px;
+    text-align: center;
+    color: black;
+    margin-top: -5px;
+    z-index: 500;
+    margin-bottom: 10px;
+}
+
+a.camThumbnail img {
+	object-fit: contain;
+	width: 100%;
+}
+
+@media screen and (max-width: 1px) and (min-width: 600px) {
+	div.cameraModal > .cam {
+		height: 25vh;
+	}
+}
+@media screen and (max-width: 991px) and (min-width: 601px) {
+	div.cameraModal > .cam {
+		height: 50vh;
+	}
+}
+@media screen and (max-width: 602px) {
+	div.cameraModal > .cam {
+		height: 75vh;
+	}
+}
+
+.recording-wrapper {
+    overflow-x: auto;
+    overflow-y: hidden;
+    line-height: 0;
+}
+.recordings {
+    display: inline-block;
+    white-space: nowrap;
+    height: 80px;
+    list-style-type: none;
+    margin: 0;
+}
+.recordings li {
+    display: inline-block;
+    white-space: normal;
+    height: 100%;
+}
+.recordings a {
+    display: table;
+    height: 100%;
+    color: #959595;
+    padding: 5px 5px 0;
+    font-size: 16px;
+    font-size: 1rem;
+}
+.recordings a span {
+    display: table-cell;
+    vertical-align: middle;
+}
+.recordings a img {
+	width: 120px;
+	height: 68px;
+	object-fit: contain;
+}
