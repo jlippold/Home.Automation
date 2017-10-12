@@ -797,6 +797,28 @@
 				"id": "3C2CC5",
 				"description": "outside"
 			}]
+		},
+		"kitchen": {
+			"name": "Kitchen",
+			"icon": "icon-house",
+			"on": [{
+				"type": "insteon",
+				"id": "46D72A",
+				"description": "kitchen"
+			}, {
+				"type": "insteon",
+				"id": "40A548",
+				"description": "kitchen"
+			}],
+			"off": [{
+				"type": "insteon",
+				"id": "46D72A",
+				"description": "kitchen"
+			}, {
+				"type": "insteon",
+				"id": "40A548",
+				"description": "kitchen"
+			}]
 		}
 	},
 	"sequence": {
