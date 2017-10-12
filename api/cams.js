@@ -116,7 +116,7 @@ var downloader = function (callback) {
 }
 
 var motionDetector = function (callback) {
-  if (ringUser == "") {
+  if (process.env.NODE_ENV != "production") {
     return;
   }
   var seen = [];
@@ -288,9 +288,15 @@ function insertRecordings(items, callback) {
       var name = path.basename(file, path.extname(file));
       var ext = path.extname(file);
 
-      if ((ext == ".mp4") && name.startsWith("01_")) {
+      if (ext == ".mp4") {
         var cameraName = path.basename(path.dirname(file));
-        var dateInFile = name.substring(3); //20170805153417
+        var dateInFile = "";
+        if (name.startsWith("01_")) {
+          dateInFile = name.substring(3); //20170805153417
+        } else {
+          dateInFile = name.substring(3 + cameraName.length + 1);
+        }
+
         var fileDate = moment(dateInFile, 'YYYYMMDDHHmmss');
 
         var jpg = newPathWithExtension(file, ".jpg");

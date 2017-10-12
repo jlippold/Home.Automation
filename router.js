@@ -14,7 +14,7 @@ routes.use(function (req, res, next) {
 })
 
 routes.get('/', function (req, res, next) {
-	res.sendFile(path.join(__dirname, '/public/source.html'));
+	res.redirect('dashboard.html');
 });
 
 routes.get('/api/status', function (req, res, next) {

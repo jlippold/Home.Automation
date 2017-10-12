@@ -1926,7 +1926,7 @@ $(document).ready(function () {
   });
 
 
-  var socket = io.connect("https://jed.bz:3333/", { transports: ['websocket'] });
+  var socket = io.connect("https://jed.bz:3333/", { transports: ['websocket'], 'reconnect': true, 'connect timeout':500 });
   socket.on('picture', function (event) {
     var cam = event.camera.toLowerCase();
     var data = event.data;
