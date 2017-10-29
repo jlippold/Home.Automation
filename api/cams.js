@@ -116,6 +116,7 @@ var downloader = function (callback) {
 }
 
 var motionDetector = function (callback) {
+  return callback();
   if (process.env.NODE_ENV != "production") {
     return;
   }
@@ -229,7 +230,7 @@ function init(callback) {
     }
 
     indexRecordingsOnDisk(function () {
-
+      return callback();
       var paths = cameraBasePaths();
       watcher = chokidar.watch(paths, {
         ignoreInitial: true,
