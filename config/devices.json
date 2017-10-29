@@ -344,6 +344,14 @@
 			"hasManualOverride": true,
 			"enabled": true
 		},
+		"401395": {
+			"description": "Decorations",
+			"icon": "icon-tree",
+			"group": "Outside",
+			"type": "switch",
+			"hasManualOverride": false,
+			"enabled": true
+		},
 		"40954A": {
 			"description": "Front Door",
 			"icon": "icon-door2",
