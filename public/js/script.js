@@ -67,6 +67,20 @@ var state = {
         motion: "#"
       }
     },
+    swings: {
+      title: "Swings",
+      id: "swings",
+      url: "/camera/live/loadCam.aspx",
+      qs: "?cam=swings",
+      legacyUrl: "/camera/live/loadCam.aspx?cam=swings",
+      timestamp: new Date(),
+      lastCheck: new Date(),
+      enabled: true,
+      urls: {
+        live: "#",
+        motion: "#"
+      }
+    },
     driveway: {
       title: "Driveway",
       id: "driveway",
@@ -1846,6 +1860,14 @@ $(document).ready(function () {
     }
   });
 
+  var SwingsCam = Camera.extend({
+    data: function () {
+      return {
+        data: state.cameras.swings
+      };
+    }
+  });
+
   var SideDoorCam = Camera.extend({
     data: function () {
       return {
@@ -1911,6 +1933,7 @@ $(document).ready(function () {
       "porch-cam": PorchCam,
       "garage-cam": GarageCam,
       "basement-cam": BasementCam,
+      "swings-cam": SwingsCam,
       "sidedoor-cam": SideDoorCam,
       "driveway-cam": DrivewayCam,
       recordings: Recordings,

@@ -35,7 +35,8 @@ var cams = [
   { ip: "192.168.1.202", name: "basement" },
   { ip: "192.168.1.203", name: "sidedoor" },
   { ip: "192.168.1.204", name: "porch" },
-  { ip: "192.168.1.205", name: "driveway" }
+  { ip: "192.168.1.205", name: "driveway" },
+  { ip: "192.168.1.206", name: "swings" }
 ];
 
 
@@ -93,6 +94,9 @@ var downloader = function (callback) {
         setTimeout(function () {
           interval = setInterval(function () {
             fs.stat(pic, function (err, stats) {
+              if (err) {
+                return ls.kill('SIGKILL');
+              }
               var secondsOld = (new Date().getTime() - stats.mtime) / 1000;
               if (secondsOld > 30) {
                 //console.error("killing failing connection " + cam.name);
