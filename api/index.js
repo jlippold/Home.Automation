@@ -6,3 +6,4 @@ exports.services = require("../api/services.js");
 exports.cams = require("../api/cams.js");
 exports.ring = require("../api/ring.js");
 exports.myq = require("../api/myq.js");
+exports.mobile = require("../api/mobile.js");

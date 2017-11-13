@@ -42,3 +42,4 @@ start.sh
 *.cookie
 recordings.db
 daemon
+mobileDevices.json

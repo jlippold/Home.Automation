@@ -608,6 +608,7 @@ $(document).ready(function () {
           dateString: moment().format("YYYY-MM-DD"),
           lastCheck: new Date(),
           url: null,
+          loadingStream: false,
           base64: null,
           playing: {
             video: null,
@@ -644,7 +645,7 @@ $(document).ready(function () {
       });
     },
     methods: {
-      camLoaded: function() {
+      camLoaded: function () {
         //console.log("Updated cam: " + this.data.id + " " + new Date());
         this.data.timestamp = new Date();
       },
@@ -652,6 +653,41 @@ $(document).ready(function () {
         if (!vm.showInlineModal) {
           this.data.url = "data:image/jpg;base64," + data;
         }
+      },
+      liveStream: function () {
+        //add spinner in here
+        var c = this;
+        if (c.data.loadingStream) {
+          return;
+        }
+        c.data.loadingStream = true;
+        $.ajax({
+          method: "GET",
+          url: "home/cameras/live/" + c.data.id,
+          success: function (data) {
+            if (data && data.stream) {
+              setTimeout(function() {
+                c.playVideo(data.stream);
+                c.data.loadingStream = false;
+              }, 3000);
+            }
+          },
+          error: function (err) {
+            console.log(err);
+            c.data.loadingStream = false;
+          }
+        });
+      },
+      playVideo: function (stream) {
+        if (isApple()) {
+          //launch native player
+          var url = 'jedbz:///playVideo#' + escape(stream);
+          document.location.href = url;
+        } else {
+          //play inline
+          document.location.href = stream;
+        }
+        return false;
       },
       openModal: function () {
         var c = this;
@@ -1949,13 +1985,36 @@ $(document).ready(function () {
   });
 
 
-  var socket = io.connect("https://jed.bz:3333/", { transports: ['websocket'], 'reconnect': true, 'connect timeout':500 });
+  var socket = io.connect("https://jed.bz:3333/", { transports: ['websocket'], 'reconnect': true, 'connect timeout': 500 });
   socket.on('picture', function (event) {
     var cam = event.camera.toLowerCase();
     var data = event.data;
     vm.$refs[cam.toLowerCase()].update(event.data);
   });
 
-
+  if (isApple()) {
+    document.location.href = 'jedbz:///mobileRegistration';
+  }
 
 });
+
+
+function isApple() {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+}
+
+function setMobileToken(deviceId, deviceName) {
+  if (deviceId && deviceName) {
+    $.ajax({
+      method: "POST",
+      url: base_url + "/home/mobile/register",
+      data: "deviceId=" + deviceId + "&deviceName=" + deviceName,
+      success: function () {
+        //alert("registered");
+      },
+      error: function(x,y,z) {
+        //alert("Push registration failed " + x + y + z);
+      }
+    });
+  }
+}

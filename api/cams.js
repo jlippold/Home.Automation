@@ -11,6 +11,7 @@ var request = require("request");
 var Stream = require('stream').Transform;
 var spawn = require('child_process').execFile;
 var RingAPI = require('doorbot');
+var moment = require('moment');
 
 var devices = require("../config/devices.json");
 
@@ -22,6 +23,7 @@ var db = new sqlite3.Database("recordings.db");
 
 var ftpPath = "G:\\FTP";
 var ffmpeg = "D:\\Scripts\\FFMpeg\\ffmpeg.exe";
+var streamPath = "D:\\www\\jed.bz\\stream\\";
 var watcher;
 
 const ring = RingAPI({
@@ -29,7 +31,7 @@ const ring = RingAPI({
   password: ringPass
 });
 
-    
+
 var cams = [
   { ip: "192.168.1.201", name: "garage" },
   { ip: "192.168.1.202", name: "basement" },
@@ -39,11 +41,19 @@ var cams = [
   { ip: "192.168.1.206", name: "swings" }
 ];
 
+cams = cams.map(function (cam) {
+  cam.streamLow = "rtsp://admin:" + reoLinkPassword + "@" + cam.ip + "/h264Preview_01_sub";
+  cam.streamHigh = "rtsp://admin:" + reoLinkPassword + "@" + cam.ip + "/h264Preview_01_main";
+  return cam;
+});
 
+module.exports.cameras = cams;
 module.exports.init = init;
 module.exports.getRecordingsForDay = getRecordingsForDay;
 module.exports.getRecordingById = getRecordingById;
 module.exports.getBase64Picture = getBase64Picture;
+module.exports.liveStream = liveStream;
+module.exports.createGif = createGif;
 
 function initdb(callback) {
   db.serialize(function () {
@@ -64,6 +74,118 @@ function initdb(callback) {
 
 }
 
+var liveStreams = [];
+
+function liveStream(cam, local, callback) {
+
+  var m3u8 = path.join(streamPath, cam.name + ".m3u8");
+  var ts = path.join(streamPath, cam.name + "_%03d.ts");
+
+  var args = ["-i", local ? cam.streamHigh : cam.streamLow,
+    "-c:v", "copy",
+    "-c:a", "copy",
+    "-start_number", "0",
+    "-g", "60",
+    "-hls_time", "2",
+    "-hls_list_size", "2",
+    "-segment_list_flags", "live",
+    "-hls_flags", "delete_segments",
+    "-hls_base_url", "/stream/",
+    "-hls_segment_filename", ts,
+    "-f", "hls", m3u8
+  ];
+
+  if (liveStreams.indexOf(cam.name) != -1) {
+    //already streaming
+    return callback();
+  }
+
+  fs.remove(m3u8, err => {
+    if (err) return callback(err);
+
+    liveStreams.push(cam.name);
+    var stream = spawn(ffmpeg, args);
+
+    stream.on('close', (code) => {
+      //remove from lookup array
+      var index = liveStreams.indexOf(cam.name);
+      if (index !== -1) {
+        liveStreams.splice(index, 1);
+      }
+    });
+
+    setTimeout(function () {
+      //kill ffmpeg after 5 minutes of streaming
+      if (stream) {
+        stream.kill('SIGKILL');
+      }
+
+    }, 3 * 60 * 1000);
+
+    var interval = setInterval(function () {
+      //wait until m3u8 exists
+      fs.stat(m3u8, function (err, stats) {
+        if (!err) {
+          if (interval) {
+            clearInterval(interval);
+          }
+          return callback(err)
+        }
+      })
+    }, 1000)
+  });
+
+
+}
+
+function createGif(cam, night, callback) {
+  var gifName = cam.name + "_" + moment().format("YYYY-MM-DD-HH-mm-ss.SSS") + ".gif";
+  var base = path.join(streamPath, "gif\\")
+  var gif = path.join(base, gifName);
+  var palette = path.join(base, cam.name + (night ? "_dark" : "_light") + ".png");
+
+  var makeGif = function (done) {
+    var gifArgs = [
+      "-y", "-t", "3", "-i", cam.streamLow, "-i", palette,
+      "-filter_complex", "fps=10,scale=0:-1:flags=lanczos[x];[x][1:v]paletteuse", gif
+    ];
+    var gifStream = spawn(ffmpeg, gifArgs);
+    console.log("Creating gif: ", ffmpeg, gifArgs.join(" "));
+    gifStream.on('close', (code) => {
+      done(null, gifName);
+    });
+  }
+
+  fs.stat(palette, function (err, stats) {
+    var needsPalette = false;
+    if (err) {
+      needsPalette = true; //404
+    } else {
+      var secondsOld = (new Date().getTime() - stats.mtime) / 1000;
+      if (secondsOld > (60 * 60 * 6)) {
+        needsPalette = true;
+      }
+    }
+
+    if (needsPalette) {
+      var args = [
+        "-y", "-t", "3", "-i", cam.streamLow,
+        "-vf", "fps=10,scale=0:-1:flags=lanczos,palettegen",
+        palette
+      ];
+      var paletteStream = spawn(ffmpeg, args);
+      console.log("Gif palette: ", ffmpeg, args.join(" "));
+      paletteStream.on('close', (code) => {
+        makeGif(callback);
+      });
+    } else {
+      makeGif(callback);
+    }
+
+  });
+
+}
+
 var downloader = function (callback) {
   if (reoLinkPassword == "") {
     return;
@@ -74,10 +196,8 @@ var downloader = function (callback) {
       function (restart) {
         var pic = path.join(ftpPath, cam.name + ".jpg");
 
-        var args = ["-i",
-          "rtsp://admin:" + reoLinkPassword + "@" + cam.ip + "/h264Preview_01_sub",
+        var args = ["-i", cam.streamLow,
           "-vf", "fps=fps=1", "-update", "1", pic, "-y"];
-
         var ls = spawn(ffmpeg, args);
         var interval;
 
@@ -166,7 +286,7 @@ var picBroadcaster = function () {
               //console.log("Dispatched: ", cam.name);
             }
           }
-          setTimeout(function() {
+          setTimeout(function () {
             next();
           }, 100);
         });
@@ -226,7 +346,7 @@ function init(callback) {
   if (process.env.NODE_ENV != "production") {
     return callback();
   }
-  
+
   initdb(function (err) {
     if (err) {
       console.log(err);

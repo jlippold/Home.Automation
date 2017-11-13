@@ -73,6 +73,10 @@
 			"icon": "icon-pitch",
 			"group": "outside",
 			"actions": [{
+				"type": "push",
+				"camera": "porch",
+				"cutoff": 15
+			}, {
 				"type": "kodi",
 				"camera": "porch",
 				"cutoff": 15
@@ -100,6 +104,10 @@
 			"icon": "icon-pitch",
 			"group": "outside",
 			"actions": [{
+				"type": "push",
+				"camera": "sidedoor",
+				"cutoff": 15
+			},{
 				"type": "kodi",
 				"camera": "sidedoor",
 				"cutoff": 15
@@ -127,8 +135,12 @@
 			"icon": "icon-pitch",
 			"group": "outside",
 			"actions": [{
+				"type": "push",
+				"camera": "driveway",
+				"cutoff": 15
+			}, {
 				"type": "kodi",
-				"camera": "porch",
+				"camera": "driveway",
 				"cutoff": 15
 			}, {
 				"type": "toggle",
@@ -200,14 +212,14 @@
 					"status": "on"
 				},
 				"3": {
-					"type": "lifx",
-					"id": "d073d511ea88",
-					"description": "Lamp",
-					"status": "toggle"
+					"type": "group",
+					"id": "livingroom_lights",
+					"description": "Living Room",
+					"status": "on"
 				},
 				"4": {
 					"type": "group",
-					"id": "livingroom",
+					"id": "livingroom_lights",
 					"description": "Living Room",
 					"status": "off"
 				},
@@ -345,9 +357,9 @@
 			"enabled": true
 		},
 		"401395": {
-			"description": "Decorations",
-			"icon": "icon-tree",
-			"group": "Outside",
+			"description": "Lamp 2",
+			"icon": "icon-lightbulb",
+			"group": "Living Room",
 			"type": "switch",
 			"hasManualOverride": false,
 			"enabled": true
@@ -519,6 +531,10 @@
 		"basement": {
 			"ip": "192.168.1.23",
 			"location": "basement"
+		},
+		"office": {
+			"ip": "192.168.1.77",
+			"location": "office"
 		}
 	},
 	"harmony": {
@@ -634,8 +650,8 @@
 			"icon": "icon-sofa",
 			"on": [{
 				"type": "insteon",
-				"id": "3E4300",
-				"description": "Family Room"
+				"id": "401395",
+				"description": "Living Room Lamp 2"
 			}, {
 				"type": "lifx",
 				"id": "d073d511ea88",
@@ -643,8 +659,8 @@
 			}],
 			"off": [{
 				"type": "insteon",
-				"id": "3E4300",
-				"description": "Family Room"
+				"id": "401395",
+				"description": "Living Room Lamp 2"
 			}, {
 				"type": "lifx",
 				"id": "d073d511ea88",

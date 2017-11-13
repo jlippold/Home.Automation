@@ -5,12 +5,12 @@ var path = require('path');
 var routes = express.Router();
 
 routes.use(function (req, res, next) {
-  if (req.hostname == "jed.bz") {
-	var err = new Error('not Found');
-	err.status = 404;
-	return next(err);
-  }
-  next()
+	if (req.hostname == "jed.bz") {
+		var err = new Error('not Found');
+		err.status = 404;
+		return next(err);
+	}
+	next()
 })
 
 routes.get('/', function (req, res, next) {
@@ -406,6 +406,25 @@ routes.post('/services/icloud/alert', function (req, res, next) {
 	});
 });
 
+routes.post('/mobile/register', function (req, res, next) {
+	var deviceId = req.body.deviceId;
+	var deviceName = req.body.deviceName;
+	if (deviceName && deviceId) {
+
+	} else {
+		return res.status(500);
+	}
+	api.mobile.addDevice(deviceId, deviceName, function (err) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+			console.error(err);
+		} else {
+			res.sendStatus(200);
+		}
+	});
+});
+
 // http://localhost:3000/motion/testFire/367fa8
 // http://localhost:3000/motion/testFire/3699ae
 
@@ -420,6 +439,28 @@ routes.get('/motion/testFire/:device', function (req, res, next) {
 			res.sendStatus(200);
 		}
 	});
+});
+
+// https://jed.bz/home/cameras/live/garage
+routes.get("/cameras/live/:camera", function (req, res, next) {
+	var camera = req.params.camera;
+	var cam = api.cams.cameras.find(function (c) {
+		return c.name == camera;
+	});
+
+	if (!cam) {
+		res.status(500);
+		console.error("Camera not found", camera);
+		return res.send("Camera not found");
+	} else {
+		var ip  = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+		var local = ip.indexOf("192.168.1") > -1;
+		api.cams.liveStream(cam, local, function(err) {
+			if (err) return res.send(err);
+			return res.send({stream: 'https://jed.bz/stream/' + cam.name + '.m3u8'});
+		});
+	}
+
 });
 
 routes.get("/cameras/recordings", function (req, res, next) {
@@ -443,7 +484,7 @@ routes.get("/cameras/recordings/:recording_id/image", function (req, res, next) 
 			res.send(err);
 			console.error(err);
 		} else {
-			res.redirect("https://jed.bz/camera-ftp/" + 
+			res.redirect("https://jed.bz/camera-ftp/" +
 				path.basename(path.dirname(recording.jpg)) + "/" +
 				path.basename(recording.jpg));
 		}
@@ -458,7 +499,7 @@ routes.get("/cameras/recordings/:recording_id/video", function (req, res, next) 
 			res.send(err);
 			console.error(err);
 		} else {
-			res.redirect("https://jed.bz/camera-ftp/" + 
+			res.redirect("https://jed.bz/camera-ftp/" +
 				path.basename(path.dirname(recording.mp4)) + "/" +
 				path.basename(recording.mp4));
 		}
