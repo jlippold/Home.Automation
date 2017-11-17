@@ -5,7 +5,7 @@ var moment = require('moment');
 var async = require('async');
 var path = require('path');
 var os = require('os');
-var apn = require('apn');
+var apn = require('node-apn-http2');
 
 
 module.exports.addDevice = addDevice;
@@ -16,9 +16,11 @@ module.exports.sendPushNotification = sendPushNotification;
 var mobileDevices = path.join(__dirname, "../mobileDevices.json")
 
 var apnProvider = new apn.Provider({
-    cert: "D://www//pushcerts//cert.pem",
-    key: "D://www//pushcerts//key.pem",
-    passphrase: process.env.pushPassphrase,
+    token: {
+        key: "D://www//pushcerts//authKey.p8",
+        keyId: process.env.pushKeyId, 
+        teamId: process.env.pushTeamId 
+    },
     production: false
 });
 
@@ -77,12 +79,12 @@ function sendPushNotification(image, location, callback) {
 
         var note = new apn.Notification();
 
-        note.rawPayload = {
+        var payload = {
             "aps": {
                 "sound": "ping.aiff",
                 "alert": {
                     "title": "Intruder detected",
-                    "body": "Movement is happening on the " + location,
+                    "body": location + " movement is happening!",
                 },
                 "badge": 0,
                 "mutable-content": 1,
@@ -91,11 +93,18 @@ function sendPushNotification(image, location, callback) {
             "mediaUrl": "https://jed.bz/stream/gif/" + image,
             "mediaType": "jpg",
         };
+
+        note.rawPayload = payload;
+        
         note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
         note.topic = "bz.jed.home";
 
         apnProvider.send(note, Object.keys(devices)).then((result) => {
             // see documentation for an explanation of result
+            if (callback) {
+                console.log("Push results", payload, result);
+                callback();
+            }
         });
     });
 }
