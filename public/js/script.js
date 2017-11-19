@@ -112,14 +112,14 @@ var state = {
         on: base_url + "home/groups/br-tv/on",
         off: base_url + "home/groups/br-tv/off",
         volume_up:
-        base_url +
-        "home/harmony/hubs/bedroom/devices/43709373/commands/VolumeUp",
+          base_url +
+          "home/harmony/hubs/bedroom/devices/43709373/commands/VolumeUp",
         volume_down:
-        base_url +
-        "home/harmony/hubs/bedroom/devices/43709373/commands/VolumeDown",
+          base_url +
+          "home/harmony/hubs/bedroom/devices/43709373/commands/VolumeDown",
         power_toggle:
-        base_url +
-        "home/harmony/hubs/bedroom/devices/43709373/commands/PowerToggle"
+          base_url +
+          "home/harmony/hubs/bedroom/devices/43709373/commands/PowerToggle"
       }
     },
     livingroom: {
@@ -137,14 +137,14 @@ var state = {
         on: base_url + "home/groups/lr-tv/on",
         off: base_url + "home/groups/lr-tv/off",
         volume_up:
-        base_url +
-        "home/harmony/hubs/livingroom/devices/43708749/commands/VolumeUp",
+          base_url +
+          "home/harmony/hubs/livingroom/devices/43708749/commands/VolumeUp",
         volume_down:
-        base_url +
-        "home/harmony/hubs/livingroom/devices/43708749/commands/VolumeDown",
+          base_url +
+          "home/harmony/hubs/livingroom/devices/43708749/commands/VolumeDown",
         power_toggle:
-        base_url +
-        "home/harmony/hubs/livingroom/devices/43708749/commands/PowerToggle"
+          base_url +
+          "home/harmony/hubs/livingroom/devices/43708749/commands/PowerToggle"
       }
     }
   },
@@ -666,7 +666,7 @@ $(document).ready(function () {
           url: "home/cameras/live/" + c.data.id,
           success: function (data) {
             if (data && data.stream) {
-              setTimeout(function() {
+              setTimeout(function () {
                 c.playVideo(data.stream);
                 c.data.loadingStream = false;
               }, 3000);
@@ -1734,9 +1734,9 @@ $(document).ready(function () {
                       map: t.map,
                       shadow: 0,
                       content:
-                      '<div><img src="' +
-                      device.url +
-                      '" class="circle" style="height: 48px;"></div>'
+                        '<div><img src="' +
+                        device.url +
+                        '" class="circle" style="height: 48px;"></div>'
                     });
                     t.markers.push(marker);
                     t.bounds.extend(marker.position);
@@ -1984,20 +1984,98 @@ $(document).ready(function () {
     edge: "right"
   });
 
+  if (isApple()) {
+    document.location.href = 'jedbz:///mobileRegistration';
+  }
 
-  var socket = io.connect("https://jed.bz:3333/", { transports: ['websocket'], 'reconnect': true, 'connect timeout': 500 });
+  socketInitiate();
+  notificationInitiate();
+});
+
+
+var socket;
+function socketInitiate() {
+
+  socket = io.connect("https://jed.bz:3333/", { transports: ['websocket'], 'reconnect': false, 'connect timeout': 500 });
+  var lastSocketEvent = new Date();
+
   socket.on('picture', function (event) {
+    lastSocketEvent = new Date();
     var cam = event.camera.toLowerCase();
     var data = event.data;
     vm.$refs[cam.toLowerCase()].update(event.data);
   });
 
+  socket.on('motion', function (event) {
+    lastSocketEvent = new Date();
+    var cam = event.camera.toLowerCase();
+    sendCameraNotification(cam);
+  });
+  
+  //connection manager
+  async.forever(function (next) {
+    setTimeout(function () {
+      var time_diff = Math.abs(moment().diff(moment(lastSocketEvent)));
+      //if no socket connection in X seconds
+      //manually disconnect/reconnect the socket so that
+      //it doesnt to try catch up old expired data
+      if (time_diff > 15 * 1000) {
+        lastSocketEvent = new Date();
+        socket.io.disconnect();
+        setTimeout(function () {
+          socket.open();
+          next();
+        }, 500);
+      } else {
+        return next()
+      }
+    }, 1000);
+  });
+
+}
+
+function notificationInitiate() {
+
   if (isApple()) {
-    document.location.href = 'jedbz:///mobileRegistration';
+    return;
   }
 
-});
+  if (!("Notification" in window)) {
+    return console.error("This browser does not support system notifications");
+  }
+  else if (Notification.permission === "granted") {
+    return;
+  }
+  else if (Notification.permission !== 'denied') {
+    Notification.requestPermission();
+  }
 
+}
+
+function sendCameraNotification(camera) {
+
+  if (!("Notification" in window)) {
+    return console.error("This browser does not support system notifications");
+  }
+
+  if (Notification.permission != "granted") {
+    return;
+  }
+
+  var options = {
+    body: "There is movement at the " + camera,
+    icon: "/camera/live/loadCam.aspx?cam=driveway"
+  }
+
+  var n = new Notification("Motion detected", options);
+  n.onclick = function () {
+    window.focus(); this.cancel();
+  };
+  setTimeout(n.close.bind(n), 5000);
+
+  var audio = new Audio('/files/doorbell.mp3');
+  audio.play();
+}
 
 function isApple() {
   return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -2012,7 +2090,7 @@ function setMobileToken(deviceId, deviceName) {
       success: function () {
         //alert("registered");
       },
-      error: function(x,y,z) {
+      error: function (x, y, z) {
         //alert("Push registration failed " + x + y + z);
       }
     });

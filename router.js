@@ -425,7 +425,7 @@ routes.post('/mobile/register', function (req, res, next) {
 	});
 });
 
-// http://localhost:3000/motion/testFire/367fa8
+// http://localhost:3000/motion/testFire/367FA8
 // http://localhost:3000/motion/testFire/3699ae
 
 routes.get('/motion/testFire/:device', function (req, res, next) {

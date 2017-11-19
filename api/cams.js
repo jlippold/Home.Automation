@@ -152,7 +152,7 @@ function createGif(cam, night, callback) {
     var gifStream = spawn(ffmpeg, gifArgs);
     console.log("Creating gif: ", ffmpeg, gifArgs.join(" "));
     gifStream.on('close', (code) => {
-      done(null, gifName);
+      done(null, gif);
     });
   }
 

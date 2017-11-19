@@ -6,6 +6,7 @@ var async = require('async');
 var path = require('path');
 var os = require('os');
 var apn = require('node-apn-http2');
+var aws = require('../lib/amazon');
 
 
 module.exports.addDevice = addDevice;
@@ -18,8 +19,8 @@ var mobileDevices = path.join(__dirname, "../mobileDevices.json")
 var apnProvider = new apn.Provider({
     token: {
         key: "D://www//pushcerts//authKey.p8",
-        keyId: process.env.pushKeyId, 
-        teamId: process.env.pushTeamId 
+        keyId: process.env.pushKeyId,
+        teamId: process.env.pushTeamId
     },
     production: false
 });
@@ -73,39 +74,47 @@ function getDevices(callback) {
     });
 }
 
-function sendPushNotification(image, location, callback) {
+function sendPushNotification(image, camera, callback) {
 
-    getDevices(function (err, devices) {
-
-        var note = new apn.Notification();
-
-        var payload = {
-            "aps": {
-                "sound": "ping.aiff",
-                "alert": {
-                    "title": "Intruder detected",
-                    "body": location + " movement is happening!",
+    async.auto({
+        upload: function (moveNext) {
+            var p = "cams/" + moment().format("YYYY-MM-DD") + "/" + path.basename(image);
+            aws.upload(image, p, 'image/gif', function (err, url) {
+                moveNext(err, url);
+            })
+        },
+        devices: function (moveNext) {
+            getDevices(function (err, mobile) {
+                moveNext(err, mobile);
+            });
+        },
+        push: ['upload', 'devices', function (moveNext, results) {
+            var note = new apn.Notification();
+            note.expiry = Math.floor(Date.now() / 1000) + 600; // Expires 10 mins
+            note.topic = "bz.jed.home";
+            note.rawPayload = {
+                "aps": {
+                    "sound": "ping.aiff",
+                    "alert": {
+                        "title": "Intruder detected",
+                        "body": camera + " movement is happening",
+                    },
+                    "badge": 0,
+                    "mutable-content": 1,
+                    "content-available": 1
                 },
-                "badge": 0,
-                "mutable-content": 1,
-                "content-available": 1
-            },
-            "mediaUrl": "https://jed.bz/stream/gif/" + image,
-            "mediaType": "jpg",
-        };
-
-        note.rawPayload = payload;
-        
-        note.expiry = Math.floor(Date.now() / 1000) + 3600; // Expires 1 hour from now.
-        note.topic = "bz.jed.home";
-
-        apnProvider.send(note, Object.keys(devices)).then((result) => {
-            // see documentation for an explanation of result
-            if (callback) {
-                console.log("Push results", payload, result);
-                callback();
-            }
-        });
+                "mediaUrl": results.upload,
+                "mediaType": "gif",
+            };
+            apnProvider.send(note, Object.keys(results.devices)).then((result) => {
+                moveNext()
+            });
+        }]
+    }, function (err, results) {
+        if (callback) {
+            //console.log("Push results", results);
+            callback();
+        }
     });
 }
 
