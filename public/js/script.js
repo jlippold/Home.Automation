@@ -1666,7 +1666,7 @@ $(document).ready(function () {
 
       $(".confirmAlert").modal();
       var c = this;
-      $("ul.tabs:first").tabs();
+      $(".tabs.devices").tabs();
       async.forever(function (next) {
         c.fetch(function () {
           next();
@@ -1990,6 +1990,12 @@ $(document).ready(function () {
 
   socketInitiate();
   notificationInitiate();
+
+  if (window.location.href.indexOf("?snooze=") > -1) {
+    var url = window.location.href;
+    var minutes = url.substring(url.indexOf("?snooze="));
+    snooze(minutes.replace("?snooze=", ""));
+  }
 });
 
 
@@ -2079,6 +2085,21 @@ function sendCameraNotification(camera) {
 
 function isApple() {
   return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+}
+
+function snooze(minutes) {
+  alert(minutes);
+  $.ajax({
+    method: "POST",
+    url: base_url + "home/mobile/snooze",
+    data: "minutes=" + minutes,
+    success: function () {
+     alert("Notifications will cease for " + minutes + " minutes");
+    },
+    error: function (x, y, z) {
+      alert("snooze failed " + x + y + z);
+    }
+  });
 }
 
 function setMobileToken(deviceId, deviceName) {

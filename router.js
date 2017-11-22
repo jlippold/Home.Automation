@@ -425,7 +425,20 @@ routes.post('/mobile/register', function (req, res, next) {
 	});
 });
 
-// http://localhost:3000/motion/testFire/367FA8
+routes.post('/mobile/snooze', function (req, res, next) {
+	var minutes = req.body.minutes;
+	api.mobile.snooze(minutes, function (err) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+			console.error(err);
+		} else {
+			res.sendStatus(200);
+		}
+	});
+});
+
+// http://192.168.1.110:3000/motion/testFire/367FA8
 // http://localhost:3000/motion/testFire/3699ae
 
 routes.get('/motion/testFire/:device', function (req, res, next) {

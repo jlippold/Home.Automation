@@ -8,13 +8,15 @@ var os = require('os');
 var apn = require('node-apn-http2');
 var aws = require('../lib/amazon');
 
-
+module.exports.snooze = snooze;
 module.exports.addDevice = addDevice;
 module.exports.getDevices = getDevices;
 module.exports.deviceIsRegistered = deviceIsRegistered;
 module.exports.sendPushNotification = sendPushNotification;
 
 var mobileDevices = path.join(__dirname, "../mobileDevices.json")
+var snoozeTimeout = {onTimeout: null};
+var isSnoozed = false;
 
 var apnProvider = new apn.Provider({
     token: {
@@ -25,6 +27,13 @@ var apnProvider = new apn.Provider({
     production: false
 });
 
+function snooze(minutes, callback) {
+    isSnoozed = true;
+    snoozeTimeout.onTimeout = setTimeout(function () {
+        isSnoozed = false;
+    }, minutes * 1 * 1000);
+    callback(null, {status: "ok"});
+}
 
 function addDevice(deviceId, deviceName, callback) {
     async.auto({
@@ -75,7 +84,10 @@ function getDevices(callback) {
 }
 
 function sendPushNotification(image, camera, callback) {
-
+    if (isSnoozed) {
+        console.log("Push snooze is enabled, skipping");
+        return;
+    }
     async.auto({
         upload: function (moveNext) {
             var p = "cams/" + moment().format("YYYY-MM-DD") + "/" + path.basename(image);
@@ -106,6 +118,7 @@ function sendPushNotification(image, camera, callback) {
                 "mediaUrl": results.upload,
                 "mediaType": "gif",
             };
+
             apnProvider.send(note, Object.keys(results.devices)).then((result) => {
                 moveNext()
             });

@@ -111,6 +111,26 @@
 		<div v-else class="row">
 			<div class="col s12 m6 l4">
 				<insteon></insteon>
+
+<nav class="white">
+	<div class="nav-wrapper">
+		<ul id="nav-mobile" class="left">
+			<li class="active">
+				<a href="#" class="black-text">Living Room</a>
+			</li>
+			<li>
+				<a href="#" class="black-text">Bedroom</a>
+			</li>
+			<li>
+				<a href="#" class="black-text">Office</a>
+			</li>
+			<li>
+				<a href="#" class="black-text">Basement</a>
+			</li>
+		</ul>
+	</div>
+</nav>
+				
 				<kodi-livingroom ref="livingroom"></kodi-livingroom>
 				<kodi-bedroom ref="bedroom"></kodi-bedroom>
 				<weather></weather>
@@ -470,7 +490,7 @@
 						<div v-if="data.devices[0].loading" class="progress">
 			      				<div class="indeterminate"></div>
 			  			</div>
-						<ul class="tabs tabs-fixed-width" style="height: 64px">
+						<ul class="devices tabs tabs-fixed-width" style="height: 64px">
 							<li v-for="(person, index) in data.devices" class="tab col s3">
 								<a v-bind:href="'#device' + index" style="padding: 0px; width: 60px; height: 64px; margin: 0px auto;">
 									<img :src="'/img/' + person.name + '.jpg'" class="circle" style="height: 48px;">
