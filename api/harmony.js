@@ -1,7 +1,7 @@
 var HarmonyHub = require('harmonyhubjs-client');
 var async = require('async');
 var fs = require('fs');
-var devices = require("../config/devices.json");
+var devices = require("../devices/");
 var dispatch = require("../lib/dispatch");
 var pool = require("../lib/pool");
 

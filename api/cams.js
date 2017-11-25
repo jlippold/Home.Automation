@@ -13,7 +13,7 @@ var spawn = require('child_process').execFile;
 var RingAPI = require('doorbot');
 var moment = require('moment');
 
-var devices = require("../config/devices.json");
+var devices = require("../devices/");
 
 var ringUser = process.env.ringUser || "username@no.com";
 var ringPass = process.env.ringPass || "somePass";
@@ -364,17 +364,6 @@ function init(callback) {
 
       watcher.on('add', function (filename, stat) {
         if (filename.indexOf(ftpPath) == 0) {
-          //console.log("New file created: " + filename);
-          //TRIGGER MOTION YALL
-
-          /*
-          var cameraName = path.basename(path.dirname(file)).toLowerCase();
-          if (devices.reolink.hasOwnProperty(id)) {
-            return callback("no device found");
-            lib.motion.fired(devices.reolink[id]);
-          }
-          */
-
           setTimeout(function () {
             insertRecordings([filename], function () {
               if (err) {

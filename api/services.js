@@ -4,7 +4,7 @@ var async = require('async');
 var nzbget = require('nzbget-nodejs');
 var torrent = require('utorrent-api');
 var apple = require("find-my-iphone");
-var appleDevices = require("../config/devices.json").icloud;
+var appleDevices = require("../devices/").icloud;
 var lib = require("../lib");
 var path = require("path");
 

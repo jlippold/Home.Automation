@@ -1,6 +1,6 @@
 var request = require('request');
 var dispatch = require("../lib/dispatch");
-var devices = require("../config/devices.json");
+var devices = require("../devices/");
 
 module.exports.setStatusOfDevice = setStatusOfDevice;
 module.exports.getStatusOfDevice = getStatusOfDevice;

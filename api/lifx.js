@@ -1,6 +1,6 @@
 var async = require('async');
 var nodeUtil = require('util');
-var devices = require("../config/devices.json").lifx;
+var devices = require("../devices/").lifx;
 var dispatch = require("../lib/dispatch");
 var lifxObj = require('lifx-api');
 var lifx;

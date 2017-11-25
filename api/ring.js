@@ -1,7 +1,7 @@
 var RingAPI = require('doorbot');
 var ringUser = process.env.ringUser || "username@no.com";
 var ringPass = process.env.ringPass || "somePass";
-var devices = require("../config/devices.json");
+var devices = require("../devices/");
 var dispatch = require("../lib/dispatch");
 
 const ring = RingAPI({
@@ -11,9 +11,9 @@ const ring = RingAPI({
 
 function register(callback) {
     if (ringUser == "") {
-        return callback();
+        return callback("No user");
     }
-    eventMonitor(callback);
+    callback();
 }
 
 function listDevices(callback) {
@@ -124,31 +124,6 @@ function isValidDeviceId(id) {
     return true;
 }
 
-var eventMonitor = function (callback) {
-    var seen = [];
-    async.forever(function (restart) {
-
-        ring.dings(function (err, rings) {
-            if (!err) {
-                rings.forEach(function (event) {
-                    if (seen.indexOf(event.id) == -1) {
-                        //new event!
-                        var name = event.doorbot_description;
-                        var type = event.kind;
-                        seen.push(event.id);
-                        lib.motion.fired(devices.ring[name]);
-                    }
-                });
-            }
-            setTimeout(function () {
-                return restart(err);
-            }, 2500);
-        });
-
-    });
-
-    callback();
-}
 
 module.exports.register = register;
 module.exports.setStatusOfDevice = setStatusOfDevice;

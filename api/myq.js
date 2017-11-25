@@ -1,7 +1,7 @@
 var myq = require('myq-node');
 var myqUser = process.env.myqUser || "";
 var myQPass = process.env.myQPass || "";
-var devices = require("../config/devices.json");
+var devices = require("../devices/");
 var dispatch = require("../lib/dispatch");
 
 myq.login(myqUser, myQPass)

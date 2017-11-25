@@ -1117,6 +1117,268 @@ $(document).ready(function () {
     }
   });
 
+  var NewKodi = Vue.extend({
+    template: "#new-kodi-template",
+    data: function () {
+      return {
+        data: {
+          rooms: ["Livingroom", "Bedroom", "Office", "Basement"],
+          roomIndex: 0,
+          title: "Bedroom TV",
+          baseUrl: base_url + "kodi-br/",
+          shortName: "br",
+          roomName: "Bedroom",
+          playerid: 0,
+          item: {
+            thumbnail: "",
+            title: ""
+          },
+          percentage: 0
+        }
+      }
+    },
+    beforeMount: function () {
+      this.fetch();
+    },
+    mounted: function () {
+      $(this.$el).find("div.remoteModal").modal();
+      $(this.$el).find("div.commandList").modal();
+      var c = this;
+      async.forever(function (next) {
+        c.fetch(function () {
+          next();
+        });
+      });
+    },
+    methods: {
+      roomName: function (params) {
+        var d = this.data;
+        return d.rooms[d.roomIndex];
+      },
+      selectRoomByIndex: function (event, index) {
+        this.data.roomIndex = index;
+      },
+      openModal: function () {
+        $(this.$el).find("div.remoteModal").modal("open");
+      },
+      openCommands: function () {
+        $(this.$el).find("div.commandList").modal("open");
+      },
+      search: function (event, device) {
+        event.stopPropagation();
+        vm.$refs.results.open(this.data.roomName, this.data.shortName);
+        return false;
+      },
+      button: function (event, id, device) {
+        event.stopPropagation();
+        if (device == "kodi") {
+          var url =
+            this.data.baseUrl +
+            "jsonrpc?request=" +
+            JSON.stringify(kodi_api.buttons[id]);
+          url = url.replace(/"%playerid%"/g, this.data.playerid);
+
+          $.ajax({
+            method: "GET",
+            url: url
+          });
+        } else {
+          $.ajax({
+            method: "GET",
+            url: device.buttons[id]
+          });
+        }
+        return false;
+      },
+      runCommand: function (event, command) {
+        var url =
+          this.data.baseUrl + "jsonrpc?request=" + JSON.stringify(command);
+        url = url.replace(/"%playerid%"/g, this.data.playerid);
+
+        $.ajax({
+          method: "GET",
+          url: url
+        });
+        return false;
+      },
+      fetch: function (done) {
+        var v = this;
+        async.auto(
+          {
+            getPlayer: function (callback) {
+              var url =
+                v.data.baseUrl +
+                "jsonrpc?request=" +
+                JSON.stringify(kodi_api.activePlayer);
+              $.ajax({
+                method: "GET",
+                url: url,
+                success: function (data) {
+                  if (data && data.result && data.result.length > 0) {
+                    v.data.playerid = data.result[0].playerid;
+                    callback(null, data.result[0].playerid);
+                  } else {
+                    v.data.playerid = 0;
+                    callback("no player");
+                  }
+                },
+                error: function (err) {
+                  callback(err);
+                }
+              });
+            },
+            getNowPlaying: [
+              "getPlayer",
+              function (results, callback) {
+                var url =
+                  v.data.baseUrl +
+                  "jsonrpc?request=" +
+                  JSON.stringify(kodi_api.nowPlaying);
+                var playerid = results.getPlayer;
+                url = url.replace(/"%playerid%"/g, playerid);
+
+                $.ajax({
+                  method: "GET",
+                  url: url,
+                  error: function (err) {
+                    callback(err);
+                  },
+                  success: function (data) {
+                    if (data && Array.isArray(data) && data.length == 2) {
+                      v.data.percentage = data[0].result.percentage;
+                      callback(null, data[1].result.item);
+                    } else {
+                      console.log(v);
+                      callback("nothing playing");
+                    }
+                  }
+                });
+              }
+            ],
+            fixUnknownType: [
+              "getNowPlaying",
+              function (results, callback) {
+                var item = results.getNowPlaying;
+
+                if (item.type == "unknown" && item.file && !item.title) {
+                  var filename = item.file.split("/").pop();
+                  var pathname = item.file
+                    .substring(0, item.file.indexOf(filename) - 1)
+                    .split("/")
+                    .pop();
+                  var url =
+                    v.data.baseUrl +
+                    "jsonrpc?request=" +
+                    JSON.stringify(kodi_api.searchByPath);
+                  var playerid = results.getPlayer;
+
+                  url = url.replace(/%filename%/g, filename);
+                  url = url.replace(/%pathname%/g, pathname);
+
+                  $.ajax({
+                    method: "GET",
+                    url: url,
+                    success: function (data) {
+                      if (data && Array.isArray(data) && data.length == 2) {
+                        if (
+                          data[0].result &&
+                          data[0].result.episodes &&
+                          Array.isArray(data[0].result.episodes) &&
+                          data[0].result.episodes.length > 0
+                        ) {
+                          return callback(null, data[0].result.episodes[0]);
+                        } else if (
+                          data[1].result &&
+                          data[1].result.movies &&
+                          Array.isArray(data[1].result.movies) &&
+                          data[1].result.movies.length > 0
+                        ) {
+                          return callback(null, data[1].result.movies[0]);
+                        } else {
+                          return callback("nothing found");
+                        }
+                      } else {
+                        return callback("bad call");
+                      }
+                    },
+                    error: function (err) {
+                      callback(err);
+                    }
+                  });
+                } else {
+                  callback(null, item);
+                }
+              }
+            ],
+            formatImages: [
+              "fixUnknownType",
+              function (results, callback) {
+                var item = results.fixUnknownType;
+                var images = item.art;
+
+                //fix image paths, and set primary thumbnail
+                var preferredImages = [
+                  "fanart",
+                  "fanart1",
+                  "fanart2",
+                  "clearart",
+                  "clearlogo",
+                  "landscape",
+                  "thumb"
+                ];
+
+                item.thumbnail = null;
+
+                preferredImages.forEach(function (key) {
+                  if (images.hasOwnProperty(key)) {
+                    images[key] =
+                      "/kodi-img/?room=" +
+                      v.data.shortName +
+                      "&path=image%2F" +
+                      encodeURIComponent(images[key]);
+                    if (!item.thumbnail) {
+                      item.thumbnail = images[key];
+                    }
+                  }
+                });
+
+                callback(null, item);
+              }
+            ]
+          },
+          function (err, results) {
+            //if (err) {
+            //console.log(err);
+            //}
+
+            //ensure required props
+            var item = results.formatImages;
+            if (!item) {
+              item = {
+                title: "",
+                thumbnail: ""
+              };
+            }
+            if (!item.title) {
+              item.title = "";
+            }
+            if (!item.thumbnail) {
+              item.thumbnail = "";
+            }
+
+            v.data.item = item;
+
+            if (done) {
+              setTimeout(function () {
+                done();
+              }, 5000);
+            }
+          }
+        );
+      }
+    }
+  });
+
   var Insteon = Vue.extend({
     template: "#switchGroup-template",
     data: function () {
@@ -1965,6 +2227,7 @@ $(document).ready(function () {
       insteon: Insteon,
       "kodi-bedroom": Bedroom,
       "kodi-livingroom": Livingroom,
+      "new-kodi": NewKodi,
       server: Server,
       "porch-cam": PorchCam,
       "garage-cam": GarageCam,
@@ -1986,6 +2249,8 @@ $(document).ready(function () {
 
   if (isApple()) {
     document.location.href = 'jedbz:///mobileRegistration';
+  } else {
+    $("#mainNav").show();
   }
 
   socketInitiate();
@@ -2017,7 +2282,7 @@ function socketInitiate() {
     var cam = event.camera.toLowerCase();
     sendCameraNotification(cam);
   });
-  
+
   //connection manager
   async.forever(function (next) {
     setTimeout(function () {
@@ -2094,7 +2359,7 @@ function snooze(minutes) {
     url: base_url + "home/mobile/snooze",
     data: "minutes=" + minutes,
     success: function () {
-     alert("Notifications will cease for " + minutes + " minutes");
+      alert("Notifications will cease for " + minutes + " minutes");
     },
     error: function (x, y, z) {
       alert("snooze failed " + x + y + z);
