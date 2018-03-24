@@ -2335,7 +2335,7 @@ function sendCameraNotification(camera) {
 
   var options = {
     body: "There is movement at the " + camera,
-    icon: "/camera/live/loadCam.aspx?cam=driveway"
+    icon: "/camera/live/loadCam.aspx?cam=" + camera.toLowerCase()
   }
 
   var n = new Notification("Motion detected", options);
@@ -2353,7 +2353,6 @@ function isApple() {
 }
 
 function snooze(minutes) {
-  alert(minutes);
   $.ajax({
     method: "POST",
     url: base_url + "home/mobile/snooze",

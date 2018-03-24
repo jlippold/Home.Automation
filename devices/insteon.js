@@ -119,8 +119,23 @@ var motion = {
             "nightOnly": true
         }],
         "enabled": false
+    },
+    "37B015": {
+        "description": "Kitchen Sensor",
+        "type": "door",
+        "icon": "icon-home",
+        "group": "kitchen",
+        "actions": [{
+            "type": "toggle",
+            "insteon": "3C2CC5",
+            "cutoff": 600,
+            "nightOnly": true
+        }],
+        "enabled": false
     }
 };
+
+
 var keypads = {
     "357531": {
         "description": "Livroom keypad",
@@ -241,6 +256,8 @@ var keypads = {
         }
     }
 };
+
+
 var switches = {
     "46D72A": {
         "description": "Kitchen Fan",
@@ -291,9 +308,9 @@ var switches = {
         "enabled": true
     },
     "401395": {
-        "description": "Lamp 2",
+        "description": "Kitchen Cabinets",
         "icon": "icon-lightbulb",
-        "group": "Living Room",
+        "group": "Kitchen",
         "type": "switch",
         "hasManualOverride": false,
         "enabled": true
@@ -355,20 +372,20 @@ var switches = {
         "enabled": true
     },
     "237643": {
-        "description": "Small Lamp Linc",
+        "description": "Lamp 2",
         "icon": "icon-lamp",
-        "group": "Dining Room",
+        "group": "Living Room",
         "hasManualOverride": true,
         "type": "switch",
         "enabled": true
     },
     "3728AC": {
-        "description": "Christmas Tree",
+        "description": "Christmas Tree", //this might the missing lamplinc
         "icon": "icon-tree",
         "group": "Living Room",
         "hasManualOverride": false,
         "type": "switch",
-        "enabled": true
+        "enabled": false
     }
 };
 

@@ -49,7 +49,7 @@ module.exports = {
         "icon": "icon-sofa",
         "on": [{
             "type": "insteon",
-            "id": "401395",
+            "id": "237643",
             "description": "Living Room Lamp 2"
         }, {
             "type": "lifx",
@@ -58,7 +58,7 @@ module.exports = {
         }],
         "off": [{
             "type": "insteon",
-            "id": "401395",
+            "id": "237643",
             "description": "Living Room Lamp 2"
         }, {
             "type": "lifx",

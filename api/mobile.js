@@ -31,7 +31,7 @@ function snooze(minutes, callback) {
     isSnoozed = true;
     snoozeTimeout.onTimeout = setTimeout(function () {
         isSnoozed = false;
-    }, minutes * 1 * 1000);
+    }, minutes * 60 * 1000);
     callback(null, {status: "ok"});
 }
 
