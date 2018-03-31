@@ -369,9 +369,8 @@
 </template>
 
 <template id="new-kodi-template">
-	<div v-if="false">
+	<div v-if="true">
 		<div class="card gesturePad" style="margin-top: 42px">
-
 			<div class="card-image waves-effect waves-block waves-light" v-if="data.item.title" v-on:click="openModal()">
 				<img :src="data.item.thumbnail">
 				<span class="card-title">{{data.item.title}}</span>
@@ -388,7 +387,7 @@
 			<nav class="white">
 				<div class="nav-wrapper">
 					<ul id="nav-mobile" class="left" style="width:100%">
-						<li v-for="(room, index) in data.rooms" :key="index" v-bind:class="{ active: index == data.roomIndex }" style="width: 25%">
+						<li v-for="(room, index) in data.rooms" :key="index" v-bind:class="{ active: index == data.roomIndex }" style="width: 20%">
 							<a v-on:click="selectRoomByIndex($event, index)" style="text-align:center" class="black-text">{{room}}</a>
 						</li>
 					</ul>

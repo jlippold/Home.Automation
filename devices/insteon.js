@@ -93,45 +93,24 @@ var motion = {
             "cutoff": 15
         }, {
             "type": "toggle",
-            "insteon": "40A548",
-            "nightOnly": false
+            "insteon": "401395",
+            "cutoff": 600,
+            "nightOnly": true
         }],
         "enabled": true
     },
-    "37DF79": {
-        "description": "Garage Door Sensor",
-        "type": "door",
-        "icon": "icon-home",
-        "group": "outside",
-        "actions": [{
-            "type": "kodi",
-            "camera": "garage",
-            "cutoff": 15
-        }, {
-            "type": "toggle",
-            "insteon": "3C2CC5",
-            "cutoff": 600,
-            "nightOnly": true
-        }, {
-            "type": "toggle",
-            "insteon": "3C2CC5",
-            "cutoff": 600,
-            "nightOnly": true
-        }],
-        "enabled": false
-    },
-    "37B015": {
+    "4A4849": {
         "description": "Kitchen Sensor",
         "type": "door",
         "icon": "icon-home",
         "group": "kitchen",
         "actions": [{
             "type": "toggle",
-            "insteon": "3C2CC5",
+            "insteon": "401395",
             "cutoff": 600,
             "nightOnly": true
         }],
-        "enabled": false
+        "enabled": true
     }
 };
 

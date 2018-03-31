@@ -1122,7 +1122,7 @@ $(document).ready(function () {
     data: function () {
       return {
         data: {
-          rooms: ["Livingroom", "Bedroom", "Office", "Basement"],
+          rooms: ["Living", "Bedroom", "Office", "Gym", "Layla"],
           roomIndex: 0,
           title: "Bedroom TV",
           baseUrl: base_url + "kodi-br/",
@@ -2344,8 +2344,8 @@ function sendCameraNotification(camera) {
   };
   setTimeout(n.close.bind(n), 5000);
 
-  var audio = new Audio('/files/doorbell.mp3');
-  audio.play();
+  //var audio = new Audio('/files/doorbell.mp3');
+  //audio.play();
 }
 
 function isApple() {

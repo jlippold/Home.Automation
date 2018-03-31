@@ -41,6 +41,27 @@ routes.get('/api/groups', function (req, res, next) {
 	});
 });
 
+routes.get('/televisions', function (req, res, next) {
+	api.kodi.listDevices(function (err, devices) {
+		res.send(devices);
+	});
+});
+
+routes.get('/televisions/:room/commands/:command', function (req, res, next) {
+	var room = req.params.room;
+	var command = req.params.command;
+
+	api.kodi.execute(room, command, function (err, json) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+			console.error(err);
+		} else {
+			res.send(json);
+		}
+	});
+});
+
 routes.get('/insteon', function (req, res, next) {
 	api.insteon.listDevices(function (err, devices) {
 		if (err) {
