@@ -22,8 +22,8 @@ function execute(room, command, callback) {
 
     var action = device.commands[command];
     
-    if (action.hasOwnProperty("jsonrpc")) {
-        return kodi.rpc(room, command, callback);
+    if (action.hasOwnProperty("jsonrpc") || Array.isArray(action)) {
+        return kodi.rpc(room, command, [], callback);
     } else if (action.hasOwnProperty("type")) {
         if (action.type == "harmony") {
             if (action.hasOwnProperty("activity")) {

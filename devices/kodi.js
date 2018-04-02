@@ -1,6 +1,6 @@
 var players = {
     "Living": {
-        ip: "192.168.1.99",
+        ip: "192.168.1.35",
         commands: {
             powerToggle: {
                 "type": "harmony",
@@ -81,8 +81,8 @@ var players = {
             }
         },
     },
-    "Basement": {
-        ip: "192.168.1.38"
+    "Gym": {
+        ip: "192.168.1.83"
     },
     "Office": {
         ip: "192.168.1.151"
@@ -93,14 +93,14 @@ var players = {
 };
 
 var defaults = {
-    powerToggle: { 
-        "jsonrpc": "2.0", 
-        "method": "Addons.ExecuteAddon", 
-        "params": { 
-            "addonid": "script.flirc_util", 
-            "params": { "command": "power" } 
-        }, 
-        "id": 2 
+    powerToggle: {
+        "jsonrpc": "2.0",
+        "method": "Addons.ExecuteAddon",
+        "params": {
+            "addonid": "script.flirc_util",
+            "params": { "command": "power" }
+        },
+        "id": 2
     },
     volumeUp: {
         "jsonrpc": "2.0",
@@ -150,14 +150,28 @@ var defaults = {
         method: "Input.Back",
         id: 1
     },
-    Stop: {
+    Stop: [{
         jsonrpc: "2.0",
         method: "Player.Stop",
         params: {
-            playerid: "%playerid%"
+            playerid: 0
         },
         id: 1
-    },
+    }, {
+        jsonrpc: "2.0",
+        method: "Player.Stop",
+        params: {
+            playerid: 1
+        },
+        id: 1
+    }, {
+        jsonrpc: "2.0",
+        method: "Player.Stop",
+        params: {
+            playerid: 2
+        },
+        id: 1
+    }],
     "Full Screen": {
         jsonrpc: "2.0",
         method: "GUI.SetFullscreen",
@@ -300,7 +314,109 @@ var defaults = {
             repeat: "off"
         },
         id: 1
-    }
+    },
+    _activePlayers: {
+        jsonrpc: "2.0",
+        id: 0,
+        method: "Player.GetActivePlayers",
+        params: {}
+    },
+    _nowPlaying: [
+        {
+            jsonrpc: "2.0",
+            method: "Player.GetProperties",
+            id: "%playerid%",
+            params: ["%playerid%", ["percentage"]]
+        },
+        {
+            jsonrpc: "2.0",
+            method: "Player.GetItem",
+            id: 2,
+            params: ["%playerid%", ["title", "art", "thumbnail", "file", "showtitle"]]
+        }
+    ],
+    _searchByPath: [
+        {
+            jsonrpc: "2.0",
+            params: {
+                filter: {
+                    and: [
+                        {
+                            operator: "is",
+                            field: "filename",
+                            value: "%filename%"
+                        },
+                        {
+                            operator: "contains",
+                            field: "path",
+                            value: "/%pathname%/"
+                        }
+                    ]
+                },
+                properties: ["title", "art", "thumbnail", "file"]
+            },
+            method: "VideoLibrary.GetEpisodes",
+            id: "libTvShows"
+        },
+        {
+            jsonrpc: "2.0",
+            params: {
+                filter: {
+                    and: [
+                        {
+                            operator: "is",
+                            field: "filename",
+                            value: "%filename%"
+                        },
+                        {
+                            operator: "contains",
+                            field: "path",
+                            value: "/%pathname%/"
+                        }
+                    ]
+                },
+                properties: ["title", "art", "thumbnail", "file"]
+            },
+            method: "VideoLibrary.GetMovies",
+            id: "libMovies"
+        }
+    ],
+    _searchByTitle: [
+        {
+            jsonrpc: "2.0",
+            params: {
+                filter: {
+                    operator: "contains",
+                    field: "title",
+                    value: "%title%"
+                },
+                limits: {
+                    start: 0,
+                    end: 20
+                },
+                properties: ["title", "art", "thumbnail", "file", "plot"]
+            },
+            method: "VideoLibrary.GetTVShows",
+            id: "libTvShows"
+        },
+        {
+            jsonrpc: "2.0",
+            params: {
+                filter: {
+                    operator: "contains",
+                    field: "title",
+                    value: "%title%"
+                },
+                limits: {
+                    start: 0,
+                    end: 10
+                },
+                properties: ["title", "art", "thumbnail", "file", "plot"]
+            },
+            method: "VideoLibrary.GetMovies",
+            id: "libMovies"
+        }
+    ]
 }
 
 Object.keys(players).forEach(function (id) {

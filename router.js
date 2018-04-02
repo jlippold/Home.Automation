@@ -47,6 +47,31 @@ routes.get('/televisions', function (req, res, next) {
 	});
 });
 
+routes.get('/televisions/:room', function (req, res, next) {
+	var room = req.params.room;
+	lib.kodi.nowPlaying(room, function (err, json) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+			console.error(err);
+		} else {
+			res.send(json);
+		}
+	});
+});
+
+routes.get('/televisions/:room/images', function (req, res, next) {
+	var image = req.query.image;
+	var room = req.params.room;
+	
+	if (image && room) {
+		lib.kodi.getImage(room, image, res);
+	} else {
+		res.status(404);
+	}
+});
+
+
 routes.get('/televisions/:room/commands/:command', function (req, res, next) {
 	var room = req.params.room;
 	var command = req.params.command;

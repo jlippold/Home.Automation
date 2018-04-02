@@ -111,8 +111,7 @@
 		<div v-else class="row">
 			<div class="col s12 m6 l4">
 				<insteon></insteon>
-				<kodi-livingroom ref="livingroom"></kodi-livingroom>
-				<kodi-bedroom ref="bedroom"></kodi-bedroom>
+				<new-kodi></new-kodi>
 				<weather></weather>
 			</div>
 			<div class="col s12 m6 l4">
@@ -124,7 +123,7 @@
 				<swings-cam ref="swings"></swings-cam>
 			</div>
 			<div class="col s12 m6 l4">
-				<new-kodi></new-kodi>
+				
 				<devices></devices>
 				<server></server>
 				<services></services>
@@ -223,157 +222,12 @@
 	
 </template>
 
-<template id="kodi-template">
-	<div v-if="data">
-		<div class="card gesturePad" style="margin-top: 42px">
-
-			<div class="card-image waves-effect waves-block waves-light" v-if="data.item.title" v-on:click="openModal()">
-				<img :src="data.item.thumbnail">	
-				<span class="card-title">{{data.item.title}}</span>
-				<div class="progress" style="margin-top:0px">
-				  <div class="determinate" v-bind:style="{ width: data.percentage + '%' }"></div>
-				</div>
-			</div>
-			<div class="card-content" v-on:click="openModal()">
-				<span class="card-title activator grey-text text-darken-4">
-					{{data.title}}
-					<i v-on:click="search($event, data)" class="material-icons right">search</i>
-				</span>
-			</div>
-
-			<div class="card-action" style="align-items: center; display: flex; flex-direction: row; padding: 16px 0px;">
-				<div class="row" style="width: 100%; margin: 0px;">
-					<div class="col s2" v-on:click="button($event, 'power_toggle', data); button($event, 'Stop', 'kodi'); ">
-						<div style="display: flex; flex-direction: row-reverse; height: 60px; padding-top: 20px">
-							<i style="width: 30px; height: 30px; text-align: center; align-items: center;margin: 0 auto;">
-								<svg style="height: 30px; width:30px">
-									<path d="M16.56,5.44L15.11,6.89C16.84,7.94 18,9.83 18,12A6,6 0 0,1 12,18A6,6 0 0,1 6,12C6,9.83 7.16,7.94 8.88,6.88L7.44,5.44C5.36,6.88 4,9.28 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12C20,9.28 18.64,6.88 16.56,5.44M13,3H11V13H13" class=""/>
-								</svg>
-							</i>
-						</div>
-					</div>
-					<div class="col s2">
-						<div v-on:click="openCommands()" style="display: flex; flex-direction: row-reverse; height: 60px; padding-top: 20px">
-							<i style="width: 30px; height: 30px; text-align: center; align-items: center;margin: 0 auto;">
-								<svg style="height: 30px; width:30px">
-									<path fill="#000000" d="M7,5H21V7H7V5M7,13V11H21V13H7M4,4.5A1.5,1.5 0 0,1 5.5,6A1.5,1.5 0 0,1 4,7.5A1.5,1.5 0 0,1 2.5,6A1.5,1.5 0 0,1 4,4.5M4,10.5A1.5,1.5 0 0,1 5.5,12A1.5,1.5 0 0,1 4,13.5A1.5,1.5 0 0,1 2.5,12A1.5,1.5 0 0,1 4,10.5M7,19V17H21V19H7M4,16.5A1.5,1.5 0 0,1 5.5,18A1.5,1.5 0 0,1 4,19.5A1.5,1.5 0 0,1 2.5,18A1.5,1.5 0 0,1 4,16.5Z" />
-								</svg>
-							</i>
-						</div>
-					</div>
-
-					<div class="col s4" v-on:click="button($event, 'Stop', 'kodi')" v-if="data.item.title">
-						<div style="height: 60px; border-radius: 50%; background-color: rgb(3, 169, 244); width: 60px; margin: 0px auto;">
-							<i style="height:40px">
-								<svg viewBox="-2 0 28 19" preserveAspectRatio="xMidYMid meet" style="height: 50px; width: 100%;">
-									<path fill="#fff" d="M18,18H6V6H18V18Z" />
-								</svg>
-							</i>
-						</div>
-					</div>
-					<div class="col s4" v-on:click="button($event, 'on', data)" v-else>
-						<div style="height: 60px; border-radius: 50%; background-color: rgb(3, 169, 244); width: 60px; margin: 0px auto;">
-							<i style="height:40px">
-								<svg viewBox="-2 0 28 19" preserveAspectRatio="xMidYMid meet" style="height: 50px; width: 100%;">
-									<path fill="#fff" d="M8,5.14V19.14L19,12.14L8,5.14Z" />
-								</svg>
-							</i>
-						</div>
-					</div>
-
-					<div class="col s2" v-on:click="button($event, 'volume_down', data)">
-						<div style="display: flex; flex-direction: row-reverse; height: 60px; padding-top: 20px">
-							<i style="width: 30px; height: 30px; text-align: center; align-items: center;margin: 0 auto;">
-								<svg style="height: 30px; width:30px">
-								    <path fill="#000000" d="M3,9H7L12,4V20L7,15H3V9M14,11H22V13H14V11Z" />
-								</svg>
-							</i>
-						</div>
-					</div>
-					<div class="col s2" v-on:click="button($event, 'volume_up', data)">
-						<div style="display: flex; flex-direction: row-reverse; height: 60px; padding-top: 20px" >
-							<i style="width: 30px; height: 30px; text-align: center; align-items: center;margin: 0 auto;">
-								<svg style="height: 30px; width:30px">
-									<path fill="#000000" d="M3,9H7L12,4V20L7,15H3V9M14,11H17V8H19V11H22V13H19V16H17V13H14V11Z" />
-								</svg>
-							</i>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-	    <!-- Modal Structure -->    
-	    <div class="modal bottom-sheet remoteModal">
-	    	<div class="modal-content remote">
-			    <div class="row top">
-			      <div class="col s4 waves-effect waves-green btn-flat" v-on:click="button($event, 'power_toggle', data); button($event, 'Stop', 'kodi');">
-	    			  <i class="icon-power"></i>
-			      </div>
-			      <div class="col s4">
-			      </div>
-			      <div class="col s4 modal-action modal-close waves-effect waves-green btn-flat">
-	    			  <a>Close</a>
-			      </div>
-			    </div>
-			    <div class="row">
-			      <div class="col s12 waves-effect waves-green btn-flat" v-on:click="button($event, 'Up', 'kodi')">
-			      	<i class="icon-up"></i>
-			      </div>
-			    </div>
-			    <div class="row">
-			      <div class="col s4 waves-effect waves-green btn-flat" v-on:click="button($event, 'Left', 'kodi')">
-			      	<i class="icon-left"></i>
-			      </div>
-			      <div class="col s4 waves-effect waves-green btn-flat" v-on:click="button($event, 'Ok', 'kodi')">
-			      	<i class="icon-ok"></i>
-			      </div>
-			      <div class="col s4 waves-effect waves-green btn-flat" v-on:click="button($event, 'Right', 'kodi')">
-			      	<i class="icon-right"></i>
-			      </div>
-			    </div>
-			    <div class="row">
-			      <div class="col s12 waves-effect waves-green btn-flat" v-on:click="button($event, 'Down', 'kodi')">
-			      	<i class="icon-down"></i>
-			      </div>
-			    </div>
-			    <div class="row bottom">
-			      <div class="col s4 waves-effect waves-green btn-flat" v-on:click="button($event, 'Back', 'kodi')">
-			      	<i class="icon-back"></i>
-			      </div>
-			      <div class="col s4 waves-effect waves-green btn-flat" v-on:click="button($event, 'volume_down', data)">
-			      	<i class="icon-volume-down"></i>
-			      </div>
-			      <div class="col s4 waves-effect waves-green btn-flat" v-on:click="button($event, 'volume_up', data)">
-			      	 <i class="icon-volume-up"></i>
-			      </div>
-			    </div>
-	    	</div>
-	    </div>
-
-	    <div class="modal bottom-sheet commandList" style="height: 100vh; max-height: 100vh !important">
-			<div class="modal-footer">
-				<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
-			</div>
-	    	<div class="modal-content">
-			    <ul class="movie collection" style="border: none">
-			    	<li v-for="command in data.commands" class="collection-item" style="" >
-			    		<a href="#" v-on:click="runCommand($event, command.command)" style="height: 80px; text-align: center; margin: 0px auto; line-height: 80px; border: 1px solid rgba(160, 160, 160, 0.2); width: 100%; font-size: 18px;">
-			    			{{command.name}}
-			    		</a>
-			    	</li>
-			    </ul>
-	    	</div>
-	    </div>
-	</div>
-</template>
-
 <template id="new-kodi-template">
-	<div v-if="true">
+	<div>
 		<div class="card gesturePad" style="margin-top: 42px">
-			<div class="card-image waves-effect waves-block waves-light" v-if="data.item.title" v-on:click="openModal()">
-				<img :src="data.item.thumbnail">
-				<span class="card-title">{{data.item.title}}</span>
+			<div class="card-image waves-effect waves-block waves-light" v-on:click="openModal()">
+				<img :src="data.image || '/img/kodi-dark.jpg'" onerror="this.src='/img/kodi-dark.jpg';">
+				<span class="card-title">{{data.title}}</span>
 				<div class="progress" style="margin-top:0px">
 					<div class="determinate" v-bind:style="{ width: data.percentage + '%' }"></div>
 				</div>
@@ -381,7 +235,7 @@
 			<div class="card-content" v-on:click="openModal()">
 				<span class="card-title activator grey-text text-darken-4">
 					{{ roomName() }} TV
-					<i v-on:click="search($event, data)" class="material-icons right">search</i>
+					<i v-on:click="search($event, data)" class="material-icons right" v-if="false">search</i>
 				</span>
 			</div>
 			<nav class="white">
@@ -396,7 +250,7 @@
 			
 			<div class="card-action" style="align-items: center; display: flex; flex-direction: row; padding: 16px 0px;">
 				<div class="row" style="width: 100%; margin: 0px;">
-					<div class="col s2" v-on:click="button($event, 'power_toggle', data); button($event, 'Stop', 'kodi'); ">
+					<div class="col s2" v-on:click="button($event, 'powerToggle'); button($event, 'Stop');">
 						<div style="display: flex; flex-direction: row-reverse; height: 60px; padding-top: 20px">
 							<i style="width: 30px; height: 30px; text-align: center; align-items: center;margin: 0 auto;">
 								<svg style="height: 30px; width:30px">
@@ -417,7 +271,7 @@
 						</div>
 					</div>
 
-					<div class="col s4" v-on:click="button($event, 'Stop', 'kodi')" v-if="data.item.title">
+					<div class="col s4" v-on:click="button($event, 'Stop')" v-if="data.title">
 						<div style="height: 60px; border-radius: 50%; background-color: rgb(3, 169, 244); width: 60px; margin: 0px auto;">
 							<i style="height:40px">
 								<svg viewBox="-2 0 28 19" preserveAspectRatio="xMidYMid meet" style="height: 50px; width: 100%;">
@@ -426,7 +280,7 @@
 							</i>
 						</div>
 					</div>
-					<div class="col s4" v-on:click="button($event, 'on', data)" v-else>
+					<div class="col s4" v-on:click="button($event, 'Play', data)" v-else>
 						<div style="height: 60px; border-radius: 50%; background-color: rgb(3, 169, 244); width: 60px; margin: 0px auto;">
 							<i style="height:40px">
 								<svg viewBox="-2 0 28 19" preserveAspectRatio="xMidYMid meet" style="height: 50px; width: 100%;">
@@ -436,7 +290,7 @@
 						</div>
 					</div>
 
-					<div class="col s2" v-on:click="button($event, 'volume_down', data)">
+					<div class="col s2" v-on:click="button($event, 'volumeDown')">
 						<div style="display: flex; flex-direction: row-reverse; height: 60px; padding-top: 20px">
 							<i style="width: 30px; height: 30px; text-align: center; align-items: center;margin: 0 auto;">
 								<svg style="height: 30px; width:30px">
@@ -445,7 +299,7 @@
 							</i>
 						</div>
 					</div>
-					<div class="col s2" v-on:click="button($event, 'volume_up', data)">
+					<div class="col s2" v-on:click="button($event, 'volumeUp')">
 						<div style="display: flex; flex-direction: row-reverse; height: 60px; padding-top: 20px">
 							<i style="width: 30px; height: 30px; text-align: center; align-items: center;margin: 0 auto;">
 								<svg style="height: 30px; width:30px">
@@ -459,10 +313,10 @@
 		</div>
 
 		<!-- Modal Structure -->
-		<div class="modal bottom-sheet remoteModal">
+		<div class="modal bottom-sheet remoteModal1">
 			<div class="modal-content remote">
 				<div class="row top">
-					<div class="col s4 waves-effect waves-green btn-flat" v-on:click="button($event, 'power_toggle', data); button($event, 'Stop', 'kodi');">
+					<div class="col s4 waves-effect waves-green btn-flat" v-on:click="button($event, 'powerToggle'); button($event, 'Stop');">
 						<i class="icon-power"></i>
 					</div>
 					<div class="col s4">
@@ -472,49 +326,49 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="col s12 waves-effect waves-green btn-flat" v-on:click="button($event, 'Up', 'kodi')">
+					<div class="col s12 waves-effect waves-green btn-flat" v-on:click="button($event, 'Up')">
 						<i class="icon-up"></i>
 					</div>
 				</div>
 				<div class="row">
-					<div class="col s4 waves-effect waves-green btn-flat" v-on:click="button($event, 'Left', 'kodi')">
+					<div class="col s4 waves-effect waves-green btn-flat" v-on:click="button($event, 'Left')">
 						<i class="icon-left"></i>
 					</div>
-					<div class="col s4 waves-effect waves-green btn-flat" v-on:click="button($event, 'Ok', 'kodi')">
+					<div class="col s4 waves-effect waves-green btn-flat" v-on:click="button($event, 'Ok')">
 						<i class="icon-ok"></i>
 					</div>
-					<div class="col s4 waves-effect waves-green btn-flat" v-on:click="button($event, 'Right', 'kodi')">
+					<div class="col s4 waves-effect waves-green btn-flat" v-on:click="button($event, 'Right')">
 						<i class="icon-right"></i>
 					</div>
 				</div>
 				<div class="row">
-					<div class="col s12 waves-effect waves-green btn-flat" v-on:click="button($event, 'Down', 'kodi')">
+					<div class="col s12 waves-effect waves-green btn-flat" v-on:click="button($event, 'Down')">
 						<i class="icon-down"></i>
 					</div>
 				</div>
 				<div class="row bottom">
-					<div class="col s4 waves-effect waves-green btn-flat" v-on:click="button($event, 'Back', 'kodi')">
+					<div class="col s4 waves-effect waves-green btn-flat" v-on:click="button($event, 'Back')">
 						<i class="icon-back"></i>
 					</div>
-					<div class="col s4 waves-effect waves-green btn-flat" v-on:click="button($event, 'volume_down', data)">
+					<div class="col s4 waves-effect waves-green btn-flat" v-on:click="button($event, 'volumeDown')">
 						<i class="icon-volume-down"></i>
 					</div>
-					<div class="col s4 waves-effect waves-green btn-flat" v-on:click="button($event, 'volume_up', data)">
+					<div class="col s4 waves-effect waves-green btn-flat" v-on:click="button($event, 'volumeUp')">
 						<i class="icon-volume-up"></i>
 					</div>
 				</div>
 			</div>
 		</div>
 
-		<div class="modal bottom-sheet commandList" style="height: 100vh; max-height: 100vh !important">
+		<div class="modal bottom-sheet commandList1" style="height: 100vh; max-height: 100vh !important">
 			<div class="modal-footer">
 				<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
 			</div>
 			<div class="modal-content">
 				<ul class="movie collection" style="border: none">
 					<li v-for="command in data.commands" class="collection-item" style="">
-						<a href="#" v-on:click="runCommand($event, command.command)" style="height: 80px; text-align: center; margin: 0px auto; line-height: 80px; border: 1px solid rgba(160, 160, 160, 0.2); width: 100%; font-size: 18px;">
-							{{command.name}}
+						<a href="#" v-on:click="button($event, command)" style="height: 80px; text-align: center; margin: 0px auto; line-height: 80px; border: 1px solid rgba(160, 160, 160, 0.2); width: 100%; font-size: 18px;">
+							{{command}}
 						</a>
 					</li>
 				</ul>
