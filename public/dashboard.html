@@ -225,7 +225,7 @@
 <template id="new-kodi-template">
 	<div>
 		<div class="card gesturePad" style="margin-top: 42px">
-			<div class="card-image waves-effect waves-block waves-light" v-on:click="openModal()">
+			<div class="card-image" v-on:click="openModal()">
 				<img :src="data.image || '/img/kodi-dark.jpg'" onerror="this.src='/img/kodi-dark.jpg';">
 				<span class="card-title">{{data.title}}</span>
 				<div class="progress" style="margin-top:0px">
@@ -235,7 +235,9 @@
 			<div class="card-content" v-on:click="openModal()">
 				<span class="card-title activator grey-text text-darken-4">
 					{{ roomName() }} TV
-					<i v-on:click="search($event, data)" class="material-icons right" v-if="false">search</i>
+					<a :href="'jedbz:///browse#' + roomName()" v-on:click="blockModal($event)">
+						<i class="material-icons right">search</i>
+					</a>
 				</span>
 			</div>
 			<nav class="white">

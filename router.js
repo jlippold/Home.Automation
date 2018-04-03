@@ -87,6 +87,37 @@ routes.get('/televisions/:room/commands/:command', function (req, res, next) {
 	});
 });
 
+routes.get('/televisions/:room/shows/:showid', function (req, res, next) {
+	var room = req.params.room;
+	var showid = req.params.showid;
+
+	lib.kodi.episodes(room, showid, function (err, json) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+			console.error(err);
+		} else {
+			res.send(json);
+		}
+	});
+});
+
+routes.get('/televisions/:room/play/:type/:id', function (req, res, next) {
+	var room = req.params.room;
+	var type = req.params.type;
+	var id = req.params.id;
+
+	lib.kodi.play(room, type, id, function (err, json) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+			console.error(err);
+		} else {
+			res.send(json);
+		}
+	});
+});
+
 routes.get('/insteon', function (req, res, next) {
 	api.insteon.listDevices(function (err, devices) {
 		if (err) {
@@ -473,13 +504,39 @@ routes.post('/mobile/register', function (req, res, next) {
 
 routes.post('/mobile/snooze', function (req, res, next) {
 	var minutes = req.body.minutes;
-	api.mobile.snooze(minutes, function (err) {
+	lib.motion.snooze(minutes, function (err) {
 		if (err) {
 			res.status(500);
 			res.send(err);
 			console.error(err);
 		} else {
 			res.sendStatus(200);
+		}
+	});
+});
+
+routes.get('/snooze/:minutes', function (req, res, next) {
+	var minutes = req.params.minutes;
+	lib.motion.snooze(minutes, function (err) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+			console.error(err);
+		} else {
+			res.sendStatus(200);
+		}
+	});
+});
+
+routes.get('/snooze', function (req, res, next) {
+	lib.motion.snoozeEnabled(function (err, result) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+			console.error(err);
+		} else {
+			res.send(result);
+			//res.sendStatus(200);
 		}
 	});
 });

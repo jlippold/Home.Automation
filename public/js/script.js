@@ -1160,9 +1160,8 @@ $(document).ready(function () {
       openCommands: function () {
         $(this.$el).find("div.commandList1").modal("open");
       },
-      search: function (event, device) {
+      blockModal: function (event) {
         event.stopPropagation();
-        vm.$refs.results.open(this.roomName());
         return false;
       },
       button: function (event, command) {

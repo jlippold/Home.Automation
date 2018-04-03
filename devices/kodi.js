@@ -381,6 +381,49 @@ var defaults = {
             id: "libMovies"
         }
     ],
+    _play: { 
+        "jsonrpc": "2.0", 
+        "method": "Player.Open", 
+        "params": { 
+            "item": { "%type%": "%item_id%" } 
+        }, 
+        "id": 1 
+    },
+    _getLiveTV: { 
+        "jsonrpc": "2.0", 
+        "method": "PVR.GetChannels", 
+        "params": { 
+            "channelgroupid": "alltv", 
+            "properties": ["channelnumber", "broadcastnow"]
+        }, 
+        "id": 1 
+    },
+    _getTVShows: {
+        "jsonrpc": "2.0",
+        "method": "VideoLibrary.GetTVShows",
+        "params": {
+            "properties": ["year", "plot"],
+            "sort": { "order": "ascending", "method": "label" }
+        },
+        "id": "libTvShows"
+    },
+    _getEpisodes: {
+        "jsonrpc": "2.0",
+        "method": "VideoLibrary.GetEpisodes",
+        "params": {
+            "tvshowid": "%show_id%"
+        },
+        "id": "libEpisodes"
+    },
+    _getMovies: {
+        "jsonrpc": "2.0",
+        "method": "VideoLibrary.GetMovies",
+        "params": {
+            "properties": ["year", "plot"],
+            "sort": { "order": "ascending", "method": "label" }
+        },
+        "id": "libMovies"
+    },
     _searchByTitle: [
         {
             jsonrpc: "2.0",
