@@ -225,7 +225,7 @@ function server(callback) {
 	if (!require('fs').existsSync(scriptPath)) {
 		return callback("file not found");
 	}
-	var child = spawn(scriptPath);
+	var child = spawn(scriptPath, [], { windowsHide: true });
 	var output = "";
 	var err = "";
 	child.stdout.on('data',

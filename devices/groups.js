@@ -66,6 +66,28 @@ module.exports = {
             "description": "Living Room Lamp"
         }]
     },
+    "bedroom_lights": {
+        "name": "Bedroom",
+        "icon": "icon-bedroom",
+        "on": [{
+            "type": "insteon",
+            "id": "3F4B99",
+            "description": "ceiling light"
+        }, {
+            "type": "lifx",
+            "id": "d073d5125481",
+            "description": "Bedroom Lamp"
+        }],
+        "off": [{
+            "type": "insteon",
+            "id": "3F4B99",
+            "description": "ceiling light"
+        }, {
+            "type": "lifx",
+            "id": "d073d5125481",
+            "description": "Bedroom Lamp"
+        }]
+    },
     "bedroom": {
         "name": "Bedroom",
         "icon": "icon-bedroom",

@@ -104,7 +104,7 @@ function liveStream(cam, local, callback) {
     if (err) return callback(err);
 
     liveStreams.push(cam.name);
-    var stream = spawn(ffmpeg, args);
+    var stream = spawn(ffmpeg, args, { windowsHide: true });
 
     stream.on('close', (code) => {
       //remove from lookup array
@@ -149,8 +149,8 @@ function createGif(cam, night, callback) {
       "-y", "-t", "3", "-i", cam.streamLow, "-i", palette,
       "-filter_complex", "fps=10,scale=0:-1:flags=lanczos[x];[x][1:v]paletteuse", gif
     ];
-    var gifStream = spawn(ffmpeg, gifArgs);
-    console.log("Creating gif: ", ffmpeg, gifArgs.join(" "));
+    var gifStream = spawn(ffmpeg, gifArgs, { windowsHide: true });
+    //console.log("Creating gif: ", ffmpeg, gifArgs.join(" "));
     gifStream.on('close', (code) => {
       done(null, gif);
     });
@@ -173,8 +173,8 @@ function createGif(cam, night, callback) {
         "-vf", "fps=10,scale=0:-1:flags=lanczos,palettegen",
         palette
       ];
-      var paletteStream = spawn(ffmpeg, args);
-      console.log("Gif palette: ", ffmpeg, args.join(" "));
+      var paletteStream = spawn(ffmpeg, args, { windowsHide: true });
+      //console.log("Gif palette: ", ffmpeg, args.join(" "));
       paletteStream.on('close', (code) => {
         makeGif(callback);
       });
@@ -198,7 +198,7 @@ var downloader = function (callback) {
 
         var args = ["-i", cam.streamLow,
           "-vf", "fps=fps=1", "-update", "1", pic, "-y"];
-        var ls = spawn(ffmpeg, args);
+        var ls = spawn(ffmpeg, args, { windowsHide: true });
         var interval;
 
         ls.on('close', (code) => {

@@ -26,7 +26,15 @@ if (process.env.NODE_ENV == "production") {
 }
 
 
-require("console-stamp")(console, { pattern: "yyyy-mm-dd HH:MM:ss" });
+require("console-stamp")(console, {
+	pattern: ".", 
+	colors: {
+		stamp: 'blue',
+		label: 'green',
+		metadata: 'red'
+	}
+});
+
 
 /*
 var basic = auth.basic({
@@ -73,8 +81,6 @@ app.use(function (err, req, res, next) {
 	res.status(err.status || 500);
 	res.type('txt').send(JSON.stringify(err));
 });
-
-
 
 async.auto({
 	camWatcher: function (next) {

@@ -41,6 +41,24 @@ routes.get('/api/groups', function (req, res, next) {
 	});
 });
 
+routes.get('/alexa/:deviceType/:status', function (req, res, next) {
+	var deviceType = req.params.deviceType;
+	var status = req.params.status;
+	if (["on", "off"].indexOf(status) == -1) {
+		return res.status(404);
+	}
+
+	api.alexa.runAlexaAction(deviceType, status, function(err, json) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+			console.error(err);
+		} else {
+			res.send(json);
+		}
+	});
+});
+
 routes.get('/televisions', function (req, res, next) {
 	api.kodi.listDevices(function (err, devices) {
 		res.send(devices);
