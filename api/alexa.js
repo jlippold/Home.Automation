@@ -7,7 +7,7 @@ var lib = require("../lib/");
 function runAlexaAction(deviceType, status, callback) {
     var currentAlexa;
     var bash = spawn("bash.exe", ["-c", 'bash ~/alexa_remote_control.sh -lastalexa'], { cwd: "C:\\Windows\\Sysnative", windowsHide: true });
-
+   
     bash.stdout.on('data', function (data) {
         currentAlexa = data.toString();
         bash.kill();
@@ -26,7 +26,7 @@ function runAlexaAction(deviceType, status, callback) {
         });
 
         if (action) {
-               return action.devices[deviceType](currentAlexa, status, callback);
+            return action.devices[deviceType](currentAlexa, status, callback);
         } else {
             console.error("Error finding device", currentAlexa, deviceType, status);
             return callback("Unknown Room");
@@ -42,6 +42,12 @@ function getDeviceMap() {
             devices: {
                 TV: function(device, status, callback) {
                     lib.groups.setStatus("br-tv", status, callback)
+                },
+                Disney: function (device, status, callback) {
+                    lib.kodi.playChannelByName("Bedroom", "Disney Junior", callback);
+                },
+                CNN: function (device, status, callback) {
+                    lib.kodi.playChannelByName("Bedroom", "CNN", callback);
                 }
             }
         },
@@ -62,10 +68,16 @@ function getDeviceMap() {
             }
         },
         {
-            alexas: ["Living Room", "Dining Room", "Kitchen"],
+            alexas: ["Living room", "Dining Room", "Kitchen"],
             devices: {
                 TV: function (device, status, callback) {
                     lib.groups.setStatus("lr-tv", status, callback)
+                },
+                Disney: function (device, status, callback) {
+                    lib.kodi.playChannelByName("Living", "Disney Junior", callback);
+                },
+                CNN: function (device, status, callback) {
+                    lib.kodi.playChannelByName("Living", "CNN", callback);
                 }
             }
         },
@@ -75,11 +87,19 @@ function getDeviceMap() {
                 TV: function (device, status, callback) {
                     device = device == "Basement" ? "Gym" : device;
                     api.kodi.execute(device, "powerToggle", callback) 
+                },
+                Disney: function (device, status, callback) {
+                    device = device == "Basement" ? "Gym" : device;
+                    lib.kodi.playChannelByName(device, "Disney Junior", callback);
+                },
+                CNN: function (device, status, callback) {
+                    device = device == "Basement" ? "Gym" : device;
+                    lib.kodi.playChannelByName(device, "CNN", callback);
                 }
             }
         },
         {
-            alexas: ["Living Room"],
+            alexas: ["Living room"],
             devices: {
                 Light: function (device, status, callback) {
                     lib.groups.setStatus("livingroom_lights", status, callback)
@@ -104,26 +124,6 @@ function getDeviceMap() {
         }
     ];
 
-
-    calls.forEach(function (call) {
-        if (call.devices.hasOwnProperty("TV")) {
-
-            call.devices.CNN = function (device, status, callback) {
-                device = device == "Basement" ? "Gym" : device;
-                lib.kodi.play(device, "channelid", 5, callback);
-            };
-
-            call.devices.Disney = function (device, status, callback) {
-                device = device == "Basement" ? "Gym" : device;
-                lib.kodi.play(device, "channelid", 28, callback);
-            };
-            /*
-            call.devices["Kids Movie"] = function (device, status, callback) {
-            call.devices["Movie"] = function (device, status, callback) {
-            call.devices["FGTV"] = function (device, status, callback) {
-            */
-        }
-    });
     return calls;
-    
+
 }

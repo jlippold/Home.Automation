@@ -42,19 +42,17 @@ routes.get('/api/groups', function (req, res, next) {
 });
 
 routes.get('/alexa/:deviceType/:status', function (req, res, next) {
+	console.log("Alexa command called");
 	var deviceType = req.params.deviceType;
 	var status = req.params.status;
-	if (["on", "off"].indexOf(status) == -1) {
+	if (["on", "off"].indexOf(status.toLowerCase()) == -1) {
 		return res.status(404);
 	}
 
+	res.send({status: "enqueue"});
 	api.alexa.runAlexaAction(deviceType, status, function(err, json) {
 		if (err) {
-			res.status(500);
-			res.send(err);
-			console.error(err);
-		} else {
-			res.send(json);
+			console.error(deviceType, status, err, json);
 		}
 	});
 });

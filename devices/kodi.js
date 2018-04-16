@@ -1,6 +1,7 @@
 var players = {
     "Living": {
         ip: "192.168.1.35",
+        hostname: "livroom",
         commands: {
             powerToggle: {
                 "type": "harmony",
@@ -11,16 +12,22 @@ var players = {
                 "status": "on"
             },
             on: {
-                "type": "group",
-                "id": "lr-tv",
-                "description": "Living Room TV",
-                "status": "on"
+                "jsonrpc": "2.0",
+                "method": "Addons.ExecuteAddon",
+                "params": {
+                    "addonid": "script.flirc_util",
+                    "params": { "command": "power_on" }
+                },
+                "id": 2
             },
             off: {
-                "type": "group",
-                "id": "lr-tv",
-                "description": "Living Room TV",
-                "status": "off"
+                "jsonrpc": "2.0",
+                "method": "Addons.ExecuteAddon",
+                "params": {
+                    "addonid": "script.flirc_util",
+                    "params": { "command": "power_off" }
+                },
+                "id": 2
             },
             volumeUp: {
                 "type": "harmony",
@@ -42,6 +49,7 @@ var players = {
     },
     "Bedroom": {
         ip: "192.168.1.98",
+        hostname: "bedroom",
         commands: {
             powerToggle: {
                 "type": "harmony",
@@ -52,16 +60,22 @@ var players = {
                 "status": "on"
             },
             on: {
-                "type": "group",
-                "id": "br-tv",
-                "description": "Bedroom TV",
-                "status": "on"
+                "jsonrpc": "2.0",
+                "method": "Addons.ExecuteAddon",
+                "params": {
+                    "addonid": "script.flirc_util",
+                    "params": { "command": "power_on" }
+                },
+                "id": 2
             },
             off: {
-                "type": "group",
-                "id": "br-tv",
-                "description": "Bedroom TV",
-                "status": "off"
+                "jsonrpc": "2.0",
+                "method": "Addons.ExecuteAddon",
+                "params": {
+                    "addonid": "script.flirc_util",
+                    "params": { "command": "power_off" }
+                },
+                "id": 2
             },
             volumeUp: {
                 "type": "harmony",
@@ -82,18 +96,21 @@ var players = {
         },
     },
     "Gym": {
-        ip: "192.168.1.83"
+        ip: "192.168.1.83",
+        hostname: "basement"
     },
     "Office": {
-        ip: "192.168.1.151"
+        ip: "192.168.1.151",
+        hostname: "office"
     },
     "Layla": {
-        ip: "192.168.1.75"
+        ip: "192.168.1.75",
+        hostname: "layla"
     }
 };
 
 var defaults = {
-    powerToggle: {
+    powerToggle: [{
         "jsonrpc": "2.0",
         "method": "Addons.ExecuteAddon",
         "params": {
@@ -101,7 +118,28 @@ var defaults = {
             "params": { "command": "power" }
         },
         "id": 2
-    },
+    }, {
+        jsonrpc: "2.0",
+        method: "Player.Stop",
+        params: {
+            playerid: 0
+        },
+        id: 1
+    }, {
+        jsonrpc: "2.0",
+        method: "Player.Stop",
+        params: {
+            playerid: 1
+        },
+        id: 1
+    }, {
+        jsonrpc: "2.0",
+        method: "Player.Stop",
+        params: {
+            playerid: 2
+        },
+        id: 1
+    }],
     volumeUp: {
         "jsonrpc": "2.0",
         "method": "Addons.ExecuteAddon",
@@ -243,6 +281,12 @@ var defaults = {
         method: "System.Reboot",
         id: 1
     },
+    /*
+    "ssh Reboot": {
+        "type": "ssh",
+        "command": "/sbin/shutdown -r -h now"
+    },
+    */
     "Next Item": {
         jsonrpc: "2.0",
         method: "Player.GoTo",
@@ -381,22 +425,22 @@ var defaults = {
             id: "libMovies"
         }
     ],
-    _play: { 
-        "jsonrpc": "2.0", 
-        "method": "Player.Open", 
-        "params": { 
-            "item": { "%type%": "%item_id%" } 
-        }, 
-        "id": 1 
+    _play: {
+        "jsonrpc": "2.0",
+        "method": "Player.Open",
+        "params": {
+            "item": { "%type%": "%item_id%" }
+        },
+        "id": 1
     },
-    _getLiveTV: { 
-        "jsonrpc": "2.0", 
-        "method": "PVR.GetChannels", 
-        "params": { 
-            "channelgroupid": "alltv", 
+    _getLiveTV: {
+        "jsonrpc": "2.0",
+        "method": "PVR.GetChannels",
+        "params": {
+            "channelgroupid": "alltv",
             "properties": ["channelnumber", "broadcastnow"]
-        }, 
-        "id": 1 
+        },
+        "id": 1
     },
     _getTVShows: {
         "jsonrpc": "2.0",
