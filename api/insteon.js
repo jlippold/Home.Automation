@@ -65,7 +65,6 @@ function register(callback) {
 		toggle.on('turnOff', registerButtonPress);
 	});
 
-
 	hub.connect(devices.hub.ip, function(err) {
 		callback(err);
 	});

@@ -15,7 +15,7 @@ function runAlexaAction(deviceType, status, callback) {
 
     bash.on('close', function (code) {
         currentAlexa = currentAlexa.replace(/(\r\n\t|\n|\r\t)/gm, "").trim();
-    
+        
         var deviceMap = getDeviceMap();
         var action = deviceMap.find(function(d) {
             if (d.alexas.indexOf(currentAlexa) > -1) {
@@ -25,6 +25,7 @@ function runAlexaAction(deviceType, status, callback) {
             }
         });
 
+        console.log("alexa", currentAlexa, deviceType, status, action);
         if (action) {
             return action.devices[deviceType](currentAlexa, status, callback);
         } else {

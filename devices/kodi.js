@@ -48,7 +48,7 @@ var players = {
         }
     },
     "Bedroom": {
-        ip: "192.168.1.98",
+        ip: "192.168.1.140",
         hostname: "bedroom",
         commands: {
             powerToggle: {
@@ -96,7 +96,7 @@ var players = {
         },
     },
     "Gym": {
-        ip: "192.168.1.83",
+        ip: "192.168.1.41",
         hostname: "basement"
     },
     "Office": {
@@ -106,6 +106,10 @@ var players = {
     "Layla": {
         ip: "192.168.1.75",
         hostname: "layla"
+    },
+    "Cora": {
+        ip: "192.168.1.84",
+        hostname: "cora"
     }
 };
 

@@ -76,18 +76,6 @@
 					Router
 				</a>
 			</li>
-			<li>
-				<a class="waves-effect" href="/kodi-lr/#remote">
-					<i class="icon icon-kodi"></i>
-					Kodi Living Room
-				</a>
-			</li>
-			<li>
-				<a class="waves-effect" href="/kodi-br/#remote">
-					<i class="icon icon-kodi"></i>
-					Kodi BedRoom
-				</a>
-			</li>
 		</ul>
 
 		<div class="navbar-fixed" id="mainNav" style="display: none">
@@ -111,7 +99,7 @@
 		<div v-else class="row">
 			<div class="col s12 m6 l4">
 				<insteon></insteon>
-				<new-kodi></new-kodi>
+				<new-kodi ref="newkodi"></new-kodi>
 				<weather></weather>
 			</div>
 			<div class="col s12 m6 l4">
@@ -232,24 +220,24 @@
 					<div class="determinate" v-bind:style="{ width: data.percentage + '%' }"></div>
 				</div>
 			</div>
-			<div class="card-content" v-on:click="openModal()">
-				<span class="card-title activator grey-text text-darken-4">
-					{{ roomName() }} TV
-					<a :href="'jedbz:///browse#' + roomName()" v-on:click="blockModal($event)">
-						<i class="material-icons right">search</i>
-					</a>
-				</span>
-			</div>
-			<nav class="white">
-				<div class="nav-wrapper">
-					<ul id="nav-mobile" class="left" style="width:100%">
-						<li v-for="(room, index) in data.rooms" :key="index" v-bind:class="{ active: index == data.roomIndex }" style="width: 20%">
-							<a v-on:click="selectRoomByIndex($event, index)" style="text-align:center" class="black-text">{{room}}</a>
-						</li>
-					</ul>
+			<div class="card-content">
+				<div class="row" style="margin: 0">
+					<div class="col s1" style="padding-top: 7px">
+						<a :href="'jedbz:///browse#' + roomName()" v-on:click="blockModal($event)">
+							<i class="material-icons right">search</i>
+						</a>
+					</div>
+					<div class="col s11" style="padding: 0; padding-left: 20px">
+						<select v-model="data.roomIndex" class="browser-default custom-select">
+							<option v-for="(room, index) in data.rooms" v-bind:value="index">
+								{{getRoomNameByIndex(index)}}
+							</option>
+						</select>
+					</div>
+
 				</div>
-			</nav>
-			
+			</div>
+
 			<div class="card-action" style="align-items: center; display: flex; flex-direction: row; padding: 16px 0px;">
 				<div class="row" style="width: 100%; margin: 0px;">
 					<div class="col s2" v-on:click="button($event, 'powerToggle'); button($event, 'Stop');">
@@ -367,9 +355,9 @@
 				<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
 			</div>
 			<div class="modal-content">
-				<ul class="movie collection" style="border: none">
+				<ul class="collection" style="border: none">
 					<li v-for="command in data.commands" class="collection-item" style="">
-						<a href="#" v-on:click="button($event, command)" style="height: 80px; text-align: center; margin: 0px auto; line-height: 80px; border: 1px solid rgba(160, 160, 160, 0.2); width: 100%; font-size: 18px;">
+						<a href="#" v-on:click="button($event, command)" style="line-height: 47px;width: 100%; display: block; font-size: 18px; text-align: center;">
 							{{command}}
 						</a>
 					</li>
