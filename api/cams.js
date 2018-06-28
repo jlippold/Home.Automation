@@ -38,7 +38,8 @@ var cams = [
   { ip: "192.168.1.203", name: "sidedoor" },
   { ip: "192.168.1.204", name: "porch" },
   { ip: "192.168.1.205", name: "driveway" },
-  { ip: "192.168.1.206", name: "swings" }
+  { ip: "192.168.1.206", name: "swings" },
+  { ip: "192.168.1.207", name: "generator" }
 ];
 
 cams = cams.map(function (cam) {

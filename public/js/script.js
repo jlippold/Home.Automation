@@ -1,5 +1,5 @@
 var vm;
-var base_url = "https://jed.bz/";
+var base_url = "https://home.jed.bz:999/";
 
 var state = {
   search: {
@@ -59,6 +59,20 @@ var state = {
       url: "/camera/live/loadCam.aspx",
       qs: "?cam=basement",
       legacyUrl: "/camera/live/loadCam.aspx?cam=basement",
+      timestamp: new Date(),
+      lastCheck: new Date(),
+      enabled: true,
+      urls: {
+        live: "#",
+        motion: "#"
+      }
+    },
+    generator: {
+      title: "Generator",
+      id: "generator",
+      url: "/camera/live/loadCam.aspx",
+      qs: "?cam=generator",
+      legacyUrl: "/camera/live/loadCam.aspx?cam=generator",
       timestamp: new Date(),
       lastCheck: new Date(),
       enabled: true,
@@ -1745,6 +1759,14 @@ $(document).ready(function () {
     }
   });
 
+  var GeneratorCam = Camera.extend({
+    data: function () {
+      return {
+        data: state.cameras.generator
+      };
+    }
+  });
+
   var SideDoorCam = Camera.extend({
     data: function () {
       return {
@@ -1777,6 +1799,7 @@ $(document).ready(function () {
       "garage-cam": GarageCam,
       "basement-cam": BasementCam,
       "swings-cam": SwingsCam,
+      "generator-cam": GeneratorCam,
       "sidedoor-cam": SideDoorCam,
       "driveway-cam": DrivewayCam,
       recordings: Recordings,
