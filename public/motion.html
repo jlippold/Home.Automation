@@ -1,0 +1,96 @@
+<!DOCTYPE html>  
+<html>
+<head>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">  
+	<link type="text/css" rel="stylesheet" href="/home/css/materialize.min.css"  media="screen,projection"/>  
+	<link type="text/css" rel="stylesheet" href="/home/css/dashboard.css?r=0.9"  media="screen,projection"/>  
+	<link type="text/css" rel="stylesheet" href="/pub/css/font.css?r=0.2" />  
+	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"> 
+</head>
+
+<body>
+	<div id="app">
+		<recordings></recordings>
+	</div>
+
+<template id="recordings-template">
+    <div>
+        <nav class="blue darken-1 center">
+            <h5 v-if="currentEvent" style="line-height: 60px">
+                {{ getHeader(currentEvent) }}
+            </h5>
+        </nav>
+
+        <br />
+
+        <div class="row">
+            <div v-if="currentEvent" class="col s12" style="text-align: center; padding-bottom: 20px">
+                <video id="video" class="responsive-video z-depth-2" controls playsinline loop autoplay>
+                    <source :src='currentEventVideo' type="video/mp4">
+                </video>
+            </div>
+        </div>
+
+        <hr />
+        
+        <div class="row" style="padding-bottom: 0px">
+            <div class="col s6">
+                <ul v-if="previousDayLabel()" class="pagination">
+                    <li>
+                        <a href="#!" v-on:click="previousDay()">
+                            <i style="float: left" class="material-icons">chevron_left</i>
+                            <span style="float: left">{{ previousDayLabel() }}</span>
+                        </a>
+                    </li>
+                </ul>
+                <ul v-else class="pagination">
+                    <li class="disabled">
+                        <a href="#!" >
+                            <i class="material-icons">chevron_left</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col s6" style="text-align: right">
+                <ul v-if="nextDayLabel()" class="pagination">
+                    <li>
+                        <a href="#!" v-on:click="nextDay()">
+                            <i style="float: right" class="material-icons">chevron_right</i>
+                            <span style="float: right">{{ nextDayLabel()}}</span>
+                        </a>
+                    </li>
+                </ul>
+                <ul v-else class="pagination">
+                    <li class="disabled">
+                        <a href="#!" >
+                            <i class="material-icons">chevron_right</i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row">
+            <div v-for="(event, idx) in todaysEvents" class="col s4">
+                <img v-on:click="data.eventIndex = idx" src="/img/cam-placeholder.png" :data-src='"/stream/gif/" + data.currentDay + "/" + event.filename + ".gif"' class="camImage z-depth-2" style="width: 100%">
+                <span v-if="idx == data.eventIndex" class="blue darken-1" style="color: white; font-weight: 500; text-align: center; display:block; width: 100%; margin-bottom: 4px;">
+                    {{ getCaption(event) }}
+                </span>
+                <span v-else style="text-align: center; display:block; width: 100%; margin-bottom: 4px;">
+                    {{ getCaption(event) }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+</template>
+
+	<script type="text/javascript" src="/home/js/jquery.js"></script>
+	<script type="text/javascript" src="/home/js/materialize.min.js"></script>
+	<script type="text/javascript" src="/home/js/vue.min.js"></script>
+	<script type="text/javascript" src="/home/js/async.min.2.1.4.js"></script>
+	<script type="text/javascript" src="/home/js/moment.js"></script>
+    <script type="text/javascript" src="/home/js/common.js"></script>
+    <script type="text/javascript" src="/home/js/motion.js"></script>
+</body>
+</html>

@@ -124,54 +124,52 @@ var keypads = {
             "1": {
                 "type": "harmony",
                 "id": "livingroom",
-                "device": "43708766",
-                "command": "F2",
-                "description": "TV On",
+                "device": "43708749",
+                "command": "PowerToggle",
+                "description": "TV Toggle",
                 "status": "on"
             },
             "2": {
-                "type": "harmony",
-                "id": "livingroom",
-                "device": "43708766",
-                "command": "F1",
-                "description": "TV off",
-                "status": "on"
-            },
-            "3": {
-                "type": "group",
-                "id": "livingroom_lights",
-                "description": "Living Room",
-                "status": "on"
-            },
-            "4": {
-                "type": "group",
-                "id": "livingroom_lights",
-                "description": "Living Room",
-                "status": "off"
-            },
-            "5": {
-                "type": "group",
-                "id": "dining_room",
-                "description": "Dining Room",
-                "status": "on"
-            },
-            "6": {
-                "type": "group",
-                "id": "dining_room",
-                "description": "Dining Room",
-                "status": "off"
-            },
-            "7": {
                 "type": "insteon",
                 "id": "1F527C",
                 "description": "fireplace",
                 "status": "toggle"
             },
-            "8": {
-                "type": "group",
-                "id": "bedroom",
-                "description": "bedroom",
+            "3": {
+                "type": "switchmate",
+                "id": "sm-living",
+                "description": "Living Room",
                 "status": "off"
+            },
+            "4": {
+                "type": "switchmate",
+                "id": "sm-living",
+                "description": "Living Room",
+                "status": "on"
+            },
+            "5": {
+                "type": "insteon",
+                "id": "3E4300",
+                "description": "Dining Room",
+                "status": "off"
+            },
+            "6": {
+                "type": "group",
+                "id": "kitchen",
+                "description": "Kitchen Room",
+                "status": "off"
+            },
+            "7": {
+                "type": "switchmate",
+                "id": "sm-dining",
+                "description": "Zoo",
+                "status": "off"
+            },
+            "8": {
+                "type": "switchmate",
+                "id": "sm-dining",
+                "description": "Zoo",
+                "status": "on"
             }
         }
     },
@@ -183,18 +181,16 @@ var keypads = {
             "1": {
                 "type": "harmony",
                 "id": "bedroom",
-                "device": "43709382",
-                "command": "F2",
-                "description": "TV on",
+                "device": "43709373",
+                "command": "PowerToggle",
+                "description": "TV toggle",
                 "status": "on"
             },
             "2": {
-                "type": "harmony",
-                "id": "bedroom",
-                "device": "43709382",
-                "command": "F1",
-                "description": "TV off",
-                "status": "on"
+                "type": "lifx",
+                "id": "d073d5125481",
+                "description": "Lamp",
+                "status": "toggle"
             },
             "3": {
                 "type": "insteon",
@@ -203,33 +199,33 @@ var keypads = {
                 "status": "toggle"
             },
             "4": {
-                "type": "insteon",
-                "id": "3F4B99_FAN",
-                "description": "Ceiling Fan",
-                "status": "toggle"
-            },
-            "5": {
                 "type": "lifx",
                 "id": "d073d5125481",
                 "description": "Lamp",
                 "status": "toggle"
             },
+            "5": {
+                "type": "insteon",
+                "id": "3F4B99_FAN",
+                "description": "Fan",
+                "status": "toggle"
+            },
             "6": {
-                "type": "group",
-                "id": "bedroom",
-                "description": "bedroom",
+                "type": "switchmate",
+                "id": "sm-living",
+                "description": "Living Room",
                 "status": "off"
             },
             "7": {
                 "type": "group",
-                "id": "dining_room",
-                "description": "Dining Room",
+                "id": "bedroom_lights",
+                "description": "bedroom",
                 "status": "off"
             },
             "8": {
                 "type": "group",
-                "id": "livingroom",
-                "description": "Living Room",
+                "id": "kitchen",
+                "description": "kitchen",
                 "status": "off"
             }
         }
@@ -257,13 +253,14 @@ var switches = {
     "3C2BBD": {
         "description": "Bathroom",
         "icon": "icon-bathroom",
+        "alexaNames": ["bathroom", "bathroom lights"],
         "group": "Bedroom",
         "type": "switch",
         "hasManualOverride": true,
         "enabled": true
     },
     "3E4300": {
-        "description": "Family Room",
+        "description": "Dining Room",
         "icon": "icon-lightbulb",
         "group": "Living Room",
         "type": "switch",
@@ -312,6 +309,7 @@ var switches = {
     },
     "3F4B99_FAN": {
         "description": "Fan",
+        "alexaNames": ["fan", "bedroom fan"],
         "icon": "icon-fan",
         "group": "Bedroom",
         "hasManualOverride": false,
@@ -321,14 +319,6 @@ var switches = {
     "2F5595": {
         "description": "Window Lamp",
         "icon": "icon-lamp2",
-        "group": "Dining Room",
-        "hasManualOverride": false,
-        "type": "switch",
-        "enabled": false
-    },
-    "2998CD": {
-        "description": "Small Lamp old dead bulb",
-        "icon": "icon-lamp",
         "group": "Dining Room",
         "hasManualOverride": false,
         "type": "switch",
@@ -344,6 +334,7 @@ var switches = {
     },
     "1F527C": {
         "description": "Fireplace",
+        "alexaNames": ["fireplace"],
         "icon": "icon-fire",
         "group": "Living Room",
         "hasManualOverride": false,
@@ -351,9 +342,10 @@ var switches = {
         "enabled": true
     },
     "237643": {
-        "description": "Lamp 2",
+        "description": "Office Lamp",
+        "alexaNames": ["office", "office light"],
         "icon": "icon-lamp",
-        "group": "Living Room",
+        "group": "Second Floor",
         "hasManualOverride": true,
         "type": "switch",
         "enabled": true

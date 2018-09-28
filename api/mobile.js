@@ -79,7 +79,7 @@ function sendPushNotification(image, camera, callback) {
     async.auto({
         upload: function (moveNext) {
             var p = "cams/" + moment().format("YYYY-MM-DD") + "/" + path.basename(image);
-            aws.upload(image, p, 'image/gif', function (err, url) {
+            aws.upload(image, p, 'video/mp4', function (err, url) {
                 moveNext(err, url);
             })
         },
@@ -104,7 +104,7 @@ function sendPushNotification(image, camera, callback) {
                     "content-available": 1
                 },
                 "mediaUrl": results.upload,
-                "mediaType": "gif",
+                "mediaType": "mp4",
             };
 
             apnProvider.send(note, Object.keys(results.devices)).then((result) => {

@@ -8,7 +8,7 @@ var appleDevices = require("../devices/").icloud;
 var lib = require("../lib");
 var path = require("path");
 
-var embyHost = process.env.embyHost || "localhost:8096";
+var embyHost = process.env.embyHost || "192.168.1.1:8096";
 var embyToken = process.env.embyToken || "";
 var uTorrentHost = process.env.uTorrentHost || "localhost";
 var uTorrentPort = process.env.uTorrentPort || "8080";
@@ -115,6 +115,9 @@ function emby(callback) {
 			return callback(err);
 		}
 		var arr = [];
+		if (!sessions || !Array.isArray(sessions)) {
+			return callback("No sessions found: " + JSON.stringify(sessions) );
+		}
 		sessions.forEach(function(session) {
 			if (session.hasOwnProperty("TranscodingInfo") && session.hasOwnProperty("NowPlayingItem")) {
 				arr.push({

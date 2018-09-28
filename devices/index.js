@@ -10,5 +10,6 @@ module.exports = {
     harmony: require("./harmony"),
     thermostat: require("./ecobee"),
     groups: require("./groups"),
-    sequence: require("./sequences")
-}
+    sequence: require("./sequences"),
+    switchmate: require("./switchmate")
+};

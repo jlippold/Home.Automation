@@ -21,6 +21,7 @@
     "express": "^4.13.3",
     "find-my-iphone": "git+ssh://git@github.com/jlippold/find-my-iphone.git",
     "fs-extra": "^4.0.1",
+    "glob": "^7.1.2",
     "harmonyhubjs-client": "^1.1.6",
     "home-controller": "^0.6.0",
     "http-auth": "^2.3.1",

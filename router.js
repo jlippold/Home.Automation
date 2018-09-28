@@ -5,7 +5,7 @@ var path = require('path');
 var routes = express.Router();
 
 routes.use(function (req, res, next) {
-	if (req.hostname == "jed.bz") {
+	if (req.hostname.indexOf("jed.bz") > -1) {
 		var err = new Error('not Found');
 		err.status = 404;
 		return next(err);
@@ -15,6 +15,13 @@ routes.use(function (req, res, next) {
 
 routes.get('/', function (req, res, next) {
 	res.redirect('dashboard.html');
+});
+
+// https://home.jed.bz:999/home/api/alexa?action=configure
+routes.get('/api/alexa', function (req, res, next) {
+	lib.activities.alexa(req.query.action, function (err, results) {
+		res.send(results);
+	});
 });
 
 routes.get('/api/status', function (req, res, next) {
@@ -118,6 +125,21 @@ routes.get('/televisions/:room/shows/:showid', function (req, res, next) {
 	});
 });
 
+routes.get('/televisions/:room/channel/:channelName', function (req, res, next) {
+	var channelName = req.params.channelName;
+	var room = req.params.room;
+
+	lib.kodi.playChannelByName(room, channelName, function (err, json) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+			console.error(err);
+		} else {
+			res.send(json);
+		}
+	});
+});
+
 routes.get('/televisions/:room/play/:type/:id', function (req, res, next) {
 	var room = req.params.room;
 	var type = req.params.type;
@@ -168,6 +190,39 @@ routes.get('/insteon/:id/:status', function (req, res, next) {
 
 	if (["on", "off", "toggle"].indexOf(status) > -1) {
 		api.insteon.setStatusOfDevice(id, status, function (err) {
+			if (err) {
+				res.status(500);
+				res.send(err);
+				console.log(err);
+			} else {
+				res.sendStatus(200);
+			}
+		});
+	} else {
+		res.send("Bad status");
+		res.status(500);
+	}
+});
+
+
+routes.get('/switchmate', function (req, res, next) {
+	api.switchmate.listDevices(function (err, devices) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+			console.error(err);
+		} else {
+			res.send(devices);
+		}
+	});
+});
+
+routes.get('/switchmate/:id/:status', function (req, res, next) {
+	var id = req.params.id;
+	var status = req.params.status;
+
+	if (["on", "off"].indexOf(status) > -1) {
+		api.switchmate.setStatusOfDevice(id, status, function (err) {
 			if (err) {
 				res.status(500);
 				res.send(err);
@@ -589,15 +644,14 @@ routes.get("/cameras/live/:camera", function (req, res, next) {
 		var local = ip.indexOf("192.168.1") > -1;
 		api.cams.liveStream(cam, local, function(err) {
 			if (err) return res.send(err);
-			return res.send({stream: 'https://jed.bz/stream/' + cam.name + '.m3u8'});
+			return res.send({stream: 'https://home.jed.bz:999/stream/' + cam.name + '.m3u8'});
 		});
 	}
 
 });
 
 routes.get("/cameras/recordings", function (req, res, next) {
-	var dateString = req.query.dateString;
-	api.cams.getRecordingsForDay(dateString, function (err, recordings) {
+	api.cams.getRecordings(function (err, recordings) {
 		if (err) {
 			res.status(500);
 			res.send(err);

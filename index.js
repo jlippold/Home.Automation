@@ -83,12 +83,6 @@ app.use(function (err, req, res, next) {
 });
 
 async.auto({
-	camWatcher: function (next) {
-		cams.init(function () {
-			console.log("cam watcher initiated");
-		});
-		next();
-	},
 	insteonHub: function (next) {
 		if (process.env.NODE_ENV != "production") {
 			console.log("skipping insteon hub")
@@ -112,13 +106,16 @@ async.auto({
 			next(err);
 		});
 	},
-	deviceList: ['insteonHub', 'harmonyActivities', function (next) {
+	cams: function(next) {
+		cams.init(next);
+	},
+	deviceList: ['cams', 'insteonHub', 'harmonyActivities', function (next) {
 		dispatcher.devices(function (err, devices) {
 			console.log("got device list");
 			next(err);
 		});
 	}],
-	sockets: ['camWatcher', 'lifxClient', 'deviceList', function (next) {
+	sockets: ['lifxClient', 'deviceList', function (next) {
 
 		server.listen(3000, function () {
 			console.log("API Listening from 3000");

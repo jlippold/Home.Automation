@@ -68,15 +68,12 @@ module.exports = {
     },
     "bedroom_lights": {
         "name": "Bedroom",
+        "alexaNames": ["bedroom", "bedroom light"],
         "icon": "icon-bedroom",
         "on": [{
             "type": "insteon",
             "id": "3F4B99",
             "description": "ceiling light"
-        }, {
-            "type": "lifx",
-            "id": "d073d5125481",
-            "description": "Bedroom Lamp"
         }],
         "off": [{
             "type": "insteon",
@@ -86,6 +83,10 @@ module.exports = {
             "type": "lifx",
             "id": "d073d5125481",
             "description": "Bedroom Lamp"
+        }, {
+            "type": "insteon",
+            "id": "3C2BBD",
+            "description": "bathroom"
         }]
     },
     "bedroom": {
@@ -172,7 +173,7 @@ module.exports = {
         }]
     },
     "lr-tv": {
-        "name": "Living Room TV",
+        "name": "Living room",
         "icon": "icon-desktop",
         "on": [{
             "type": "harmony",
@@ -193,8 +194,8 @@ module.exports = {
         }]
     },
     "br-tv": {
-        "name": "Bed Room TV",
-        "icon": "icon-desktop-1",
+        "name": "Bedroom",
+        "icon": "icon-desktop",
         "on": [{
             "type": "harmony",
             "id": "bedroom",
@@ -216,6 +217,7 @@ module.exports = {
     "outside": {
         "name": "Outside",
         "icon": "icon-house",
+        "alexaNames": ["outside", "outside light"],
         "on": [{
             "type": "insteon",
             "id": "1A8D98",
@@ -245,6 +247,7 @@ module.exports = {
     },
     "kitchen": {
         "name": "Kitchen",
+        "alexaNames": ["kitchen", "kitchen light"],
         "icon": "icon-house",
         "on": [{
             "type": "insteon",

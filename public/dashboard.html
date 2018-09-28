@@ -3,9 +3,9 @@
 <head>
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">  
 	<link type="text/css" rel="stylesheet" href="/home/css/materialize.min.css"  media="screen,projection"/>  
-	<link type="text/css" rel="stylesheet" href="/home/css/dashboard.css?r=0.8"  media="screen,projection"/>  
+	<link type="text/css" rel="stylesheet" href="/home/css/dashboard.css?r=0.9"  media="screen,projection"/>  
 	<link type="text/css" rel="stylesheet" href="/home/css/weather-icons.min.css?r=0.8"  media="screen,projection"/>  
-	<link type="text/css" rel="stylesheet" href="/pub/css/font.css?r=0.1" />  
+	<link type="text/css" rel="stylesheet" href="/pub/css/font.css?r=0.3" />  
 	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"> 
 </head>
 
@@ -23,61 +23,49 @@
 				</div>
 			</li>
 			<li>
-				<a class="waves-effect" href="/admin"> 
-					<i class="icon icon-jed"></i>
-					Old Admin Site
-				</a>
-			</li>
-			<li>
-				<a class="waves-effect" href="https://home.jed.bz:8888"> 
+				<a class="waves-effect" href="https://home.jed.bz:8888#newtab" target="_blank"> 
 					<i class="icon icon-emby"></i>
 					Emby
 				</a>
 			</li>
 			<li>
-				<a class="waves-effect" href="/stern/"> 
+				<a class="waves-effect" href="/stern/#newtab" target="_blank"> 
 					<i class="icon icon-stern"></i>
 					Howard Stern
 				</a>
 			</li>
 			<li>
-				<a class="waves-effect" href="/torrent/mini/index.html">
+				<a class="waves-effect" href="/torrent/#newtab" target="_blank">
 					<i class="icon icon-utorrent"></i>
 					Torrents
 				</a>
 			</li>
 			<li>
-				<a class="waves-effect" href="/nzbdrone/">
+				<a class="waves-effect" href="/nzbdrone/#newtab" target="_blank">
 					<i class="icon icon-sonarr"></i>
 					Sonarr
 				</a>
 			</li>
 			<li>
-				<a class="waves-effect" href="http://192.168.1.110:7878/radarr/">
+				<a class="waves-effect" href="http://192.168.1.110:7878/radarr/#newtab" target="_blank">
 					<i class="icon icon-sonarr"></i>
 					Radarr
 				</a>
 			</li>
 			<li>
-				<a class="waves-effect" href="/nzbget/">
+				<a class="waves-effect" href="/nzbget/#newtab" target="_blank">
 					<i class="icon icon-download-cloud"></i>
 					NZBget
 				</a>
 			</li>
 			<li>
-				<a class="waves-effect" href="/git/Repository/Index">
-					<i class="icon icon-git"></i>
-					git
-				</a>
-			</li>
-			<li>
-				<a class="waves-effect" href="/files">
+				<a class="waves-effect" href="/files/#newtab" target="_blank">
 					<i class="icon icon-list"></i>
 					Files
 				</a>
 			</li>
 			<li>
-				<a class="waves-effect" href="https://home.jed.bz:11051/">
+				<a class="waves-effect" href="https://home.jed.bz:11051/#newtab" target="_blank">
 					<i class="icon icon-router"></i>
 					Router
 				</a>
@@ -109,6 +97,7 @@
 				<weather></weather>
 			</div>
 			<div class="col s12 m6 l4">
+				<motion></motion>
 				<driveway-cam ref="driveway"></driveway-cam>
 				<porch-cam ref="porch"></porch-cam>
 				<sidedoor-cam ref="sidedoor"></sidedoor-cam>
@@ -227,23 +216,16 @@
 					<div class="determinate" v-bind:style="{ width: data.percentage + '%' }"></div>
 				</div>
 			</div>
-			<div class="card-content">
-				<div class="row" style="margin: 0">
-					<div class="col s1" style="padding-top: 7px">
-						<a :href="'jedbz:///browse#' + roomName()" v-on:click="blockModal($event)">
-							<i class="material-icons right">search</i>
-						</a>
-					</div>
-					<div class="col s11" style="padding: 0; padding-left: 20px">
-						<select v-model="data.roomIndex" class="browser-default custom-select">
-							<option v-for="(room, index) in data.rooms" v-bind:value="index">
-								{{getRoomNameByIndex(index)}}
-							</option>
-						</select>
-					</div>
-
+			<div class="card-content row waves-effect" style="padding: 14px 0px; margin:0">	
+				<div v-for="(room, index) in data.rooms" class="col s6 tv-buttons">
+					<p v-if="data.roomIndex == index" class="active" v-on:click="setRoomByIndex($event, index)">
+						{{getRoomNameByIndex(index)}}
+					</p>
+					<p v-else v-on:click="setRoomByIndex($event, index)">
+						{{getRoomNameByIndex(index)}}
+					</p>
 				</div>
-			</div>
+			</div>	
 
 			<div class="card-action" style="align-items: center; display: flex; flex-direction: row; padding: 16px 0px;">
 				<div class="row" style="width: 100%; margin: 0px;">
@@ -257,14 +239,10 @@
 							</i>
 						</div>
 					</div>
+
 					<div class="col s2">
-						<div v-on:click="openCommands()" style="display: flex; flex-direction: row-reverse; height: 60px; padding-top: 20px">
-							<i style="width: 30px; height: 30px; text-align: center; align-items: center;margin: 0 auto;">
-								<svg style="height: 30px; width:30px">
-									<path fill="#000000" d="M7,5H21V7H7V5M7,13V11H21V13H7M4,4.5A1.5,1.5 0 0,1 5.5,6A1.5,1.5 0 0,1 4,7.5A1.5,1.5 0 0,1 2.5,6A1.5,1.5 0 0,1 4,4.5M4,10.5A1.5,1.5 0 0,1 5.5,12A1.5,1.5 0 0,1 4,13.5A1.5,1.5 0 0,1 2.5,12A1.5,1.5 0 0,1 4,10.5M7,19V17H21V19H7M4,16.5A1.5,1.5 0 0,1 5.5,18A1.5,1.5 0 0,1 4,19.5A1.5,1.5 0 0,1 2.5,18A1.5,1.5 0 0,1 4,16.5Z"
-									/>
-								</svg>
-							</i>
+						<div v-on:click="browse()" style="display: flex; flex-direction: row-reverse; height: 60px; padding-top: 20px">
+							<i class="material-icons right">search</i>
 						</div>
 					</div>
 
@@ -548,9 +526,10 @@
 	</div>
 </template>
 
+
 <template id="camera-template">
 	<div>
-		<div class="card" v-show="data.enabled">
+		<div class="camera card" v-show="data.enabled">
 			<div class="card-image" v-on:click="liveStream()">
 				<span v-if="loading" data-badge-caption="" class="new badge blue" style="position: absolute;z-index: 1; right: 0;">Loading...</span>
 				<svg v-if="data.loadingStream" style="position: absolute;z-index: 2;width: 25%;margin: 13% 37%;" height="50%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
@@ -612,6 +591,38 @@
 	</div>
 </template>
 
+<template id="motion-template">
+
+	<div class="card">
+		<div class="card-content">
+			<div class="row">
+				<span class="card-title" style="padding-bottom: 10px;">Recordings</span>
+				<div class="col s6" style="margin-top: 10px">
+					<h6 v-if="!data.snooze">
+						Motion detection enabled
+					</h6>
+					<h6 v-else>
+						Silent for {{data.timeout}} minutes
+					</h6>
+				</div>
+				<div class="col s6" style="text-align: right">
+					<a v-if="data.snooze" v-on:click="silent()" class="btn-floating btn-large waves-effect waves-light green">
+						<i class="icon icon-bell"></i>
+					</a>
+					<a v-else v-on:click="silent()" class="btn-floating btn-large waves-effect waves-light red">
+						<i class="icon icon-bell"></i>
+					</a>
+					<a href="/home/motion.html#newtab" target="_blank" class="btn-floating btn-large waves-effect waves-light blue">
+						<i class="icon icon-camera"></i>
+					</a>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</template>
+
 <template id="services-template">
 	<div class="card">
 		<div class="card-content">
@@ -653,7 +664,7 @@
 			</table>
 			<div style="padding-top: 10px">
 				<div v-for="item in data.emby" class="chip" >
-					<img :src="'https://jed.bz:8888' + item.image + '&height=100&quality=90'">
+					<img :src="'https://home.jed.bz:8888' + item.image + '&height=100&quality=90'">
 						{{item.title}}: {{item.user}} {{item.client}}
 					</div>
 				</div>
@@ -692,12 +703,12 @@
 </template>
 
 
-
-	<script type="text/javascript" src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="/home/js/jquery.js"></script>
 	<script type="text/javascript" src="/home/js/materialize.min.js"></script>
-	<script type="text/javascript" src="//unpkg.com/vue/dist/vue.js"></script>
+	<script type="text/javascript" src="/home/js/vue.min.js"></script>
 	<script type="text/javascript" src="/home/js/async.min.2.1.4.js"></script>
 	<script type="text/javascript" src="/home/js/moment.js"></script>
+	<script type="text/javascript" src="/home/js/common.js"></script>
 	<script type="text/javascript" src="/home/js/script.js?r=0.1"></script>
 	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
 	<script src="//maps.googleapis.com/maps/api/js?key=AIzaSyAbz4NWK8NfeybeMGfBqQyablVMv2Xm0Lw"></script>

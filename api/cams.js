@@ -10,13 +10,10 @@ var crypto = require("crypto");
 var request = require("request");
 var Stream = require('stream').Transform;
 var spawn = require('child_process').execFile;
-var RingAPI = require('doorbot');
 var moment = require('moment');
+var glob = require("glob");
 
 var devices = require("../devices/");
-
-var ringUser = process.env.ringUser || "username@no.com";
-var ringPass = process.env.ringPass || "somePass";
 var reoLinkPassword = process.env.reoLinkPassword || "";
 
 var db = new sqlite3.Database("recordings.db");
@@ -24,12 +21,9 @@ var db = new sqlite3.Database("recordings.db");
 var ftpPath = "G:\\FTP";
 var ffmpeg = "D:\\Scripts\\FFMpeg\\ffmpeg.exe";
 var streamPath = "D:\\www\\jed.bz\\stream\\";
+var camRoot = path.join(streamPath, "gif\\")
 var watcher;
 
-const ring = RingAPI({
-  email: ringUser,
-  password: ringPass
-});
 
 
 var cams = [
@@ -50,13 +44,15 @@ cams = cams.map(function (cam) {
 
 module.exports.cameras = cams;
 module.exports.init = init;
-module.exports.getRecordingsForDay = getRecordingsForDay;
+module.exports.getRecordings = getRecordings;
 module.exports.getRecordingById = getRecordingById;
 module.exports.getBase64Picture = getBase64Picture;
 module.exports.liveStream = liveStream;
 module.exports.createGif = createGif;
+module.exports.createMP4 = createMP4;
 
 function initdb(callback) {
+
   db.serialize(function () {
     var createTable = `CREATE TABLE IF NOT EXISTS 
         recordings (recording_id TEXT, mp4 TEXT PRIMARY KEY, 
@@ -64,10 +60,7 @@ function initdb(callback) {
         CONSTRAINT id_unique UNIQUE (recording_id))`;
     db.run(createTable, function (err) {
 
-      downloader(function () {
-        picBroadcaster();
-        callback(err);
-      });
+
     });
   });
 
@@ -91,7 +84,7 @@ function liveStream(cam, local, callback) {
     "-hls_list_size", "2",
     "-segment_list_flags", "live",
     "-hls_flags", "delete_segments",
-    "-hls_base_url", "/stream/",
+    "-hls_base_url", "https://home.jed.bz:999/stream/",
     "-hls_segment_filename", ts,
     "-f", "hls", m3u8
   ];
@@ -151,7 +144,7 @@ function createGif(cam, night, callback) {
       "-filter_complex", "fps=10,scale=0:-1:flags=lanczos[x];[x][1:v]paletteuse", gif
     ];
     var gifStream = spawn(ffmpeg, gifArgs, { windowsHide: true });
-    //console.log("Creating gif: ", ffmpeg, gifArgs.join(" "));
+    console.log("Creating gif: ", ffmpeg, gifArgs.join(" "));
     gifStream.on('close', (code) => {
       done(null, gif);
     });
@@ -181,6 +174,65 @@ function createGif(cam, night, callback) {
       });
     } else {
       makeGif(callback);
+    }
+
+  });
+
+}
+
+function createMP4(cam, night, callback) {
+  var fName = cam.name + "_" + moment().format("YYYY-MM-DD-HH-mm-ss.SSS");
+  var base = path.join(camRoot, moment().format("YYYY-MM-DD") + "\\");
+
+  var gif = path.join(base, fName + ".gif");
+  var mp4 = path.join(base, fName + ".mp4");
+  var palette = path.join(camRoot, cam.name + (night ? "_dark" : "_light") + ".png");
+
+  fs.ensureDir(base, function (err) {
+    if (err) return callback(err);
+
+  });
+
+
+  var encode = function (done) {
+    //encode to gif and mp4
+    var args = [
+      "-y", "-i", cam.streamHigh, "-i", palette, "-filter_complex",
+      "trim=start=0:end=3,setpts=PTS-STARTPTS,fps=2,scale=320:-2:flags=lanczos[x];[x][1:v]paletteuse",
+      gif, "-map", "0:v", "-map", "0:a", "-f", "mp4", "-filter:v", "scale=640:-2", "-vcodec", "libx264",
+      "-profile:v", "main", "-acodec", "aac", "-t", "10", mp4
+    ];
+    var stream = spawn(ffmpeg, args, { windowsHide: true });
+    //console.log("Encoding: ", ffmpeg, args.join(" "));
+    stream.on('close', (code) => {
+      done(null, mp4);
+    });
+  }
+
+  fs.stat(palette, function (err, stats) {
+    var needsPalette = false;
+    if (err) {
+      needsPalette = true; //404
+    } else {
+      var secondsOld = (new Date().getTime() - stats.mtime) / 1000;
+      if (secondsOld > (60 * 60 * 6)) {
+        needsPalette = true;
+      }
+    }
+
+    if (needsPalette) {
+      var args = [
+        "-y", "-t", "3", "-i", cam.streamHigh,
+        "-vf", "fps=10,scale=0:-1:flags=lanczos,palettegen",
+        palette
+      ];
+      var paletteStream = spawn(ffmpeg, args, { windowsHide: true });
+      //console.log("Gif palette: ", ffmpeg, args.join(" "));
+      paletteStream.on('close', (code) => {
+        encode(callback);
+      });
+    } else {
+      encode(callback);
     }
 
   });
@@ -237,41 +289,6 @@ var downloader = function (callback) {
       }
     );
   });
-  motionDetector(callback);
-}
-
-var motionDetector = function (callback) {
-  return callback();
-  if (process.env.NODE_ENV != "production") {
-    return;
-  }
-  var seen = [];
-  async.forever(function (restart) {
-
-    ring.dings(function (err, rings) {
-      if (err) {
-        console.error("ring error: ", err)
-      } else {
-        rings.forEach(function (event) {
-          if (seen.indexOf(event.id) == -1) {
-            //new event!
-            var name = event.doorbot_description;
-            var type = event.kind;
-            seen.push(event.id);
-            lib.motion.fired(devices.ring[name]);
-            console.log("Ring motion fired: " + name);
-          }
-        });
-      }
-      setTimeout(function () {
-        //console.log("fired ring again", rings);
-        return restart();
-      }, 2500);
-    });
-
-  });
-
-  callback();
 }
 
 var picBroadcaster = function () {
@@ -310,22 +327,30 @@ function getBase64Picture(cam, callback) {
   fs.readFile(pic, { encoding: 'base64' }, callback);
 }
 
-function getRecordingsForDay(dateString, callback) {
-  var sql = "SELECT * FROM recordings where dateString = $dateString ORDER BY date DESC";
-  db.all(sql, { $dateString: dateString }, function (err, rows) {
-    var output = { recordings: [] };
-    if (rows) {
-      output.recordings = rows.map(function (row) {
-        row.fullDate = moment(row.date).format("dddd, MMMM Do YYYY, h:mm:ss a");
-        row.time = moment(row.date).format("hA");
-        row.thumbnail = "https://jed.bz/camera/live/getThumbnail.aspx?width=120&file=" + row.jpg
-        row.image = "https://jed.bz/home/cameras/recordings/" + row.recording_id + "/image"
-        row.video = "https://jed.bz/home/cameras/recordings/" + row.recording_id + "/video"
-        return row;
-      });
-    }
-    callback(err, output);
-  });
+function getRecordings(callback) {
+
+  glob(path.join(camRoot, "/**/*.gif"), function (err, files) {
+    if (err) return callback(err);
+    var out = {};
+    files.forEach(function (file) {
+      var day = path.basename(path.dirname(file));
+      var name = path.parse(path.basename(file)).name;
+
+      if (name.indexOf("_20") > -1) {
+        var location = name.split("_")[0];
+        var timestamp = name.split("_")[1];
+
+        if (!out.hasOwnProperty(day)) {
+          out[day] = [];
+        }
+        out[day].push({ day, location, filename: name, timestamp });
+      }
+    });
+
+    out.days = Object.keys(out).sort();
+    callback(err, { events: out });
+  })
+
 }
 
 function getRecordingById(recording_id, callback) {
@@ -347,6 +372,11 @@ function init(callback) {
   if (process.env.NODE_ENV != "production") {
     return callback();
   }
+
+  downloader();
+  picBroadcaster();
+  return callback();
+
 
   initdb(function (err) {
     if (err) {

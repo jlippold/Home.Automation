@@ -9,3 +9,4 @@ exports.myq = require("../api/myq.js");
 exports.kodi = require("../api/kodi.js");
 exports.mobile = require("../api/mobile.js");
 exports.alexa = require("../api/alexa.js");
+exports.switchmate = require("../api/switchmate.js");

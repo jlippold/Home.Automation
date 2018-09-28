@@ -12,7 +12,7 @@ module.exports = {
         "icon": "icon-lamp2",
         "group": "Living Room",
         "online": true,
-        "enabled": true,
+        "enabled": false,
         "status": "offline"
     },
     "d073d5122368": {
@@ -20,7 +20,7 @@ module.exports = {
         "icon": "icon-lamp2",
         "group": "Dining Room",
         "online": true,
-        "enabled": true,
+        "enabled": false,
         "status": "offline"
     },
     "d073d5116404": {
@@ -28,7 +28,7 @@ module.exports = {
         "icon": "icon-lightbulb",
         "group": "Dining Room",
         "online": true,
-        "enabled": true,
+        "enabled": false,
         "status": "offline"
     }
 };

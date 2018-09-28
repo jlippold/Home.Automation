@@ -2,6 +2,8 @@ var players = {
     "Living": {
         ip: "192.168.1.35",
         hostname: "livroom",
+        name: "living room",
+        alexaNames: ["living room tv", "living room television"],
         commands: {
             powerToggle: {
                 "type": "harmony",
@@ -50,6 +52,8 @@ var players = {
     "Bedroom": {
         ip: "192.168.1.140",
         hostname: "bedroom",
+        name: "bedroom",
+        alexaNames: ["bedroom tv", "bedroom television"],
         commands: {
             powerToggle: {
                 "type": "harmony",
@@ -95,20 +99,28 @@ var players = {
             }
         },
     },
-    "Gym": {
+    "Basement": {
         ip: "192.168.1.41",
+        name: "basement",
+        alexaNames: ["basement tv", "basement television"],
         hostname: "basement"
     },
     "Office": {
         ip: "192.168.1.151",
+        name: "office",
+        alexaNames: ["office tv", "office television"],
         hostname: "office"
     },
     "Layla": {
         ip: "192.168.1.75",
+        name: "layla",
+        alexaNames: ["Laylas tv", "Laylas television"],
         hostname: "layla"
     },
     "Cora": {
         ip: "192.168.1.84",
+        name: "cora",
+        alexaNames: ["coras tv", "coras television"],
         hostname: "cora"
     }
 };
@@ -262,24 +274,56 @@ var defaults = {
             value: 0
         }
     },
-    Play: {
+    Play: [{
         jsonrpc: "2.0",
         method: "Player.PlayPause",
         params: {
-            playerid: "%playerid%",
+            playerid: 0,
             play: true
         },
         id: 1
-    },
-    Pause: {
+    }, {
         jsonrpc: "2.0",
         method: "Player.PlayPause",
         params: {
-            playerid: "%playerid%",
+            playerid: 1,
+            play: true
+        },
+        id: 1
+    }, {
+        jsonrpc: "2.0",
+        method: "Player.PlayPause",
+        params: {
+            playerid: 2,
+            play: true
+        },
+        id: 1
+    }],
+    Pause: [{
+        jsonrpc: "2.0",
+        method: "Player.PlayPause",
+        params: {
+            playerid: 0,
             play: false
         },
         id: 1
-    },
+    }, {
+        jsonrpc: "2.0",
+        method: "Player.PlayPause",
+        params: {
+            playerid: 1,
+            play: false
+        },
+        id: 1
+    }, {
+        jsonrpc: "2.0",
+        method: "Player.PlayPause",
+        params: {
+            playerid: 2,
+            play: false
+        },
+        id: 1
+    }],
     Reboot: {
         jsonrpc: "2.0",
         method: "System.Reboot",
@@ -309,15 +353,31 @@ var defaults = {
         },
         id: 1
     },
-    "Fast Forward x8": {
+    "Fast Forward x8": [{
         jsonrpc: "2.0",
         method: "Player.SetSpeed",
         params: {
-            playerid: "%playerid%",
+            playerid: 0,
             speed: 8
         },
         id: 1
-    },
+    },{
+        jsonrpc: "2.0",
+        method: "Player.SetSpeed",
+        params: {
+            playerid: 1,
+            speed: 8
+        },
+        id: 1
+    },{
+        jsonrpc: "2.0",
+        method: "Player.SetSpeed",
+        params: {
+            playerid: 2,
+            speed: 8
+        },
+        id: 1
+    }],
     "Fast Forward x32": {
         jsonrpc: "2.0",
         method: "Player.SetSpeed",
@@ -327,15 +387,31 @@ var defaults = {
         },
         id: 1
     },
-    "Rewind x8": {
+    "Rewind x8": [{
         jsonrpc: "2.0",
         method: "Player.SetSpeed",
         params: {
-            playerid: "%playerid%",
+            playerid: 0,
             speed: -8
         },
         id: 1
-    },
+    },{
+        jsonrpc: "2.0",
+        method: "Player.SetSpeed",
+        params: {
+            playerid: 1,
+            speed: -8
+        },
+        id: 1
+    },{
+        jsonrpc: "2.0",
+        method: "Player.SetSpeed",
+        params: {
+            playerid: 2,
+            speed: -8
+        },
+        id: 1
+    }],
     "Rewind x32": {
         jsonrpc: "2.0",
         method: "Player.SetSpeed",

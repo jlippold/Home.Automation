@@ -34,7 +34,12 @@ div.remote {
 }
 
 div.remote div.row {
-    height: 20%;
+    height: 25%;
+    margin-bottom: 0;
+}
+
+div.remote div.bottom {
+    height: 25%;
     margin-bottom: 0;
 }
 
@@ -274,4 +279,32 @@ a.camThumbnail img {
     width: 120px;
     height: 68px;
     object-fit: contain;
+}
+
+div.tv-buttons {
+    margin: 0px;
+}
+div.tv-buttons p {
+    font-weight: 300; 
+    font-size: 1.3em;
+    text-align: center;
+    height: 42px;
+    line-height: 42px;
+}
+
+div.tv-buttons p.active {
+    border-bottom: 1px solid #ee6e73;
+}
+
+div.camera:hover div.cam-buttons {
+    display: block;
+}
+
+div.cam-buttons {
+    display: none;
+    position: absolute;
+    z-index: 2; 
+    bottom: 10px; 
+    right: 10px; 
+    color: red;
 }

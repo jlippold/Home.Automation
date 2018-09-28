@@ -1,0 +1,105 @@
+<!DOCTYPE html>  
+<html>
+<head>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">  
+	<link type="text/css" rel="stylesheet" href="/home/css/materialize.min.css"  media="screen,projection"/>  
+	<link type="text/css" rel="stylesheet" href="/home/css/dashboard.css?r=0.9"  media="screen,projection"/>  
+	<link type="text/css" rel="stylesheet" href="/pub/css/font.css?r=0.2" />  
+	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;"> 
+</head>
+
+<body>
+	<div id="app">
+		<commands ref="results"></commands>
+	</div>
+
+<template id="command-template">
+    <div>
+        <div class="remote">
+
+            <div class="row">
+                <div class="col s4 btn-flat">
+                    &nbsp;
+                </div>
+                <div class="col s4 btn-flat" v-on:click="button($event, 'Up')">
+                    <i class="icon-up"></i>
+                </div>
+                <div class="col s4 btn-flat" v-on:click="button($event, 'Page Up');">
+                    <i class="icon-angle-double-up"></i>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s4 btn-flat" v-on:click="button($event, 'Left')">
+                    <i class="icon-left"></i>
+                </div>
+                <div class="col s4 btn-flat" v-on:click="button($event, 'Ok')">
+                    <i class="icon-ok"></i>
+                </div>
+                <div class="col s4 btn-flat" v-on:click="button($event, 'Right')">
+                    <i class="icon-right"></i>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s4 btn-flat" v-on:click="button($event, 'Back')">
+                    <i class="icon-back"></i>
+                </div>
+                <div class="col s4 btn-flat" v-on:click="button($event, 'Down')">
+                    <i class="icon-down"></i>
+                </div>
+                <div class="col s4 btn-flat" v-on:click="button($event, 'Page Down');">
+                    <i class="icon-angle-double-down"></i>
+                </div>
+            </div>
+            <div class="row bottom">
+                <div class="col s3 btn-flat" v-on:click="button($event, 'powerToggle'); button($event, 'Stop');">
+                    <i class="icon-power"></i>
+                </div>
+                <div class="col s3 btn-flat" v-on:click="button($event, 'Reboot');">
+                    <i class="icon-spin1"></i>
+                </div>
+                <div class="col s3 btn-flat" v-on:click="button($event, 'volumeDown')">
+                    <i class="icon-volume-down"></i>
+                </div>
+                <div class="col s3 btn-flat" v-on:click="button($event, 'volumeUp')">
+                    <i class="icon-volume-up"></i>
+                </div>
+            </div>
+            <div class="row bottom" style="display:none">
+                <div class="col s1"></div>
+                <div class="col s2 btn-flat" v-on:click="button($event, 'Rewind x8');">
+                    <i class="icon-to-start"></i>
+                </div>
+                <div class="col s2 btn-flat" v-on:click="button($event, 'Play');">
+                    <i class="icon-play"></i>
+                </div>
+                <div class="col s2 btn-flat" v-on:click="button($event, 'Pause');">
+                    <i class="icon-pause"></i>
+                </div>
+                <div class="col s2 btn-flat" v-on:click="button($event, 'Stop');">
+                    <i class="icon-stop"></i>
+                </div>
+                <div class="col s2 btn-flat" v-on:click="button($event, 'Fast Forward x8');">
+                    <i class="icon-to-end"></i>
+                </div>
+                <div class="col s1"></div>
+            </div>
+        </div>
+        <ul class="collection" style="border: none">
+            <li v-for="command in data.commands" class="collection-item">
+                <a href="#" v-on:click="button($event, command)" style="line-height: 47px;width: 100%; display: block; font-size: 18px; text-align: center;">
+                    {{command}}
+                </a>
+            </li>
+        </ul>
+    </div>
+</template>
+
+	<script type="text/javascript" src="/home/js/jquery.js"></script>
+	<script type="text/javascript" src="/home/js/materialize.min.js"></script>
+	<script type="text/javascript" src="/home/js/vue.min.js"></script>
+	<script type="text/javascript" src="/home/js/async.min.2.1.4.js"></script>
+	<script type="text/javascript" src="/home/js/moment.js"></script>
+    <script type="text/javascript" src="/home/js/common.js"></script>
+    <script type="text/javascript" src="/home/js/modal.js"></script>
+</body>
+</html>
