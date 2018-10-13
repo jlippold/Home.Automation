@@ -154,12 +154,12 @@ function setStatusOfDevice(id, status, callback) {
 			if (devices.insteon[id].type == "switch") {
 				hub.light(id).turnOn().then(function() {
 					dispatch.setStatus(id, status);
-					callback(null);
+					callback();
 				});
 			} else { //fan
 				hub.light(id.substring(0, 6)).fanOn().then(function() {
 					dispatch.setStatus(id, status);
-					callback(null);
+					callback();
 				});
 			}
 		});
@@ -168,12 +168,12 @@ function setStatusOfDevice(id, status, callback) {
 			if (devices.insteon[id].type == "switch") {
 				hub.light(id).turnOff().then(function() {
 					dispatch.setStatus(id, status);
-					callback(null);
+					callback();
 				});
 			} else { //fan
 				hub.light(id.substring(0, 6)).fanOff().then(function() {
 					dispatch.setStatus(id, status);
-					callback(null);
+					callback();
 				});
 			}
 		});
@@ -185,7 +185,7 @@ function setStatusOfDevice(id, status, callback) {
 						device.turnOff()
 							.then(function(status) {
 								dispatch.setStatus(id, "off");
-								callback(null);
+								callback();
 							});
 					});
 				} else {
@@ -193,7 +193,7 @@ function setStatusOfDevice(id, status, callback) {
 						device.turnOn()
 							.then(function(status) {
 								dispatch.setStatus(id, "on");
-								callback(null);
+								callback();
 							});
 					});
 				}
@@ -205,7 +205,7 @@ function setStatusOfDevice(id, status, callback) {
 						device.fanOff()
 							.then(function(status) {
 								dispatch.setStatus(id, "off");
-								callback(null);
+								callback();
 							});
 					});
 				} else {
@@ -213,7 +213,7 @@ function setStatusOfDevice(id, status, callback) {
 						device.fanOn()
 							.then(function(status) {
 								dispatch.setStatus(id, "on");
-								callback(null);
+								callback();
 							});
 					});
 				}

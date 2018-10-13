@@ -107,8 +107,7 @@
 				<swings-cam ref="swings"></swings-cam>
 			</div>
 			<div class="col s12 m6 l4">
-				
-				<devices></devices>
+				<routines></routines>
 				<server></server>
 				<services></services>
 			</div>
@@ -671,6 +670,30 @@
 			</div>
 		</div>
 	</div>
+</template>
+
+<template id="routines-template">
+	<div class="card">
+		<div class="card-content" style="padding: 0px">
+			<div class="row">
+				<div class="col s12" style="padding: 24px 24px 4px;">
+					<span class="card-title" style="padding-bottom: 10px">Routines</span>
+				</div>
+				<div class="col s12" style="padding: 0px;">
+					<ul class="collapsible" data-collapsible="expandable" style="margin: 0px; border: medium none; box-shadow: none;">
+						<li v-for="item in data" class="collection-item avatar" v-on:click="run(item)">
+							<div class="collapsible-header" style="font-weight: 300; font-size: 1.3em; text-align: center;">
+								<i v-if="item.confirm" class="material-icons circle">play_arrow</i>
+								<i v-else class="material-icons circle">access_time</i>
+								{{ item.time }} - {{ item.description }}
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
 </template>
 
 <template id="server-template">

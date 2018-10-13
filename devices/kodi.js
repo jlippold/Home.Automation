@@ -13,24 +13,6 @@ var players = {
                 "description": "PowerToggle",
                 "status": "on"
             },
-            on: {
-                "jsonrpc": "2.0",
-                "method": "Addons.ExecuteAddon",
-                "params": {
-                    "addonid": "script.flirc_util",
-                    "params": { "command": "power_on" }
-                },
-                "id": 2
-            },
-            off: {
-                "jsonrpc": "2.0",
-                "method": "Addons.ExecuteAddon",
-                "params": {
-                    "addonid": "script.flirc_util",
-                    "params": { "command": "power_off" }
-                },
-                "id": 2
-            },
             volumeUp: {
                 "type": "harmony",
                 "id": "livingroom",
@@ -62,24 +44,6 @@ var players = {
                 "command": "PowerToggle",
                 "description": "PowerToggle",
                 "status": "on"
-            },
-            on: {
-                "jsonrpc": "2.0",
-                "method": "Addons.ExecuteAddon",
-                "params": {
-                    "addonid": "script.flirc_util",
-                    "params": { "command": "power_on" }
-                },
-                "id": 2
-            },
-            off: {
-                "jsonrpc": "2.0",
-                "method": "Addons.ExecuteAddon",
-                "params": {
-                    "addonid": "script.flirc_util",
-                    "params": { "command": "power_off" }
-                },
-                "id": 2
             },
             volumeUp: {
                 "type": "harmony",
@@ -156,6 +120,24 @@ var defaults = {
         },
         id: 1
     }],
+    on: {
+        "jsonrpc": "2.0",
+        "method": "Addons.ExecuteAddon",
+        "params": {
+            "addonid": "script.flirc_util",
+            "params": { "command": "power_on" }
+        },
+        "id": 2
+    },
+    off: {
+        "jsonrpc": "2.0",
+        "method": "Addons.ExecuteAddon",
+        "params": {
+            "addonid": "script.flirc_util",
+            "params": { "command": "power_off" }
+        },
+        "id": 2
+    },
     volumeUp: {
         "jsonrpc": "2.0",
         "method": "Addons.ExecuteAddon",

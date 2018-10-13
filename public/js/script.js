@@ -1180,6 +1180,52 @@ $(document).ready(function () {
     }
   });
 
+  var Routines = Vue.extend({
+    template: "#routines-template",
+    data: function () {
+      return {
+        data: []
+      };
+    },
+    beforeMount: function () {
+      //this.fetch(function() {});
+    },
+    mounted: function () {
+      var c = this;
+      c.fetch(function () {});
+    },
+    methods: {
+      run: function(item) {
+        var message = `Press ok to confirm running ${item.actions.length} commands in this routine:`;
+        item.actions.forEach(function(action) {
+          message += `\n${action.description}`;
+        });
+        if (confirm(message)) {
+          $.ajax({
+            method: "GET",
+            url: base_url + "home/routines/" + item.key
+          });
+        }
+      },
+      fetch: function (done) {
+        var c = this;
+        $.ajax({
+          method: "GET",
+          url: base_url + "home/routines",
+          error: function () {
+            done();
+          },
+          success: function (data) {
+            c.data = data.routines.filter(function(item) {
+              return item.hidden == false;
+            });
+            done();
+          }
+        });
+      }
+    }
+  });
+
   //sub classed components
   var PorchCam = Camera.extend({
     data: function () {
@@ -1246,6 +1292,7 @@ $(document).ready(function () {
     },
     components: {
       "search-results": SearchResults,
+      routines: Routines,
       insteon: Insteon,
       "new-kodi": NewKodi,
       server: Server,

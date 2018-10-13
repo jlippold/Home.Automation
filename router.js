@@ -24,6 +24,19 @@ routes.get('/api/alexa', function (req, res, next) {
 	});
 });
 
+// https://home.jed.bz:999/home/api/alexa/stream/anchorman?key=XXX
+routes.get('/api/alexa/stream/:title', function (req, res, next) {
+	if (req.query.key != process.env.ALEXA_KEY ) {
+		//console.log("bad key", req.query, process.env.ALEXA_KEY );
+		return res.send(null, "bad key");
+	}
+	api.alexa.findByTitle(req.params.title, function (err, url) {
+		if (err) console.log(err);
+		if (err) return res.send(err);
+		res.redirect(url);
+	});
+});
+
 routes.get('/api/status', function (req, res, next) {
 	lib.activities.status(function (err, results) {
 		res.send(results);
@@ -607,6 +620,31 @@ routes.get('/snooze', function (req, res, next) {
 			console.error(err);
 		} else {
 			res.send(result);
+			//res.sendStatus(200);
+		}
+	});
+});
+
+routes.get('/routines', function (req, res, next) {
+	lib.routines.list(function (err, routines) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+			console.error(err);
+		} else {
+			res.send(routines);
+		}
+	});
+});
+
+routes.get('/routines/:routine', function (req, res, next) {
+	lib.routines.run(req.params.routine, function (err, routines) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+			console.error(err);
+		} else {
+			res.send(routines);
 			//res.sendStatus(200);
 		}
 	});

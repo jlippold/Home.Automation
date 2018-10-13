@@ -12,6 +12,7 @@ module.exports.addDevice = addDevice;
 module.exports.getDevices = getDevices;
 module.exports.deviceIsRegistered = deviceIsRegistered;
 module.exports.sendPushNotification = sendPushNotification;
+module.exports.sendNotificationForRoutine = sendNotificationForRoutine;
 
 var mobileDevices = path.join(__dirname, "../mobileDevices.json")
 
@@ -72,6 +73,44 @@ function getDevices(callback) {
     }, function (err, results) {
         callback(err, results.readFile);
     });
+}
+
+function sendNotificationForRoutine(title, message, key, callback) {
+    var note = new apn.Notification();
+    note.expiry = Math.floor(Date.now() / 1000) + 300; // Expires 5 mins
+    note.topic = "bz.jed.home";
+    note.rawPayload = {
+        "aps": {
+            "sound": "ping.aiff",
+            "alert": {
+                "title": title,
+                "body": message,
+            },
+            "badge": 0, 
+            "mutable-content": 1,
+            "content-available": 1
+        },
+        "isRoutine": "1",
+        "RoutineKey": key
+    };
+
+    getDevices(function (err, mobileDevices) {
+        if (err) return callback(err);
+        var jed;
+        Object.keys(mobileDevices).forEach(function(key) {
+            if (mobileDevices[key].name.toLowerCase().indexOf("jed") > -1) {
+                jed = key;
+            }
+        });
+        if (!jed) {
+            console.error("Jed's device key not found");
+            return callback();
+        }
+        apnProvider.send(note, [jed]).then((result) => {
+            callback()
+        });
+    });
+
 }
 
 function sendPushNotification(image, camera, callback) {

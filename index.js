@@ -3,6 +3,7 @@ var async = require('async');
 var insteon = require('./api/insteon');
 var harmony = require('./api/harmony');
 var lifx = require('./api/lifx');
+var lib = require("./lib");
 var cams = require('./api/cams');
 var router = require('./router');
 var dispatcher = require('./lib/dispatch');
@@ -78,6 +79,7 @@ app.use(function (req, res, next) {
 
 // error handlers
 app.use(function (err, req, res, next) {
+	console.error(err);
 	res.status(err.status || 500);
 	res.type('txt').send(JSON.stringify(err));
 });
@@ -106,16 +108,25 @@ async.auto({
 			next(err);
 		});
 	},
+	killStreams: function(next) {
+		var spawn = require('child_process').spawn;
+		spawn("taskkill", ["/IM", "ffmpeg.exe", "/F"], { windowsHide: true});
+		next();
+	},
 	cams: function(next) {
 		cams.init(next);
 	},
-	deviceList: ['cams', 'insteonHub', 'harmonyActivities', function (next) {
+	deviceList: ['killStreams', 'cams', 'insteonHub', 'harmonyActivities', function (next) {
 		dispatcher.devices(function (err, devices) {
 			console.log("got device list");
 			next(err);
 		});
 	}],
-	sockets: ['lifxClient', 'deviceList', function (next) {
+	routines: ['deviceList', function(next) {
+		lib.routines.init();
+		next();
+	}],
+	sockets: ['lifxClient', 'routines', function (next) {
 
 		server.listen(3000, function () {
 			console.log("API Listening from 3000");
