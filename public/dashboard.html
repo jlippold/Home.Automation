@@ -101,7 +101,7 @@
 				<driveway-cam ref="driveway"></driveway-cam>
 				<porch-cam ref="porch"></porch-cam>
 				<sidedoor-cam ref="sidedoor"></sidedoor-cam>
-				<generator-cam ref="generator"></generator-cam>
+				<kitchen-cam ref="kitchen"></kitchen-cam>
 				<garage-cam ref="garage"></garage-cam>
 				<basement-cam ref="basement"></basement-cam>
 				<swings-cam ref="swings"></swings-cam>
@@ -409,13 +409,14 @@
 			</div>
 			<div class="col s6 m6 l6" style="text-align: right">
 				<h4>
-					<i v-if="data.indoor.mode == 'heat'" class="wi wi-fire"></i>
-					<i v-if="data.indoor.mode == 'cool'" class="wi wi-snowflake-cold"></i>
+					<i v-if="data.indoor.mode.toLowerCase().indexOf('heat') > -1" class="wi wi-fire"></i>
+					<i v-if="data.indoor.mode.toLowerCase().indexOf('cool') > -1" class="wi wi-snowflake-cold"></i>
 					{{data.indoor.temperature}}&deg;
 				</h4>
 				
-				<span v-if="data.indoor.mode == 'heat'" data-badge-caption="" class="new badge red">HEAT</span>
-				<span v-else-if="data.indoor.mode == 'cool'" data-badge-caption="" class="new badge blue">COOL</span>
+				<span v-if="data.indoor.mode.toLowerCase().indexOf('heat') > -1" data-badge-caption="" class="new badge red">{{data.indoor.mode}}</span>
+				<span v-else-if="data.indoor.mode.toLowerCase().indexOf('cool') > -1" data-badge-caption="" class="new badge blue">{{data.indoor.mode}}</span>
+				<span v-else-if="data.indoor.mode == 'auto'" data-badge-caption="" class="new badge grey">{{data.indoor.mode}}</span>
 				<span v-else data-badge-caption="" class="new badge grey">A/C: OFF</span>
 				
 				<br />

@@ -61,7 +61,8 @@ var motion = {
         "type": "motion",
         "icon": "icon-pitch",
         "group": "outside",
-        "actions": [{
+        "actions": [
+        /* {
             "type": "push",
             "camera": "driveway",
             "cutoff": 15
@@ -69,7 +70,8 @@ var motion = {
             "type": "kodi",
             "camera": "driveway",
             "cutoff": 15
-        }, {
+        }, */
+        {
             "type": "toggle",
             "insteon": "1A8D98",
             "cutoff": 600,
@@ -172,9 +174,42 @@ var keypads = {
                 "status": "on"
             }
         }
+    },    
+    "4C0906": {
+        "description": "Bedroom keypad",
+        "type": "keypad",
+        "enabled": true,
+        "actions": {
+            "3": {
+                "type": "harmony",
+                "id": "bedroom",
+                "device": "43709373",
+                "command": "PowerToggle",
+                "description": "TV toggle",
+                "status": "on"
+            },
+            "4": {
+                "type": "insteon",
+                "id": "3F4B99_FAN",
+                "description": "Fan",
+                "status": "toggle"
+            },
+            "5": {
+                "type": "lifx",
+                "id": "d073d5125481",
+                "description": "Lamp",
+                "status": "toggle"
+            },
+            "6": {
+                "type": "insteon",
+                "id": "1F527C",
+                "description": "fireplace",
+                "status": "toggle"
+            }
+        }
     },
     "3EBF4E": {
-        "description": "Bedroom keypad",
+        "description": "Office keypad",
         "type": "keypad",
         "enabled": true,
         "actions": {
@@ -353,10 +388,11 @@ var switches = {
     "3728AC": {
         "description": "Christmas Tree", //this might the missing lamplinc
         "icon": "icon-tree",
+        "alexaNames": ["tree", "christmas tree"],
         "group": "Living Room",
         "hasManualOverride": false,
         "type": "switch",
-        "enabled": false
+        "enabled": true
     }
 };
 

@@ -57,7 +57,8 @@ function register(callback) {
 	keypads.forEach(function(id) {
 		var toggle = hub.light(id);
 
-		function registerButtonPress(digit) {
+		function registerButtonPress(digit, y) {
+			console.log(digit, y);
 			var d = devices.insteon[id];
 			keypad.pressed(d, digit);
 		}

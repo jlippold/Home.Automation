@@ -71,12 +71,12 @@ var state = {
         motion: "#"
       }
     },
-    generator: {
-      title: "Generator",
-      id: "generator",
+    kitchen: {
+      title: "Kitchen",
+      id: "kitchen",
       url: "/camera/live/loadCam.aspx",
-      qs: "?cam=generator",
-      legacyUrl: "/camera/live/loadCam.aspx?cam=generator",
+      qs: "?cam=kitchen",
+      legacyUrl: "/camera/live/loadCam.aspx?cam=kitchen",
       timestamp: new Date(),
       lastCheck: new Date(),
       enabled: true,

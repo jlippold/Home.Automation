@@ -1,6 +1,6 @@
 var players = {
     "Living": {
-        ip: "192.168.1.35",
+        ip: "192.168.1.41",
         hostname: "livroom",
         name: "living room",
         alexaNames: ["living room tv", "living room television"],
@@ -32,7 +32,7 @@ var players = {
         }
     },
     "Bedroom": {
-        ip: "192.168.1.140",
+        ip: "192.168.1.67",
         hostname: "bedroom",
         name: "bedroom",
         alexaNames: ["bedroom tv", "bedroom television"],
@@ -64,7 +64,7 @@ var players = {
         },
     },
     "Basement": {
-        ip: "192.168.1.41",
+        ip: "192.168.1.130",
         name: "basement",
         alexaNames: ["basement tv", "basement television"],
         hostname: "basement"
@@ -84,7 +84,7 @@ var players = {
     "Cora": {
         ip: "192.168.1.84",
         name: "cora",
-        alexaNames: ["coras tv", "coras television"],
+        alexaNames: ["coras tv", "coras television", "gias tv", "gias television"],
         hostname: "cora"
     }
 };

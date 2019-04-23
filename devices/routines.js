@@ -3,7 +3,7 @@ module.exports = {
         description: "Morning Lights",
         time: "6:15 AM",
         hidden: false,
-        cron: "15 6 * * 1-5",
+        cron: "15 6 * * 1-7",
         confirm: false,
         actions: [{
             type: "insteon",
@@ -15,30 +15,29 @@ module.exports = {
             id: "40A548",
             status: "on",
             description: "kitchen light on"
-        }]
+        }, {
+            type: "insteon",
+            id: "46D72A",
+            status: "on",
+            description: "kitchen light 2 on"
+        },/* {
+            type: "insteon",
+            id: "1F527C",
+            status: "on",
+            description: "fireplace"
+        }*/]
     },
-    wake_up_kids: {
-        description: "Wake up the kids",
+    wake_up_syn: {
+        description: "Bedroom TV Disney",
         time: "7:45 AM",
         hidden: false,
-        cron: "45 7 * * 1-5",
-        confirm: true,
+        //cron: "45 7 * * 1-5",
+        confirm: false,
         actions: [{
-            type: "kodiRemote",
-            device: "Cora",
-            command: "powerToggle",
-            description: "Cora TV On"
-        }, {
             type: "kodiRemote",
             device: "Bedroom",
             command: "on",
             description: "Bedroom TV On"
-        }, {
-            type: "kodiChannel",
-            device: "Cora",
-            command: "playChannel",
-            param: "TOONHD",
-            description: "Cora TV Cartoons"
         }, {
             type: "kodiChannel",
             device: "Bedroom",
@@ -47,16 +46,16 @@ module.exports = {
             description: "Bedroom TV Disney"
         }]
     },
-    kids_to_bed: {
-        description: "Kids to bed",
-        time: "8:30 PM",
+    wake_up_kids: {
+        description: "Cora TV Disney",
+        time: "7:45 AM",
         hidden: false,
-        cron: "30 20 * * *",
-        confirm: true,
+        //cron: "45 7 * * 1-5",
+        confirm: false,
         actions: [{
             type: "kodiRemote",
             device: "Cora",
-            command: "powerToggle",
+            command: "on",
             description: "Cora TV On"
         }, {
             type: "kodiChannel",
@@ -66,38 +65,58 @@ module.exports = {
             description: "Cora TV Disney"
         }]
     },
-    dad_in_bed: {
-        description: "Dad in bed",
-        time: "9:45 PM",
-        hidden: false,
-        cron: "45 21 * * *",
-        confirm: true,
+    bye_kids: {
+        description: "Bye kids",
+        time: "8:30 AM",
+        hidden: true,
+        cron: "30 8 * * 1-5",
+        confirm: false,
         actions: [{
             type: "kodiRemote",
             device: "Bedroom",
-            command: "on",
-            description: "Bedroom TV On"
-        }, {
-            type: "kodiChannel",
+            command: "off",
+            description: "Bedroom TV Off"
+        }]
+    },
+    bye_fire: {
+        description: "Bye fire",
+        time: "10:30 AM",
+        hidden: true,
+        cron: "30 10 * * 1-7",
+        confirm: false,
+        actions: [/* {
+            type: "insteon",
+            id: "1F527C",
+            status: "off",
+            description: "fireplace"
+        }, */{
+                type: "insteon",
+                id: "46D72A",
+                status: "off",
+                description: "kitchen light 2 off"
+            }, {
+                type: "insteon",
+                id: "237643",
+                status: "off",
+                description: "office light off"
+            }, {
+                type: "insteon",
+                id: "237643",
+                status: "off",
+                description: "office light off"
+            }]
+    },
+    kill_tv: {
+        description: "kill tv",
+        time: "2:00 AM",
+        hidden: true,
+        cron: "0 2 * * *",
+        confirm: false,
+        actions: [{
+            type: "kodiRemote",
             device: "Bedroom",
-            command: "playChannel",
-            param: "CNNHD",
-            description: "Bedroom TV CNN"
-        }, {
-            type: "insteon",
-            id: "3F4B99",
-            status: "off",
-            description: "bedroom light off"
-        }, {
-            type: "insteon",
-            id: "3C2BBD",
-            status: "off",
-            description: "bathroom off"
-        }, {
-            type: "insteon",
-            id: "3F4B99_FAN",
-            status: "on",
-            description: "fan on"
+            command: "off",
+            description: "Bedroom TV Off"
         }]
     },
     test: {

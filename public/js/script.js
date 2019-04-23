@@ -1259,10 +1259,10 @@ $(document).ready(function () {
     }
   });
 
-  var GeneratorCam = Camera.extend({
+  var KitchenCam = Camera.extend({
     data: function () {
       return {
-        data: state.cameras.generator
+        data: state.cameras.kitchen
       };
     }
   });
@@ -1301,7 +1301,7 @@ $(document).ready(function () {
       "garage-cam": GarageCam,
       "basement-cam": BasementCam,
       "swings-cam": SwingsCam,
-      "generator-cam": GeneratorCam,
+      "kitchen-cam": KitchenCam,
       "sidedoor-cam": SideDoorCam,
       "driveway-cam": DrivewayCam,
       recordings: Recordings,
