@@ -56,8 +56,36 @@ var motion = {
         }],
         "enabled": true
     },
-    "318D55": {
+    "4F8843": {
         "description": "Driveway Sensor",
+        "type": "motion",
+        "icon": "icon-pitch",
+        "group": "outside",
+        "actions": [
+            {
+                "type": "push",
+                "camera": "driveway",
+                "cutoff": 15
+            }, {
+                "type": "kodi",
+                "camera": "driveway",
+                "cutoff": 15
+            },
+            {
+                "type": "toggle",
+                "insteon": "1A8D98",
+                "cutoff": 600,
+                "nightOnly": true
+            }, {
+                "type": "toggle",
+                "insteon": "3C2CC5",
+                "cutoff": 600,
+                "nightOnly": true
+            }],
+        "enabled": true
+    },
+    "318D55": {
+        "description": "Driveway Sensor (DEAD)",
         "type": "motion",
         "icon": "icon-pitch",
         "group": "outside",
@@ -82,7 +110,7 @@ var motion = {
             "cutoff": 600,
             "nightOnly": true
         }],
-        "enabled": true
+        "enabled": false
     },
     "37B015": {
         "description": "Garage Sensor",

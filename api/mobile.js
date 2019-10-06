@@ -13,6 +13,7 @@ module.exports.getDevices = getDevices;
 module.exports.deviceIsRegistered = deviceIsRegistered;
 module.exports.sendPushNotification = sendPushNotification;
 module.exports.sendNotificationForRoutine = sendNotificationForRoutine;
+module.exports.sendGenericNotification = sendGenericNotification;
 
 var mobileDevices = path.join(__dirname, "../mobileDevices.json")
 
@@ -110,7 +111,29 @@ function sendNotificationForRoutine(title, message, key, callback) {
             callback()
         });
     });
+}
 
+function sendGenericNotification(title, message, callback) {
+    var note = new apn.Notification();
+    note.expiry = Math.floor(Date.now() / 1000) + 300; // Expires 5 mins
+    note.topic = "bz.jed.home";
+    note.rawPayload = {
+        "aps": {
+            "sound": "ping.aiff",
+            "alert": {
+                "title": title,
+                "body": message,
+            },
+            "badge": 0
+        }
+    };
+
+    getDevices(function (err, mobileDevices) {
+        if (err) return callback(err);
+        apnProvider.send(note, Object.keys(mobileDevices)).then((result) => {
+            callback()
+        });
+    });
 }
 
 function sendPushNotification(image, camera, callback) {

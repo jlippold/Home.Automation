@@ -65,19 +65,6 @@ module.exports = {
             description: "Cora TV Disney"
         }]
     },
-    bye_kids: {
-        description: "Bye kids",
-        time: "8:30 AM",
-        hidden: true,
-        cron: "30 8 * * 1-5",
-        confirm: false,
-        actions: [{
-            type: "kodiRemote",
-            device: "Bedroom",
-            command: "off",
-            description: "Bedroom TV Off"
-        }]
-    },
     bye_fire: {
         description: "Bye fire",
         time: "10:30 AM",
@@ -99,24 +86,32 @@ module.exports = {
                 id: "237643",
                 status: "off",
                 description: "office light off"
-            }, {
-                type: "insteon",
-                id: "237643",
-                status: "off",
-                description: "office light off"
             }]
     },
     kill_tv: {
         description: "kill tv",
         time: "2:00 AM",
         hidden: true,
-        cron: "0 2 * * *",
+        cron: "0 3 * * *",
         confirm: false,
         actions: [{
             type: "kodiRemote",
             device: "Bedroom",
             command: "off",
             description: "Bedroom TV Off"
+        }]
+    },
+    kill_cora_tv: {
+        description: "kill cora tv",
+        time: "10:30 PM",
+        hidden: true,
+        cron: "30 22 * * *",
+        confirm: false,
+        actions: [{
+            type: "kodiRemote",
+            device: "Cora",
+            command: "off",
+            description: "Cora TV Off"
         }]
     },
     test: {

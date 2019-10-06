@@ -1,6 +1,6 @@
 module.exports = {
     "livingroom": {
-        "ip": "192.168.1.86",
+        "ip": "192.168.1.46",
         "location": "livingroom",
         "icon": "icon-desktop",
         "group": "Living Room",

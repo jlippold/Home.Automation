@@ -196,6 +196,32 @@ routes.get('/insteon/:id/dim/:level', function (req, res, next) {
 	});
 });
 
+routes.get('/insteon/:id', function (req, res, next) {
+	var id = req.params.id.toUpperCase();
+	api.insteon.getStatusOfDevice(id, function (err, s) {
+		res.send({ status: s == "on" ? "true" : "false" });
+	}, true);
+});
+routes.post('/insteon/:id', function (req, res, next) {
+	var id = req.params.id.toUpperCase();
+	var status = req.body.status;
+	if (["on", "off", "toggle"].indexOf(status) > -1) {
+		api.insteon.setStatusOfDevice(id, status, function (err) {
+			if (err) {
+				res.status(500);
+				res.send(err);
+				console.log(err);
+			} else {
+				res.sendStatus(200);
+			}
+		});
+	} else {
+		res.send("Bad status");
+		res.status(500);
+	}
+});
+
+
 // http://localhost:3000/insteon/1f527c/toggle
 routes.get('/insteon/:id/:status', function (req, res, next) {
 	var id = req.params.id.toUpperCase();
@@ -501,6 +527,21 @@ routes.get('/services/emby', function (req, res, next) {
 	});
 });
 
+routes.get('/services/emby/search', function (req, res, next) {
+	
+	api.emby.getImage(req.query.title, function(err, url) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+			console.error(err);
+		} else {
+			//return res.redirect(url);
+			require('request').get(url).pipe(res);
+		}
+	});
+});
+
+
 routes.get('/services/router', function (req, res, next) {
 	api.services.router(function (err, result) {
 		if (err) {
@@ -637,6 +678,8 @@ routes.get('/routines', function (req, res, next) {
 	});
 });
 
+
+
 routes.get('/routines/:routine', function (req, res, next) {
 	lib.routines.run(req.params.routine, function (err, routines) {
 		if (err) {
@@ -647,6 +690,20 @@ routes.get('/routines/:routine', function (req, res, next) {
 			res.send(routines);
 			//res.sendStatus(200);
 		}
+	});
+});
+
+routes.get('/presence/:name/:home', function (req, res, next) {
+	//console.log(`${req.params.name}: ${req.params.home}`);
+	var message =`${req.params.name} left the house.`;
+	var titles = ["See ya later", "So long", "Beat it", "Te veo, peo", "Bye bye", "Hasta la vista baby"]; 
+	if (req.params.home == "home") {
+		message = `${req.params.name} is home.`;
+		titles = ["Welcome home", "Hello hello", "Hola", "Arrival"]; 
+	}
+	
+	api.mobile.sendGenericNotification(titles[Math.floor(Math.random() * titles.length)], message, function() {
+		res.sendStatus(200);
 	});
 });
 

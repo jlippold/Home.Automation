@@ -17,12 +17,12 @@ module.exports = {
         }, {
             "type": "harmony",
             "id": "livingroom",
-            "activity": "25614547",
+            "activity": "63598673",
             "description": "Watch TV"
         }, {
             "type": "harmony",
             "id": "livingroom",
-            "device": "43708766",
+            "device": "63598673",
             "command": "F2"
         }],
         "off": [{
@@ -40,7 +40,7 @@ module.exports = {
         }, {
             "type": "harmony",
             "id": "livingroom",
-            "device": "43708766",
+            "device": "63598673",
             "command": "F1"
         }]
     },
@@ -178,7 +178,7 @@ module.exports = {
         "on": [{
             "type": "harmony",
             "id": "livingroom",
-            "activity": "25614547",
+            "activity": "63598673",
             "description": "Watch TV"
         }, {
             "type": "harmony",

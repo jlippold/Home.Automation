@@ -8,7 +8,7 @@ var players = {
             powerToggle: {
                 "type": "harmony",
                 "id": "livingroom",
-                "device": "43708749",
+                "device": "63598673",
                 "command": "PowerToggle",
                 "description": "PowerToggle",
                 "status": "on"
@@ -16,7 +16,7 @@ var players = {
             volumeUp: {
                 "type": "harmony",
                 "id": "livingroom",
-                "device": "43708749",
+                "device": "63598673",
                 "command": "VolumeUp",
                 "description": "VolumeUp",
                 "status": "on"
@@ -24,7 +24,7 @@ var players = {
             volumeDown: {
                 "type": "harmony",
                 "id": "livingroom",
-                "device": "43708749",
+                "device": "63598673",
                 "command": "VolumeDown",
                 "description": "VolumeDown",
                 "status": "on"
@@ -120,7 +120,7 @@ var defaults = {
         },
         id: 1
     }],
-    on: {
+    on: [{
         "jsonrpc": "2.0",
         "method": "Addons.ExecuteAddon",
         "params": {
@@ -128,8 +128,37 @@ var defaults = {
             "params": { "command": "power_on" }
         },
         "id": 2
-    },
-    off: {
+    }, {
+        jsonrpc: "2.0",
+        method: "Player.Stop",
+        params: {
+            playerid: 0
+        },
+        id: 1
+    }, {
+        jsonrpc: "2.0",
+        method: "Player.Stop",
+        params: {
+            playerid: 1
+        },
+        id: 1
+    }, {
+        jsonrpc: "2.0",
+        method: "Player.Stop",
+        params: {
+            playerid: 2
+        },
+        id: 1
+    }, {
+        "jsonrpc": "2.0",
+        "method": "Addons.ExecuteAddon",
+        "params": {
+            "addonid": "script.flirc_util",
+            "params": { "command": "random_play" }
+        },
+        "id": 2
+    }],
+    off: [{
         "jsonrpc": "2.0",
         "method": "Addons.ExecuteAddon",
         "params": {
@@ -137,7 +166,28 @@ var defaults = {
             "params": { "command": "power_off" }
         },
         "id": 2
-    },
+    }, {
+        jsonrpc: "2.0",
+        method: "Player.Stop",
+        params: {
+            playerid: 0
+        },
+        id: 1
+    }, {
+        jsonrpc: "2.0",
+        method: "Player.Stop",
+        params: {
+            playerid: 1
+        },
+        id: 1
+    }, {
+        jsonrpc: "2.0",
+        method: "Player.Stop",
+        params: {
+            playerid: 2
+        },
+        id: 1
+    }],
     volumeUp: {
         "jsonrpc": "2.0",
         "method": "Addons.ExecuteAddon",
@@ -343,7 +393,7 @@ var defaults = {
             speed: 8
         },
         id: 1
-    },{
+    }, {
         jsonrpc: "2.0",
         method: "Player.SetSpeed",
         params: {
@@ -351,7 +401,7 @@ var defaults = {
             speed: 8
         },
         id: 1
-    },{
+    }, {
         jsonrpc: "2.0",
         method: "Player.SetSpeed",
         params: {
@@ -377,7 +427,7 @@ var defaults = {
             speed: -8
         },
         id: 1
-    },{
+    }, {
         jsonrpc: "2.0",
         method: "Player.SetSpeed",
         params: {
@@ -385,7 +435,7 @@ var defaults = {
             speed: -8
         },
         id: 1
-    },{
+    }, {
         jsonrpc: "2.0",
         method: "Player.SetSpeed",
         params: {
