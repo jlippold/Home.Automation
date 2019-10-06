@@ -38,8 +38,8 @@ function execute(room, command, callback) {
             }
         } else if (action.type == "group") {
             return groups.setStatus(action.id, action.status, callback);
-        } else if (action.type == "ssh") {
-            return kodi.runSSHCommand(device, action.command, callback);
+        } else if (action.type == "reboot") {
+            return kodi.reboot(device, action.command, callback);
         } else {
             return callback({ error: "Unknown command type", command: command });
         }

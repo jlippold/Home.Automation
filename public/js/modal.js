@@ -1,4 +1,6 @@
+
 $(document).ready(function () {
+
 
   var Commands = Vue.extend({
     template: "#command-template",
@@ -25,12 +27,12 @@ $(document).ready(function () {
         return this.data.roomNames[index];
       },
       button: function (event, command) {
-        if (event) event.stopPropagation();
+        
         $.ajax({
           method: "GET",
           url: base_url + "home/televisions/" + this.roomName() + "/commands/" + command
         });
-        return false;
+        if (event) { return event.stopPropagation() };
       },
       fetch: function (done) {
         var v = this;

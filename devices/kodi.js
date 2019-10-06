@@ -356,17 +356,10 @@ var defaults = {
         },
         id: 1
     }],
-    Reboot: {
-        jsonrpc: "2.0",
-        method: "System.Reboot",
-        id: 1
+    "Reboot": {
+        "type": "reboot",
+        "command": ""
     },
-    /*
-    "ssh Reboot": {
-        "type": "ssh",
-        "command": "/sbin/shutdown -r -h now"
-    },
-    */
     "Next Item": {
         jsonrpc: "2.0",
         method: "Player.GoTo",

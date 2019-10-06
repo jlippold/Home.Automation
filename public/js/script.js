@@ -399,6 +399,7 @@ $(document).ready(function () {
           method: "GET",
           url: base_url + "home/televisions/" + this.roomName() + "/commands/" + command
         });
+        
         return false;
       },
       fetch: function (done) {
