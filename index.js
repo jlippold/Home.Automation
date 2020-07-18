@@ -110,7 +110,7 @@ async.auto({
 	},
 	killStreams: function(next) {
 		var spawn = require('child_process').spawn;
-		spawn("taskkill", ["/IM", "ffmpeg.exe", "/F"], { windowsHide: true});
+		spawn("killall", ["ffmpeg"], { windowsHide: true});
 		next();
 	},
 	cams: function(next) {

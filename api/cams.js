@@ -4,7 +4,6 @@ var walk = require('klaw');
 var async = require('async');
 var moment = require('moment');
 var chokidar = require('chokidar');
-var sqlite3 = require('sqlite3').verbose();
 var lib = require("../lib/");
 var crypto = require("crypto");
 var request = require("request");
@@ -16,12 +15,11 @@ var glob = require("glob");
 var devices = require("../devices/");
 var reoLinkPassword = process.env.reoLinkPassword || "";
 
-var db = new sqlite3.Database("recordings.db");
 
-var ftpPath = "G:\\FTP";
-var ffmpeg = "D:\\Scripts\\FFMpeg\\ffmpeg.exe";
-var streamPath = "D:\\www\\jed.bz\\stream\\";
-var camRoot = path.join(streamPath, "gif\\")
+var ftpPath = process.env.ftpPath || "";
+var ffmpeg = process.env.ffmpegPath || "";
+var streamPath = process.env.streamPath || "";
+var camRoot = path.join(streamPath, "gif")
 var watcher;
 
 
