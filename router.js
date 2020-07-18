@@ -678,7 +678,53 @@ routes.get('/routines', function (req, res, next) {
 	});
 });
 
+routes.get('/samsung/token', function (req, res, next) {
+	lib.samsung.token(null, function (err, token) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+			console.error(err);
+		} else {
+			res.send({ token });
+		}
+	});
+});
 
+routes.get('/samsung/apps', function (req, res, next) {
+	lib.samsung.apps(null, function (err, response) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+			console.error(err);
+		} else {
+			res.send(response);
+		}
+	});
+});
+
+routes.get('/samsung/volumeUp', function (req, res, next) {
+	lib.samsung.volumeUp(function (err, response) {
+		if (err) {
+			res.status(500);
+			res.send(err);
+			console.error(err);
+		} else {
+			res.send(response);
+		}
+	});
+});
+
+routes.get('/samsung/netflix', function (req, res, next) {
+	lib.samsung.netflix(null, function (err, response) {
+		if (err) { 
+			res.status(500);
+			res.send(err);
+			console.error(err);
+		} else {
+			res.send(response);
+		}
+	});
+});
 
 routes.get('/routines/:routine', function (req, res, next) {
 	lib.routines.run(req.params.routine, function (err, routines) {
@@ -703,6 +749,12 @@ routes.get('/presence/:name/:home', function (req, res, next) {
 	}
 	
 	api.mobile.sendGenericNotification(titles[Math.floor(Math.random() * titles.length)], message, function() {
+		res.sendStatus(200);
+	});
+});
+
+routes.post('/announce', function (req, res, next) {
+	api.mobile.sendGenericNotification(req.body.title, req.body.message, function () {
 		res.sendStatus(200);
 	});
 });

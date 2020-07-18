@@ -4,11 +4,12 @@ var myQPass = process.env.myQPass || "";
 var devices = require("../devices/");
 var dispatch = require("../lib/dispatch");
 
-myq.login(myqUser, myQPass)
+//myq.login(myqUser, myQPass)
 
 function listDevices(callback) {
 
     var list = {};
+    return callback(null, list);
     Object.keys(devices.myq).forEach(function (id) {
         var device = devices.myq[id];
         if (device.type == "switch") {
@@ -23,7 +24,7 @@ function listDevices(callback) {
 }
 
 function getStatusOfDevice(id, callback, cached) {
-
+    return callback();
     if (arguments.length == 2) {
         cached = false;
     }

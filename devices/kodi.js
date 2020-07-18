@@ -32,7 +32,7 @@ var players = {
         }
     },
     "Bedroom": {
-        ip: "192.168.1.67",
+        ip: "192.168.1.53",
         hostname: "bedroom",
         name: "bedroom",
         alexaNames: ["bedroom tv", "bedroom television"],
@@ -40,7 +40,7 @@ var players = {
             powerToggle: {
                 "type": "harmony",
                 "id": "bedroom",
-                "device": "43709373",
+                "device": "66877461",
                 "command": "PowerToggle",
                 "description": "PowerToggle",
                 "status": "on"
@@ -48,7 +48,7 @@ var players = {
             volumeUp: {
                 "type": "harmony",
                 "id": "bedroom",
-                "device": "43709373",
+                "device": "66877461",
                 "command": "VolumeUp",
                 "description": "VolumeUp",
                 "status": "on"
@@ -56,7 +56,7 @@ var players = {
             volumeDown: {
                 "type": "harmony",
                 "id": "bedroom",
-                "device": "43709373",
+                "device": "66877461",
                 "command": "VolumeDown",
                 "description": "VolumeDown",
                 "status": "on"
@@ -82,7 +82,7 @@ var players = {
         hostname: "layla"
     },
     "Cora": {
-        ip: "192.168.1.84",
+        ip: "cora",
         name: "cora",
         alexaNames: ["coras tv", "coras television", "gias tv", "gias television"],
         hostname: "cora"
@@ -274,6 +274,15 @@ var defaults = {
     OSD: {
         jsonrpc: "2.0",
         method: "Input.showOSD",
+        id: 1
+    },
+    tmp: {
+        jsonrpc: "2.0",
+        method: "GUI.ActivateWindow",
+        params: {
+            "window": "videos",
+            "parameters": ["smb://192.168.1.110/a$/tmp"]
+        },
         id: 1
     },
     Home: {

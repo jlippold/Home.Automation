@@ -9,6 +9,9 @@ var motion = {
             "camera": "porch",
             "cutoff": 15
         }, {
+            "type": "alexa",
+            "text": "Some one is on the porch"
+        }, {
             "type": "kodi",
             "camera": "porch",
             "cutoff": 15
@@ -66,6 +69,9 @@ var motion = {
                 "type": "push",
                 "camera": "driveway",
                 "cutoff": 15
+            }, {
+                "type": "alexa",
+                "text": "Some one is in the driveway"
             }, {
                 "type": "kodi",
                 "camera": "driveway",
