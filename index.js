@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 var express = require('express');
 var async = require('async');
 var insteon = require('./api/insteon');

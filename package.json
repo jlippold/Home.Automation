@@ -18,6 +18,7 @@
     "core-util-is": "^1.0.2",
     "cors": "^2.7.1",
     "doorbot": "git+ssh://git@github.com/jlippold/doorbot.git",
+    "dotenv": "^8.2.0",
     "express": "^4.13.3",
     "find-my-iphone": "git+ssh://git@github.com/jlippold/find-my-iphone.git",
     "fs-extra": "^4.0.1",
