@@ -1,9 +1,22 @@
 module.exports = {
+    early_fire: {
+        description: "Fireplace",
+        time: "4:15 AM",
+        hidden: false,
+        cron: "15 5 * * *",
+        confirm: false,
+        actions: [{
+            type: "insteon",
+            id: "1F527C",
+            status: "on",
+            description: "fireplace"
+        }]
+    },
     first_wake: {
         description: "Morning Lights",
         time: "6:15 AM",
         hidden: false,
-        cron: "15 6 * * 1-7",
+        cron: "15 6 * * *",
         confirm: false,
         actions: [{
             type: "insteon",
@@ -20,12 +33,12 @@ module.exports = {
             id: "46D72A",
             status: "on",
             description: "kitchen light 2 on"
-        },/* {
+        }, {
             type: "insteon",
             id: "1F527C",
             status: "on",
             description: "fireplace"
-        }*/]
+        }]
     },
     /*
     wake_up_syn: {
@@ -67,6 +80,32 @@ module.exports = {
         }]
     },
     */
+    xmax_on: {
+        description: "Xmas lights on",
+        time: "4:00 PM",
+        hidden: false,
+        cron: "0 16 * * *",
+        confirm: false,
+        actions: [{
+            type: "insteon",
+            id: "3728AC",
+            status: "on",
+            description: "xmas"
+        }]
+    },
+    xmax_off: {
+        description: "Xmas lights off",
+        time: "10:00 PM",
+        hidden: false,
+        cron: "0 22 * * *",
+        confirm: false,
+        actions: [{
+            type: "insteon",
+            id: "3728AC",
+            status: "off",
+            description: "xmas"
+        }]
+    },
     bye_fire: {
         description: "Bye fire",
         time: "10:30 AM",
@@ -88,12 +127,12 @@ module.exports = {
             id: "237643",
             status: "off",
             description: "office light off"
-        }, {
+        }/*, {
             type: "kodiRemote",
             device: "Cora",
             command: "off",
             description: "Cora TV Off"
-        }]
+        }*/]
     },
     kill_tv: {
         description: "kill tv",
@@ -108,6 +147,7 @@ module.exports = {
             description: "Bedroom TV Off"
         }]
     },
+    /*
     kill_cora_tv: {
         description: "kill cora tv",
         time: "10:30 PM",
@@ -121,6 +161,7 @@ module.exports = {
             description: "Cora TV Off"
         }]
     },
+    */
     test: {
         description: "Test bed",
         hidden: true,

@@ -1,5 +1,3 @@
-require('dotenv').config()
-
 var express = require('express');
 var async = require('async');
 var insteon = require('./api/insteon');
@@ -112,7 +110,7 @@ async.auto({
 	},
 	killStreams: function(next) {
 		var spawn = require('child_process').spawn;
-		spawn("killall", ["ffmpeg"], { windowsHide: true});
+		spawn("taskkill", ["/IM", "ffmpeg.exe", "/F"], { windowsHide: true});
 		next();
 	},
 	cams: function(next) {

@@ -3,7 +3,6 @@ module.exports = {
         "ip": "192.168.1.104"
     },
     insteon: require("./insteon"),
-    ring: require("./ring"),
     myq: require("./myq"),
     lifx: require("./lifx"),
     kodi: require("./kodi"),

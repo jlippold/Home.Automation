@@ -17,8 +17,6 @@
     "console-stamp": "^0.2.5",
     "core-util-is": "^1.0.2",
     "cors": "^2.7.1",
-    "doorbot": "git+ssh://git@github.com/jlippold/doorbot.git",
-    "dotenv": "^8.2.0",
     "express": "^4.13.3",
     "find-my-iphone": "git+ssh://git@github.com/jlippold/find-my-iphone.git",
     "fs-extra": "^4.0.1",
@@ -39,6 +37,7 @@
     "request": "^2.81.0",
     "samsung-tv-control": "^1.9.0",
     "socket.io": "^1.4.5",
+    "sqlite3": "^3.1.9",
     "suncalc": "^1.8.0",
     "utorrent-api": "^0.1.5"
   },

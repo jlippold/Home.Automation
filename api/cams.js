@@ -16,12 +16,11 @@ var devices = require("../devices/");
 var reoLinkPassword = process.env.reoLinkPassword || "";
 
 
-var ftpPath = process.env.ftpPath || "";
-var ffmpeg = process.env.ffmpegPath || "";
-var streamPath = process.env.streamPath || "";
-var camRoot = path.join(streamPath, "gif")
+var ftpPath = "F:\\FTP";
+var ffmpeg = "C:\\Scripts\\FFMpeg\\ffmpeg.exe";
+var streamPath = "C:\\www\\jed.bz\\stream\\";
+var camRoot = path.join(streamPath, "gif\\")
 var watcher;
-
 
 
 var cams = [
@@ -51,16 +50,6 @@ module.exports.createMP4 = createMP4;
 
 function initdb(callback) {
 
-  db.serialize(function () {
-    var createTable = `CREATE TABLE IF NOT EXISTS 
-        recordings (recording_id TEXT, mp4 TEXT PRIMARY KEY, 
-          location TEXT, jpg TEXT NULL, date DATETIME, dateString TEXT,
-        CONSTRAINT id_unique UNIQUE (recording_id))`;
-    db.run(createTable, function (err) {
-
-
-    });
-  });
 
   //db.close();
 
@@ -374,101 +363,6 @@ function init(callback) {
   downloader();
   picBroadcaster();
   return callback();
-
-
-  initdb(function (err) {
-    if (err) {
-      console.log(err);
-      return callback(err);
-    }
-
-    indexRecordingsOnDisk(function () {
-      return callback();
-      var paths = cameraBasePaths();
-      watcher = chokidar.watch(paths, {
-        ignoreInitial: true,
-        depth: 1,
-        persistent: true
-      });
-
-      watcher.on('add', function (filename, stat) {
-        if (filename.indexOf(ftpPath) == 0) {
-          setTimeout(function () {
-            insertRecordings([filename], function () {
-              if (err) {
-                console.log("new file insert error" + err);
-              }
-            });
-          }, 1000);
-        }
-      });
-
-      callback();
-    });
-  })
-}
-
-function indexRecordingsOnDisk(callback) {
-  var paths = cameraBasePaths();
-  async.each(paths, function (basePath, next) {
-    var items = [];
-    walk(basePath).on('data', item => items.push(item.path))
-      .on('end', () => {
-        insertRecordings(items, function () {
-          next();
-        });
-      });
-  }, function () {
-    callback();
-  });
-}
-
-function insertRecordings(items, callback) {
-
-  db.serialize(function () {
-    async.eachLimit(items, 20, function (file, next) {
-
-      var name = path.basename(file, path.extname(file));
-      var ext = path.extname(file);
-
-      if (ext == ".mp4") {
-        var cameraName = path.basename(path.dirname(file));
-        var dateInFile = "";
-        if (name.startsWith("01_")) {
-          dateInFile = name.substring(3); //20170805153417
-        } else {
-          dateInFile = name.substring(3 + cameraName.length + 1);
-        }
-
-        var fileDate = moment(dateInFile, 'YYYYMMDDHHmmss');
-
-        var jpg = newPathWithExtension(file, ".jpg");
-        var sql = `INSERT INTO recordings VALUES (
-            $id, $mp4, $location, $jpg, 
-            $date, $dateString )`;
-
-        fileExists(jpg, function (exists) {
-          jpg = exists ? jpg : null;
-          var id = crypto.randomBytes(16).toString("hex");
-          db.run(sql, {
-            $id: id, $mp4: file, $location: cameraName, $jpg: jpg,
-            $date: fileDate.toDate(), $dateString: fileDate.format('YYYY-MM-DD')
-          }, function (err) {
-            err = err && JSON.stringify(err).indexOf("CONSTRAINT") > 0 ? null : err;
-            return next(err);
-          });
-        });
-      } else {
-        return next();
-      }
-    }, function (err) {
-      if (err) {
-        console.log(err);
-      }
-      //db.close();
-      callback(err);
-    });
-  });
 }
 
 function cameraBasePaths() {
