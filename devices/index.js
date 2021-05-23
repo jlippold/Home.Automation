@@ -1,6 +1,6 @@
 module.exports = {
     hub: {
-        "ip": "192.168.1.104"
+        "ip": "192.168.1.97"
     },
     insteon: require("./insteon"),
     myq: require("./myq"),

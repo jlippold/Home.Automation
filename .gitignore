@@ -43,3 +43,4 @@ start.sh
 recordings.db
 daemon
 mobileDevices.json
+.env

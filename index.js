@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 var express = require('express');
 var async = require('async');
 var insteon = require('./api/insteon');
@@ -8,7 +10,6 @@ var cams = require('./api/cams');
 var router = require('./router');
 var dispatcher = require('./lib/dispatch');
 var cors = require('cors');
-var auth = require('http-auth');
 var fs = require('fs');
 
 var app = express();
@@ -37,26 +38,13 @@ require("console-stamp")(console, {
 });
 
 
-/*
-var basic = auth.basic({
-	realm: "Jeds House.",
-	file: __dirname + "/config/users.htpasswd"
-});
-
-app.use(function(req, res, next) {
-	if (req.headers["x-arr-ssl"]) {
-		auth.connect(basic)(req, res, next);
-	} else {
-		next();
-	}
-});
-*/
 
 var bodyParser = require('body-parser')
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
 	extended: true
 }));
+
 
 app.use(cors({
 	origin: 'http://localhost:3000'
@@ -86,21 +74,9 @@ app.use(function (err, req, res, next) {
 
 async.auto({
 	insteonHub: function (next) {
-		return next();
-		if (process.env.NODE_ENV != "production") {
-			console.log("skipping insteon hub")
-			return next();
-		}
 		insteon.register(function (err) {
-			
 			console.log("connected to insteon hub");
 			next(err);
-		});
-	},
-	lifxClient: function (next) {
-		lifx.init(function () {
-			console.log("connected to lifx client");
-			next();
 		});
 	},
 	harmonyActivities: function (next) {
@@ -111,11 +87,13 @@ async.auto({
 		});
 	},
 	killStreams: function(next) {
+		if (process.env.NODE_ENV != "production") return next();
 		var spawn = require('child_process').spawn;
 		spawn("taskkill", ["/IM", "ffmpeg.exe", "/F"], { windowsHide: true});
 		next();
 	},
 	cams: function(next) {
+		if (process.env.NODE_ENV != "production") return next();
 		cams.init(next);
 	},
 	deviceList: ['killStreams', 'cams', 'insteonHub', 'harmonyActivities', function (next) {
@@ -128,7 +106,7 @@ async.auto({
 		lib.routines.init();
 		next();
 	}],
-	sockets: ['lifxClient', 'routines', function (next) {
+	sockets: [ 'routines', function (next) {
 
 		server.listen(3000, function () {
 			console.log("API Listening from 3000");
@@ -143,6 +121,7 @@ async.auto({
 				dispatcher.broadcastDevices();
 			});
 		}
+
 		next();
 	}]
 }, function (err, results) {

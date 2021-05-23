@@ -20,9 +20,9 @@ module.exports.listDevices = listDevices;
 function register(callback) {
 
 	var motionDevices = getInsteonDevicesByType("motion");
-	motionDevices.forEach(function(id) {
+	motionDevices.forEach(function (id) {
 		var device = hub.motion(id);
-		device.on('motion', function() {
+		device.on('motion', function () {
 
 			var d = devices.insteon[id];
 			console.log(
@@ -38,9 +38,9 @@ function register(callback) {
 	});
 
 	var doors = getInsteonDevicesByType("door");
-	doors.forEach(function(id) {
+	doors.forEach(function (id) {
 		var device = hub.door(id);
-		device.on('closed', function() {
+		device.on('closed', function () {
 			var d = devices.insteon[id];
 			console.log(
 				nodeUtil.format(
@@ -54,7 +54,7 @@ function register(callback) {
 	});
 
 	var keypads = getInsteonDevicesByType("keypad");
-	keypads.forEach(function(id) {
+	keypads.forEach(function (id) {
 		var toggle = hub.light(id);
 
 		function registerButtonPress(digit, y) {
@@ -66,14 +66,19 @@ function register(callback) {
 		toggle.on('turnOff', registerButtonPress);
 	});
 
-	hub.connect(devices.hub.ip, function(err) {
-		callback(err);
-	});
+	var config = {
+		host: devices.hub.ip,
+		port: 25105,
+		user: process.env.insteonUser,
+		password: process.env.insteonPass,
+	};
+	hub.httpClient(config, callback);
+
 }
 
 function listDevices(callback) {
 	var list = {};
-	Object.keys(devices.insteon).forEach(function(id) {
+	Object.keys(devices.insteon).forEach(function (id) {
 
 		var device = devices.insteon[id];
 
@@ -97,7 +102,7 @@ function listDevices(callback) {
 
 function getInsteonDevicesByType(type) {
 	var arr = [];
-	Object.keys(devices.insteon).forEach(function(id) {
+	Object.keys(devices.insteon).forEach(function (id) {
 		if (devices.insteon[id].type == type) {
 			arr.push(id);
 		}
@@ -119,7 +124,7 @@ function getStatusOfDevice(id, callback, cached) {
 
 		var device = hub.light(id.substring(0, 6)); //remove fan suffix
 		if (devices.insteon[id].type === "switch") {
-			device.level(function(err, level) {
+			device.level(function (err, level) {
 				if (level > 0) { //is on 
 					return callback(err, "on");
 				} else { //is off
@@ -127,13 +132,13 @@ function getStatusOfDevice(id, callback, cached) {
 				}
 			});
 		} else if (devices.insteon[id].type === "fan") {
-			device.fan().then(function(speed) {
+			device.fan().then(function (speed) {
 				return callback(null, speed == "off" ? "off" : "on");
 			});
 		}
 
 	} else {
-		dispatch.devices(function(err, d) {
+		dispatch.devices(function (err, d) {
 			if (d.hasOwnProperty(id)) {
 				return callback(err, d[id].status);
 			} else {
@@ -151,28 +156,28 @@ function setStatusOfDevice(id, status, callback) {
 	}
 	var device = hub.light(id.substring(0, 6));
 	if (status == "on") {
-		pool.add(function() {
+		pool.add(function () {
 			if (devices.insteon[id].type == "switch") {
-				hub.light(id).turnOn().then(function() {
+				hub.light(id).turnOn().then(function () {
 					dispatch.setStatus(id, status);
 					callback();
 				});
 			} else { //fan
-				hub.light(id.substring(0, 6)).fanOn().then(function() {
+				hub.light(id.substring(0, 6)).fanOn().then(function () {
 					dispatch.setStatus(id, status);
 					callback();
 				});
 			}
 		});
 	} else if (status == "off") {
-		pool.add(function() {
+		pool.add(function () {
 			if (devices.insteon[id].type == "switch") {
-				hub.light(id).turnOff().then(function() {
+				hub.light(id).turnOff().then(function () {
 					dispatch.setStatus(id, status);
 					callback();
 				});
 			} else { //fan
-				hub.light(id.substring(0, 6)).fanOff().then(function() {
+				hub.light(id.substring(0, 6)).fanOff().then(function () {
 					dispatch.setStatus(id, status);
 					callback();
 				});
@@ -180,19 +185,19 @@ function setStatusOfDevice(id, status, callback) {
 		});
 	} else if (status == "toggle") {
 		if (devices.insteon[id].type == "switch") {
-			getStatusOfDevice(id, function(err, status) {
+			getStatusOfDevice(id, function (err, status) {
 				if (status == "on") {
-					pool.add(function() {
+					pool.add(function () {
 						device.turnOff()
-							.then(function(status) {
+							.then(function (status) {
 								dispatch.setStatus(id, "off");
 								callback();
 							});
 					});
 				} else {
-					pool.add(function() {
+					pool.add(function () {
 						device.turnOn()
-							.then(function(status) {
+							.then(function (status) {
 								dispatch.setStatus(id, "on");
 								callback();
 							});
@@ -200,19 +205,19 @@ function setStatusOfDevice(id, status, callback) {
 				}
 			});
 		} else { //fan
-			getStatusOfDevice(id, function(err, status) {
+			getStatusOfDevice(id, function (err, status) {
 				if (status == "on") {
-					pool.add(function() {
+					pool.add(function () {
 						device.fanOff()
-							.then(function(status) {
+							.then(function (status) {
 								dispatch.setStatus(id, "off");
 								callback();
 							});
 					});
 				} else {
-					pool.add(function() {
+					pool.add(function () {
 						device.fanOn()
-							.then(function(status) {
+							.then(function (status) {
 								dispatch.setStatus(id, "on");
 								callback();
 							});
@@ -232,9 +237,9 @@ function dim(id, level, callback) {
 
 	var device = hub.light(id.substring(0, 6));
 
-	pool.add(function() {
+	pool.add(function () {
 		if (devices.insteon[id].type == "switch") {
-			hub.light(id).level(level).then(function() {
+			hub.light(id).level(level).then(function () {
 				callback(null);
 			});
 		} else {

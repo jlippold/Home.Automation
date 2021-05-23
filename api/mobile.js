@@ -20,7 +20,7 @@ var mobileDevices = path.join(__dirname, "../mobileDevices.json")
 
 var apnProvider = new apn.Provider({
     token: {
-        key: "C://www//pushcerts//authKey.p8",
+        key: process.env.pushP8,
         keyId: process.env.pushKeyId,
         teamId: process.env.pushTeamId
     },
