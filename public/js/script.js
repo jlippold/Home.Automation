@@ -1133,33 +1133,6 @@ $(document).ready(function () {
             function (next) {
               $.ajax({
                 method: "GET",
-                url: base_url + "home/services/torrent",
-                error: function () {
-                  next();
-                },
-                success: function (data) {
-                  data.uploadColor = "blue";
-                  if (data.rawUpload > 400000) {
-                    data.uploadColor = "red";
-                  } else if (data.rawUpload > 100000) {
-                    data.uploadColor = "orange";
-                  }
-
-                  data.downloadColor = "blue";
-                  if (data.rawDownload > 3000000) {
-                    data.downloadColor = "red";
-                  } else if (data.rawDownload > 1000000) {
-                    data.downloadColor = "orange";
-                  }
-
-                  state.services.torrent = data;
-                  next();
-                }
-              });
-            },
-            function (next) {
-              $.ajax({
-                method: "GET",
                 url: base_url + "home/services/emby",
                 error: function () {
                   next();

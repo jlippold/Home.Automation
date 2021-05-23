@@ -460,17 +460,6 @@ routes.get('/harmony/hubs/:hub/devices/:device/commands/:command', function (req
 	});
 });
 
-routes.get('/services/torrent', function (req, res, next) {
-	api.services.uTorrent(function (err, result) {
-		if (err) {
-			res.status(500);
-			res.send(err);
-			console.error(err);
-		} else {
-			res.send(result);
-		}
-	});
-});
 
 routes.get('/services/nzb', function (req, res, next) {
 	api.services.nzbGet(function (err, result) {
