@@ -86,11 +86,13 @@ app.use(function (err, req, res, next) {
 
 async.auto({
 	insteonHub: function (next) {
+		return next();
 		if (process.env.NODE_ENV != "production") {
 			console.log("skipping insteon hub")
 			return next();
 		}
 		insteon.register(function (err) {
+			
 			console.log("connected to insteon hub");
 			next(err);
 		});
