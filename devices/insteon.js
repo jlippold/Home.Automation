@@ -9,9 +9,6 @@ var motion = {
             "camera": "porch",
             "cutoff": 15
         }, {
-            "type": "alexa",
-            "text": "Some one is on the porch"
-        }, {
             "type": "kodi",
             "camera": "porch",
             "cutoff": 15
@@ -39,10 +36,6 @@ var motion = {
         "icon": "icon-pitch",
         "group": "outside",
         "actions": [{
-            "type": "push",
-            "camera": "sidedoor",
-            "cutoff": 15
-        }, {
             "type": "kodi",
             "camera": "sidedoor",
             "cutoff": 15
@@ -70,9 +63,6 @@ var motion = {
                 "camera": "driveway",
                 "cutoff": 15
             }, {
-                "type": "alexa",
-                "text": "Some one is in the driveway"
-            }, {
                 "type": "kodi",
                 "camera": "driveway",
                 "cutoff": 15
@@ -89,34 +79,6 @@ var motion = {
                 "nightOnly": true
             }],
         "enabled": true
-    },
-    "318D55": {
-        "description": "Driveway Sensor (DEAD)",
-        "type": "motion",
-        "icon": "icon-pitch",
-        "group": "outside",
-        "actions": [
-        /* {
-            "type": "push",
-            "camera": "driveway",
-            "cutoff": 15
-        }, {
-            "type": "kodi",
-            "camera": "driveway",
-            "cutoff": 15
-        }, */
-        {
-            "type": "toggle",
-            "insteon": "1A8D98",
-            "cutoff": 600,
-            "nightOnly": true
-        }, {
-            "type": "toggle",
-            "insteon": "3C2CC5",
-            "cutoff": 600,
-            "nightOnly": true
-        }],
-        "enabled": false
     },
     "37B015": {
         "description": "Garage Sensor",
@@ -140,7 +102,11 @@ var motion = {
         "type": "door",
         "icon": "icon-home",
         "group": "kitchen",
-        "actions": [{
+        "actions": [/* {
+            "type": "push",
+            "camera": "kitchen",
+            "cutoff": 30
+        }, */{
             "type": "toggle",
             "insteon": "401395",
             "cutoff": 600,

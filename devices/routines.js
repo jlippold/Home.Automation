@@ -8,11 +8,6 @@ module.exports = {
         confirm: false,
         actions: [{
             type: "insteon",
-            id: "237643",
-            status: "on",
-            description: "office light on"
-        }, {
-            type: "insteon",
             id: "40A548",
             status: "on",
             description: "kitchen light on"
@@ -171,29 +166,5 @@ module.exports = {
             status: "toggle",
             description: "bedroom light toggle"
         }]
-    },
-    test2: {
-        description: "Test office",
-        hidden: true,
-        time: "XX",
-        //cron: "*/1 * * * *",
-        confirm: true,
-        actions: [{
-            type: "insteon",
-            id: "237643",
-            status: "toggle",
-            description: "office light toggle"
-        }, {
-            type: "kodiRemote",
-            device: "Office",
-            command: "on",
-            description: "Office TV On"
-        }, {
-            type: "kodiChannel",
-            device: "Office",
-            command: "playChannel",
-            param: "CNNHD",
-            description: "Office TV CNN"
-        }]
-    },
+    }
 };
