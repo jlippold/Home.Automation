@@ -29,7 +29,7 @@
     "jsonfile": "^2.3.1",
     "klaw": "^2.0.0",
     "lifx-api": "github:jlippold/lifx",
-    "moment": "^2.22.0",
+    "moment": "^2.29.4",
     "myq-node": "^0.1.4",
     "node-apn-http2": "^1.0.1",
     "node-expat": "^2.3.15",
