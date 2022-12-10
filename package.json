@@ -18,7 +18,7 @@
     "core-util-is": "^1.0.2",
     "cors": "^2.7.1",
     "dotenv": "^10.0.0",
-    "express": "^4.13.3",
+    "express": "^4.17.3",
     "find-my-iphone": "git+ssh://git@github.com/jlippold/find-my-iphone.git",
     "fs-extra": "^4.0.1",
     "glob": "^7.1.2",
